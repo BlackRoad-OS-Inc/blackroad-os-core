@@ -2,12 +2,16 @@
   "name": "blackroad-os-core",
   "version": "0.1.0",
   "description": "Backend scaffold for the BlackRoad OS Core service",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -16,7 +20,10 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^22.1.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.3"
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.0",
+    "tsx": "^4.16.2",
+    "typescript": "5.3.3"
   }
 }
