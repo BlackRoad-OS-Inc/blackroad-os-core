@@ -1,7 +1,7 @@
 import express from 'express';
 import ledgerRouter from './routes/ledger';
 import { PORT } from './config/env';
-import packageJson from '../package.json';
+import packageJson from '../package.json' assert { type: 'json' };
 
 const app = express();
 
