@@ -1,8 +1,9 @@
 import app from './index';
-import { PORT } from './config/env';
+import { HOST, PORT } from './config/env';
+import { environment, serviceName } from './config/serviceConfig';
 
-const port = PORT;
-
-app.listen(port, '0.0.0.0', () => {
-  console.log(`BlackRoad OS Core service listening on port ${port}`);
+app.listen(PORT, HOST, () => {
+  console.log(
+    `[startup] service=${serviceName} env=${environment} listening on ${HOST}:${PORT}`,
+  );
 });

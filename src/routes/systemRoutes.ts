@@ -1,11 +1,21 @@
 import { Router } from 'express';
-import { PORT } from '../config/env';
+import { HOST, PORT } from '../config/env';
 import { environment, serviceName, startupTime, version } from '../config/serviceConfig';
 
 const systemRouter = Router();
 
 systemRouter.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: serviceName });
+  const uptimeSeconds = Math.floor((Date.now() - startupTime.getTime()) / 1000);
+  const timestamp = new Date().toISOString();
+
+  console.log(`[health] service=${serviceName} uptime_s=${uptimeSeconds} at=${timestamp}`);
+
+  res.json({
+    status: 'ok',
+    service: serviceName,
+    uptime_seconds: uptimeSeconds,
+    timestamp,
+  });
 });
 
 systemRouter.get('/info', (_req, res) => {
@@ -16,6 +26,8 @@ systemRouter.get('/info', (_req, res) => {
     version,
     environment,
     uptimeSeconds,
+    host: HOST,
+    port: PORT,
   });
 });
 
