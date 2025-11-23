@@ -1,13 +1,19 @@
 # blackroad-os-core
 
-`blackroad-os-core` is the base library for BlackRoad OS domain concepts and orchestration primitives. Other services (operator, api, prism console, etc.) import these models instead of redefining them.
+`blackroad-os-core` is the **core domain library** for BlackRoad OS. It defines the canonical types and pure helpers used across
+the ecosystem (Operator, API, Prism Console, Infra docs) and participates in the shared GitHub project **"BlackRoad OS - Master
+Orchestration"**.
 
-## Features
+## What lives here
 
-- Canonical domain models: `Agent`, `Capability`, `Task`, `Event`, `JournalEntry`.
-- Minimal event bus abstraction with an in-memory `LocalEventBus` for development and testing.
-- PS-SHA∞ journaling interface with a development stub (`DevPsShaInfinity`).
-- Lightweight config helper for core log level and environment.
+- Identity primitives (PS-SHA∞ worldlines and anchors)
+- Truth verification pipeline types (`TextSnapshot → VerificationJob → AgentAssessment → TruthState`)
+- Domain events, journal entries, and RoadChain block shapes
+- Base Agent and Job abstractions with lifecycle helpers
+- A minimal `Result` helper for consistent success/error handling
+
+The package is pure TypeScript with no HTTP framework or runtime bindings. It is safe to import from server processes, CLIs, and
+browser-friendly bundles alike.
 
 ## Installation
 
@@ -17,63 +23,11 @@ npm install
 
 ## Usage
 
-### Importing domain types
+Import directly from the barrel to access the stable API:
 
 ```ts
-import { Agent, Task, Event, JournalEntry } from "blackroad-os-core/dist/domain";
+import { computePsShaInfinity, Job, startJob, Result } from "blackroad-os-core";
 ```
-
-### Using the local event bus
-
-```ts
-import { LocalEventBus } from "blackroad-os-core/dist/bus";
-import { Event } from "blackroad-os-core/dist/domain";
-
-const bus = new LocalEventBus();
-
-const handler = (event: Event) => {
-  console.log("Received", event.type);
-};
-
-bus.subscribe("task.created", handler);
-bus.publish({
-  id: "evt-1",
-  type: "task.created",
-  source: "blackroad-os-core.example",
-  timestamp: new Date().toISOString(),
-  payload: { id: "task-123" },
-});
-```
-
-### Journaling with the development PS-SHA∞ stub
-
-```ts
-import { DevPsShaInfinity } from "blackroad-os-core/dist/utils";
-
-const journal = new DevPsShaInfinity();
-const entry = await journal.journal({
-  id: "entry-1",
-  timestamp: new Date().toISOString(),
-  actorId: "agent-1",
-  actionType: "demo.started",
-  payload: { message: "Hello" },
-});
-
-console.log(entry.hash); // sha256 hash over the payload + metadata + previousHash
-```
-
-## Configuration
-
-A minimal config helper is provided for this library:
-
-```ts
-import { getCoreConfig } from "blackroad-os-core/dist/config";
-
-const config = getCoreConfig();
-console.log(config.env, config.logLevel);
-```
-
-Higher-level services should layer their own configuration on top of this.
 
 ## Tests
 
@@ -83,10 +37,4 @@ npm test
 
 ## Documentation
 
-See [`docs/core-architecture.md`](docs/core-architecture.md) for an architectural overview and guidance on how these primitives fit into the broader platform.
-
-## Future Work
-
-- Full PS-SHA∞ implementation with production-grade cryptography.
-- Distributed event bus implementations (Kafka, NATS, Redis, etc.).
-- Richer schemas and typed payloads for tasks and events.
+See [`docs/CORE_OVERVIEW.md`](docs/CORE_OVERVIEW.md) for module-level context and expected consumers.

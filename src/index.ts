@@ -1,20 +1,16 @@
-import express from 'express';
-import health from './routes/health';
-import ledgerRouter from './routes/ledger';
-import systemRouter from './routes/systemRoutes';
+export * from "./results/result";
 
-const app = express();
+export * from "./identity/identityTypes";
+export * from "./identity/psShaInfinity";
 
-app.use(express.json());
+export * from "./truth/textSnapshot";
+export * from "./truth/verificationJob";
+export * from "./truth/truthState";
 
-app.use(health);
-app.use(systemRouter);
-app.use('/ledger', ledgerRouter);
+export * from "./events/domainEvent";
+export * from "./events/journalEntry";
+export * from "./events/roadChain";
 
-const port = Number(process.env.PORT) || 8080;
-
-app.listen(port, '0.0.0.0', () => {
-  console.log(`[blackroad-os-core] listening on http://0.0.0.0:${port}`);
-});
-
-export default app;
+export * from "./agents/agentBase";
+export * from "./jobs/jobTypes";
+export * from "./jobs/jobLifecycle";
