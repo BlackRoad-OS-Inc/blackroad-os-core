@@ -11,4 +11,12 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   ignorePatterns: ['dist'],
+  overrides: [
+    {
+      files: ['**/*.test.ts'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };

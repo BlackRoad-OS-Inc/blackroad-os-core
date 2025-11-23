@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node16",
+    "isolatedModules": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
