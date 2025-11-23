@@ -8,10 +8,9 @@ export interface DomainEventPayload {
 
 export interface DomainEvent<TPayload extends DomainEventPayload = DomainEventPayload> {
   id: PsShaInfinity;
-  occurredAt: string;
-  source: string;
   type: string;
-  severity: EventSeverity;
   payload: TPayload;
-  relatedIds?: PsShaInfinity[];
+  severity: EventSeverity;
+  timestamp: string;
+  agentId?: PsShaInfinity;
 }

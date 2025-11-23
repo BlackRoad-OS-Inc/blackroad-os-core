@@ -4,12 +4,12 @@ export type JobStatus = "queued" | "running" | "completed" | "failed" | "cancell
 
 export interface Job<Input = unknown, Output = unknown> {
   id: PsShaInfinity;
-  createdAt: string;
-  updatedAt: string;
   type: string;
-  status: JobStatus;
+  agentId: PsShaInfinity;
   input: Input;
+  status: JobStatus;
   output?: Output;
   errorMessage?: string;
-  agentId?: PsShaInfinity;
+  createdAt: string;
+  updatedAt: string;
 }

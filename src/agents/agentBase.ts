@@ -24,6 +24,7 @@ export interface AgentContext {
 }
 
 export interface Agent<I = unknown, O = unknown> {
+  id: PsShaInfinity;
   metadata: AgentMetadata;
   getState(): AgentState;
   run(input: I, context: AgentContext): Promise<Result<O, Error>>;

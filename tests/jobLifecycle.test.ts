@@ -4,6 +4,7 @@ import type { Job } from "../src/jobs/jobTypes";
 describe("jobLifecycle", () => {
   const baseJob: Job<{ task: string }> = {
     id: "pssha∞_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" as const,
+    agentId: "pssha∞_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" as const,
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2024-01-01T00:00:00.000Z",
     type: "verification",

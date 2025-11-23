@@ -14,3 +14,6 @@ export * from "./events/roadChain";
 export * from "./agents/agentBase";
 export * from "./jobs/jobTypes";
 export * from "./jobs/jobLifecycle";
+
+export * from "./utils/time";
+export * from "./utils/hashing";
