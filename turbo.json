@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "apps/**/.next/**", "apps/**/src-tauri/target/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": ["coverage/**"]
+    },
+    "postbuild": {
+      "dependsOn": ["build"],
+      "outputs": ["apps/web/public/sig.beacon.json"]
+    }
+  }
+}

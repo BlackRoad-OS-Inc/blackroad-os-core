@@ -1,0 +1,14 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@blackroad/ui": ["../../packages/ui/src"],
+      "@/trpc/*": ["./trpc/*"],
+      "@blackroad/lib/*": ["../../lib/*"]
+    },
+    "types": ["@types/node"]
+  },
+  "include": ["next-env.d.ts", "app/**/*", "trpc/**/*", "tests/**/*"],
+  "exclude": ["node_modules"]
+}

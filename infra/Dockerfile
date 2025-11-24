@@ -1,11 +1,13 @@
-# Backend Dockerfile
-FROM python:3.11-slim
-
+FROM node:20-alpine as builder
 WORKDIR /app
+COPY . .
+RUN corepack enable && pnpm install --frozen-lockfile=false
+RUN pnpm turbo run build --filter=web
 
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY backend/ .
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+FROM node:20-alpine as runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/apps/web/.next ./.next
+COPY --from=builder /app/apps/web/package.json ./package.json
+EXPOSE 3000
+CMD ["npx", "next", "start"]
