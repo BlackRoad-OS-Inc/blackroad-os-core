@@ -81,11 +81,23 @@ export class RoleGuard {
   }
 }
 
+// Escape HTML special characters to prevent XSS in SVG output
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function generateOrgChartSVG(catalog: Catalog): string {
   const nodes = catalog.agents
     .map((agent, index) => {
       const y = 40 + index * 40;
-      return `<g id="${agent.id}"><rect x="10" y="${y}" width="240" height="30" fill="#0f172a" rx="4"/><text x="20" y="${y + 20}" fill="#e2e8f0">${agent.name} (${agent.role})</text></g>`;
+      const safeName = escapeHtml(agent.name);
+      const safeRole = escapeHtml(agent.role);
+      return `<g id="${agent.id}"><rect x="10" y="${y}" width="240" height="30" fill="#0f172a" rx="4"/><text x="20" y="${y + 20}" fill="#e2e8f0">${safeName} (${safeRole})</text></g>`;
     })
     .join("\n");
 
