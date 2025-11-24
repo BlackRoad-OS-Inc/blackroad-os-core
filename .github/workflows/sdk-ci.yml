@@ -4,7 +4,7 @@ permissions:
 
 on:
   push:
-    branches: [main, feat/core-sdk-initial]
+    branches: [main, 'feat/*']
   pull_request:
 
 jobs:
@@ -31,5 +31,5 @@ jobs:
       - run: pip install poetry
       - run: |
           cd packages/sdk-py
-          poetry install --without dev
+          poetry install
           poetry run pytest
