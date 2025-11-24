@@ -27,7 +27,7 @@ def test_org_chart_svg_snapshot():
 def test_org_chart_svg_xss_protection():
     """Test that XSS injection attempts are properly escaped."""
     malicious_agent = Agent(
-        id="xss1",
+        id="xss1' onload='alert(1)",
         name="</text><script>alert('xss')</script>",
         role="<img src=x onerror=alert('xss')>"
     )
@@ -42,3 +42,5 @@ def test_org_chart_svg_xss_protection():
     # The entire malicious string should be escaped and rendered as plain text
     assert "&lt;/text&gt;&lt;script&gt;" in svg
     assert "&lt;img src=x onerror=alert(" in svg
+    # Verify that quotes in id attribute are also escaped
+    assert "&#x27;" in svg or "&apos;" in svg  # Single quotes should be escaped
