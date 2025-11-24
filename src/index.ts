@@ -6,6 +6,7 @@ export * from "./identity/psShaInfinity";
 export * from "./truth/textSnapshot";
 export * from "./truth/verificationJob";
 export * from "./truth/truthState";
+export * from "./truth/truthAggregation";
 
 export * from "./events/domainEvent";
 export * from "./events/journalEntry";
