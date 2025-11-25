@@ -14,6 +14,11 @@ on:
     branches:
       - main
 
+# Limit permissions of the GITHUB_TOKEN for security
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   dco-check:
     name: DCO Sign-Off Verification
