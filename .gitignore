@@ -14,3 +14,4 @@ coverage
 /tmp
 /apps/web/.vercel
 /apps/web/public/sig.beacon.json
+pnpm-lock.yaml
