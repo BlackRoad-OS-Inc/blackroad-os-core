@@ -5,7 +5,7 @@ from blackroad_core import Catalog, RoleGuard
 FIXTURE = Path(__file__).parent / "fixtures" / "catalog.json"
 
 
-def test_load_catalog_file(monkeypatch):
+def test_load_catalog_file():
     catalog = Catalog.load(str(FIXTURE))
     assert len(catalog.agents) == 2
 

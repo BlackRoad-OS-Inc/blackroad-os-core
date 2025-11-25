@@ -22,15 +22,28 @@ async function loadFromUrl(url: string): Promise<Catalog> {
     throw new Error("Global fetch is not available in this runtime.");
   }
 
-  const res = await fetchFn(url);
-  if (!res.ok) {
-    throw new Error(`Failed to load catalog from ${url}`);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+  try {
+    const res = await fetchFn(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (!res.ok) {
+      throw new Error(`Failed to load catalog from ${url}`);
+    }
+    return (await res.json()) as Catalog;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`Request to ${url} timed out after 5 seconds`);
+    }
+    throw error;
   }
-  return (await res.json()) as Catalog;
 }
 
-function loadFromFile(filePath: string): Catalog {
-  const raw = fs.readFileSync(filePath, "utf-8");
+async function loadFromFile(filePath: string): Promise<Catalog> {
+  const { readFile } = await import("fs/promises");
+  const raw = await readFile(filePath, "utf-8");
   return JSON.parse(raw) as Catalog;
 }
 
@@ -55,6 +68,16 @@ export async function loadCatalog(source?: string): Promise<Catalog> {
 
 export function getAgent(id: string, catalog: Catalog): Agent | null {
   return catalog.agents.find((a) => a.id === id) ?? null;
+}
+
+// Escape HTML special characters to prevent XSS in SVG output
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export class RoleGuard {
