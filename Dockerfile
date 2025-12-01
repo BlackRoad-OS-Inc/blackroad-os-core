@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Generate Prisma client
 RUN pnpm db:generate
@@ -20,20 +20,10 @@ RUN pnpm db:generate
 # Copy source files
 COPY . .
 
-# Production image
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-# Install pnpm for tsx
-RUN corepack enable && corepack prepare pnpm@8.15.8 --activate
-
 ENV NODE_ENV=production
-
-# Copy everything from builder
-COPY --from=builder /app ./
+ENV PORT=4000
 
 EXPOSE 4000
 
-# Start the API server
-CMD ["pnpm", "dev:api"]
+# Start the API server using tsx
+CMD ["npx", "tsx", "src/api/server.ts"]
