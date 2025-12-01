@@ -111,16 +111,6 @@ export class RoleGuard {
   }
 }
 
-// Escape HTML special characters to prevent XSS in SVG output
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 export function generateOrgChartSVG(catalog: Catalog): string {
   const nodes = catalog.agents
     .map((agent, index) => {

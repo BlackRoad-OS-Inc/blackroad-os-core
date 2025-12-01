@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "identifier": "com.blackroad.core",
   "build": {
-    "beforeBuildCommand": "pnpm turbo run build --filter=web",
-    "beforeDevCommand": "pnpm dev --filter=web",
+    "beforeBuildCommand": "pnpm turbo run build --filter=@blackroad/web",
+    "beforeDevCommand": "pnpm dev --filter=@blackroad/web",
     "frontendDist": "../web/.next",
     "devUrl": "http://localhost:3000"
   },
