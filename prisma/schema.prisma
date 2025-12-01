@@ -7,11 +7,264 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ============================================================================
+// AGENTS
+// ============================================================================
+
 model Agent {
   id        String   @id @default(cuid())
   name      String
   status    String   @default("active")
   createdAt DateTime @default(now()) @map("created_at")
 
+  runs AgentRun[]
+
   @@map("agents")
+}
+
+model AgentRun {
+  id        String   @id @default(cuid())
+  agentId   String   @map("agent_id")
+  status    String   @default("running") // running, completed, failed
+  input     Json?
+  output    Json?
+  error     String?
+  startedAt DateTime @default(now()) @map("started_at")
+  endedAt   DateTime? @map("ended_at")
+
+  agent Agent @relation(fields: [agentId], references: [id])
+
+  @@map("agent_runs")
+}
+
+// ============================================================================
+// USERS & ACCOUNTS
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?  @map("avatar_url")
+  role      String   @default("member") // admin, member, viewer
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  memberships AccountMembership[]
+  auditLogs   AuditLog[]
+
+  @@map("users")
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  plan      String   @default("free") // free, pro, team, enterprise
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  memberships AccountMembership[]
+  projects    Project[]
+
+  @@map("accounts")
+}
+
+model AccountMembership {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  accountId String   @map("account_id")
+  role      String   @default("member") // owner, admin, member, viewer
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@unique([userId, accountId])
+  @@map("account_memberships")
+}
+
+// ============================================================================
+// PROJECTS (The Five Pillars Container)
+// ============================================================================
+
+model Project {
+  id          String   @id @default(cuid())
+  accountId   String   @map("account_id")
+  name        String
+  slug        String
+  description String?
+  type        String   @default("infra") // infra, creator, homework, business, agent
+  status      String   @default("active") // active, archived
+  metadata    Json?    // Flexible field for type-specific data
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  account      Account       @relation(fields: [accountId], references: [id])
+  services     Service[]
+  domains      Domain[]
+  repositories Repository[]
+  environments Environment[]
+
+  @@unique([accountId, slug])
+  @@map("projects")
+}
+
+// ============================================================================
+// INFRA MAP: Services, Domains, Repositories, Environments
+// ============================================================================
+
+model Service {
+  id           String   @id @default(cuid())
+  projectId    String   @map("project_id")
+  name         String
+  provider     String   @default("railway") // railway, vercel, cloudflare, manual
+  externalId   String?  @map("external_id") // Railway service ID, etc.
+  status       String   @default("unknown") // healthy, degraded, down, unknown
+  url          String?
+  environmentId String? @map("environment_id")
+  metadata     Json?    // Provider-specific data
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project     Project      @relation(fields: [projectId], references: [id])
+  environment Environment? @relation(fields: [environmentId], references: [id])
+  domains     Domain[]
+
+  @@map("services")
+}
+
+model Domain {
+  id           String   @id @default(cuid())
+  projectId    String   @map("project_id")
+  serviceId    String?  @map("service_id")
+  hostname     String   @unique
+  provider     String   @default("cloudflare") // cloudflare, route53, manual
+  zoneId       String?  @map("zone_id") // Cloudflare zone ID
+  recordId     String?  @map("record_id") // DNS record ID
+  recordType   String?  @map("record_type") // A, CNAME, etc.
+  target       String?  // Where it points
+  proxied      Boolean  @default(true)
+  sslStatus    String?  @map("ssl_status")
+  status       String   @default("unknown") // active, pending, error, unknown
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project Project  @relation(fields: [projectId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
+
+  @@map("domains")
+}
+
+model Repository {
+  id           String   @id @default(cuid())
+  projectId    String   @map("project_id")
+  provider     String   @default("github") // github, gitlab
+  owner        String   // org or user
+  name         String   // repo name
+  fullName     String   @map("full_name") // owner/name
+  defaultBranch String  @default("main") @map("default_branch")
+  url          String
+  externalId   String?  @map("external_id") // GitHub repo ID
+  isPrivate    Boolean  @default(true) @map("is_private")
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@unique([provider, fullName])
+  @@map("repositories")
+}
+
+model Environment {
+  id        String   @id @default(cuid())
+  projectId String   @map("project_id")
+  name      String   // dev, staging, production
+  slug      String
+  isDefault Boolean  @default(false) @map("is_default")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project  Project   @relation(fields: [projectId], references: [id])
+  services Service[]
+
+  @@unique([projectId, slug])
+  @@map("environments")
+}
+
+// ============================================================================
+// AUDIT LOG
+// ============================================================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?  @map("user_id")
+  agentId    String?  @map("agent_id")
+  action     String   // e.g., "project.create", "domain.update"
+  resource   String   // e.g., "project", "domain"
+  resourceId String?  @map("resource_id")
+  metadata   Json?    // Additional context
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ============================================================================
+// CREATOR PORTAL
+// ============================================================================
+
+model CreatorProject {
+  id          String   @id @default(cuid())
+  projectId   String?  @map("project_id") // Link to infra Project if applicable
+  title       String
+  type        String   @default("landing") // landing, course, campaign, doc
+  status      String   @default("draft") // draft, review, published, archived
+  description String?
+  content     Json?    // Flexible content structure
+  stylePrefs  Json?    @map("style_prefs") // Remembered creation preferences
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("creator_projects")
+}
+
+// ============================================================================
+// HOMEWORK PORTAL
+// ============================================================================
+
+model HomeworkSession {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id") // Optional, for logged-in users
+  subject   String?  // math, english, science, etc.
+  grade     String?  // Grade level
+  createdAt DateTime @default(now()) @map("created_at")
+
+  items HomeworkItem[]
+
+  @@map("homework_sessions")
+}
+
+model HomeworkItem {
+  id        String   @id @default(cuid())
+  sessionId String   @map("session_id")
+  question  String   @db.Text
+  subject   String?
+  response  String?  @db.Text // AI response
+  status    String   @default("pending") // pending, processing, completed, error
+  metadata  Json?    // Additional context (images, structured data)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  session HomeworkSession @relation(fields: [sessionId], references: [id])
+
+  @@map("homework_items")
 }
