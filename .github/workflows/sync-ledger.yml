@@ -1,0 +1,92 @@
+# ============================================================================
+# BlackRoad OS - Sync Ledger Files
+# Keep DOMAINS.json and REPOS.yaml up to date
+# ============================================================================
+
+name: Sync Ledger
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  sync-domains:
+    runs-on: ubuntu-latest
+    name: Update Domain Registry
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Setup Node
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        with:
+          node-version: '20'
+
+      - name: Query Cloudflare Zones
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          # Fetch zone list from Cloudflare API
+          curl -s -X GET "https://api.cloudflare.com/client/v4/zones" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" > zones.json
+
+          echo "Cloudflare zones fetched"
+          cat zones.json | jq '.result | length'
+
+      - name: Update DOMAINS.json
+        run: |
+          # Update last_updated timestamp
+          jq '.last_updated = now | todate' DOMAINS.json > DOMAINS.json.tmp
+          mv DOMAINS.json.tmp DOMAINS.json
+
+          echo "✅ DOMAINS.json updated"
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "cece@blackroad.systems"
+          git config --local user.name "Cece (BlackRoad Operator)"
+
+          if git diff --quiet DOMAINS.json; then
+            echo "No changes to commit"
+          else
+            git add DOMAINS.json
+            git commit -m "chore: update domain registry (automated)
+
+            🤖 Generated with BlackRoad OS
+            Co-Authored-By: Cece <cece@blackroad.systems>"
+
+            # Uncomment to push:
+            # git push
+          fi
+
+  sync-repos:
+    runs-on: ubuntu-latest
+    name: Update Repository Registry
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Query GitHub Orgs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # List all orgs
+          gh api user/orgs --jq '.[].login' > orgs.txt
+
+          echo "GitHub organizations:"
+          cat orgs.txt
+
+          # Count repos per org
+          while read org; do
+            count=$(gh api "orgs/$org/repos" --paginate --jq '. | length')
+            echo "$org: $count repos"
+          done < orgs.txt
+
+      - name: Generate Report
+        run: |
+          echo "Repository sync complete"
+          echo "Total organizations: $(wc -l < orgs.txt)"

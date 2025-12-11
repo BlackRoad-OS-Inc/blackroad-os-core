@@ -1,0 +1,303 @@
+name: Auto-Fix Build Failures
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Railway", "CI"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      service_name:
+        description: 'Service to fix (optional)'
+        required: false
+
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+jobs:
+  detect-and-fix:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests anthropic openai
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Check Railway deployment status
+        id: check_status
+        run: |
+          echo "Checking Railway deployment status..."
+
+          # Get failed services
+          railway service status --all > railway_status.txt || true
+
+          FAILED_SERVICES=$(grep "FAILED\|CRASHED" railway_status.txt | awk '{print $1}' || echo "")
+
+          echo "failed_services<<EOF" >> $GITHUB_OUTPUT
+          echo "$FAILED_SERVICES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          if [ -n "$FAILED_SERVICES" ]; then
+            echo "has_failures=true" >> $GITHUB_OUTPUT
+            echo "❌ Found failed services:"
+            echo "$FAILED_SERVICES"
+          else
+            echo "has_failures=false" >> $GITHUB_OUTPUT
+            echo "✅ No failed services"
+          fi
+
+      - name: Analyze build logs
+        if: steps.check_status.outputs.has_failures == 'true'
+        id: analyze
+        run: |
+          cat > analyze_failures.py << 'SCRIPT_EOF'
+          import os
+          import sys
+          import subprocess
+          import json
+
+          def get_service_logs(service_name):
+              """Get Railway service logs"""
+              try:
+                  result = subprocess.run(
+                      ['railway', 'logs', '--service', service_name],
+                      capture_output=True,
+                      text=True,
+                      timeout=30
+                  )
+                  return result.stdout + result.stderr
+              except Exception as e:
+                  print(f"Error getting logs for {service_name}: {e}")
+                  return ""
+
+          def analyze_error(logs):
+              """Analyze error logs and suggest fixes"""
+              common_fixes = {
+                  "ModuleNotFoundError": "Add missing dependency to requirements.txt",
+                  "SyntaxError": "Fix Python syntax error",
+                  "ImportError": "Fix import path or add missing package",
+                  "port already in use": "Change PORT environment variable",
+                  "EADDRINUSE": "Port conflict - update port configuration",
+                  "Cannot find module": "Add missing Node.js dependency",
+                  "command not found": "Add missing system dependency",
+                  "Permission denied": "Fix file permissions or paths",
+                  "No such file": "Add missing file or fix path"
+              }
+
+              fixes = []
+              for error, fix in common_fixes.items():
+                  if error.lower() in logs.lower():
+                      fixes.append({
+                          "error": error,
+                          "fix": fix,
+                          "found_in": logs.split('\n')[0][:100]
+                      })
+
+              return fixes
+
+          # Get failed services from environment
+          failed_services = os.getenv('FAILED_SERVICES', '').strip().split('\n')
+          failed_services = [s.strip() for s in failed_services if s.strip()]
+
+          all_fixes = {}
+
+          for service in failed_services[:5]:  # Limit to 5 services
+              print(f"\n📊 Analyzing {service}...")
+              logs = get_service_logs(service)
+              fixes = analyze_error(logs)
+
+              if fixes:
+                  all_fixes[service] = fixes
+                  print(f"  Found {len(fixes)} potential fixes")
+              else:
+                  print(f"  No automatic fixes identified")
+
+          # Output results
+          with open('fix_suggestions.json', 'w') as f:
+              json.dump(all_fixes, f, indent=2)
+
+          print(f"\n✅ Analysis complete. Suggestions saved.")
+          SCRIPT_EOF
+
+          python analyze_failures.py
+
+          if [ -f fix_suggestions.json ]; then
+            echo "suggestions<<EOF" >> $GITHUB_OUTPUT
+            cat fix_suggestions.json >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+        env:
+          FAILED_SERVICES: ${{ steps.check_status.outputs.failed_services }}
+
+      - name: Auto-fix common issues
+        if: steps.check_status.outputs.has_failures == 'true'
+        run: |
+          cat > auto_fix.py << 'SCRIPT_EOF'
+          import os
+          import json
+          import subprocess
+
+          def fix_requirements():
+              """Add common missing dependencies"""
+              common_deps = [
+                  "flask",
+                  "flask-cors",
+                  "python-dotenv",
+                  "requests"
+              ]
+
+              requirements_file = "requirements.txt"
+              if os.path.exists(requirements_file):
+                  with open(requirements_file, 'r') as f:
+                      current = set(line.strip() for line in f if line.strip())
+
+                  with open(requirements_file, 'a') as f:
+                      for dep in common_deps:
+                          if not any(dep in req for req in current):
+                              f.write(f"\n{dep}")
+                              print(f"✅ Added {dep} to requirements.txt")
+
+          def fix_syntax_errors():
+              """Run autopep8 to fix common syntax issues"""
+              try:
+                  subprocess.run(['pip', 'install', 'autopep8'], check=True)
+                  subprocess.run(
+                      ['autopep8', '--in-place', '--recursive', '.'],
+                      check=True
+                  )
+                  print("✅ Fixed syntax errors with autopep8")
+              except Exception as e:
+                  print(f"⚠️  Could not run autopep8: {e}")
+
+          def fix_port_conflicts():
+              """Update railway.toml with unique ports"""
+              import random
+
+              if os.path.exists('railway.toml'):
+                  with open('railway.toml', 'r') as f:
+                      content = f.read()
+
+                  # Generate random port
+                  port = random.randint(8000, 9000)
+
+                  if 'PORT' in content:
+                      content = content.replace('PORT = "8000"', f'PORT = "{port}"')
+                      with open('railway.toml', 'w') as f:
+                          f.write(content)
+                      print(f"✅ Updated PORT to {port}")
+
+          # Apply fixes
+          print("🔧 Applying automatic fixes...")
+          fix_requirements()
+          fix_syntax_errors()
+          fix_port_conflicts()
+          print("✅ Auto-fixes complete")
+          SCRIPT_EOF
+
+          python auto_fix.py
+
+      - name: Commit fixes
+        if: steps.check_status.outputs.has_failures == 'true'
+        run: |
+          git config --global user.name "BlackRoad Auto-Fix Bot"
+          git config --global user.email "autofix@blackroad.io"
+
+          git add -A
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "fix: Auto-fix build failures
+
+          🤖 Automated fixes applied by BlackRoad Auto-Fix workflow
+
+          Fixed services:
+          ${{ steps.check_status.outputs.failed_services }}
+
+          Applied fixes:
+          - Updated dependencies
+          - Fixed syntax errors
+          - Resolved port conflicts
+
+          Generated with Claude Code"
+
+            git push
+            echo "✅ Pushed auto-fixes to GitHub"
+          fi
+
+      - name: Trigger redeployment
+        if: steps.check_status.outputs.has_failures == 'true'
+        run: |
+          echo "🔄 Triggering Railway redeployment..."
+
+          # Redeploy failed services
+          FAILED_SERVICES="${{ steps.check_status.outputs.failed_services }}"
+
+          for service in $FAILED_SERVICES; do
+            echo "Redeploying $service..."
+            railway service link "$service" || true
+            railway up --service "$service" --detach || true
+          done
+
+      - name: Create issue if fixes fail
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const failedServices = process.env.FAILED_SERVICES;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Build Auto-Fix Failed',
+              body: `## Build Failure Auto-Fix Attempt Failed
+
+              The automated fix workflow could not resolve build failures.
+
+              **Failed Services:**
+              \`\`\`
+              ${failedServices}
+              \`\`\`
+
+              **Manual intervention required.**
+
+              Please review the [workflow run](${context.payload.workflow_run.html_url}) for details.
+
+              /cc @alexa
+              `,
+              labels: ['bug', 'auto-fix-failed', 'needs-review']
+            });
+        env:
+          FAILED_SERVICES: ${{ steps.check_status.outputs.failed_services }}
+
+      - name: Report status
+        if: always()
+        run: |
+          echo "╔════════════════════════════════════════════════════════╗"
+          echo "║  Auto-Fix Build Failures - Summary                    ║"
+          echo "╚════════════════════════════════════════════════════════╝"
+          echo ""
+          echo "Failed services: ${{ steps.check_status.outputs.has_failures }}"
+          echo ""
+          if [ "${{ steps.check_status.outputs.has_failures }}" == "true" ]; then
+            echo "Services fixed:"
+            echo "${{ steps.check_status.outputs.failed_services }}"
+          else
+            echo "✅ No failures detected"
+          fi

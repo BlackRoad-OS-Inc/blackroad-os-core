@@ -1,0 +1,141 @@
+# ============================================================================
+# BlackRoad OS - API Integration Tests
+# Test all deployed workers and services
+# ============================================================================
+
+name: API Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+
+jobs:
+  test-workers:
+    runs-on: ubuntu-latest
+    name: Test Cloudflare Workers
+
+    steps:
+      - name: Test API Gateway Health
+        run: |
+          response=$(curl -s https://blackroad-gateway-v2.amundsonalexa.workers.dev/api/v1/health)
+          echo "$response"
+          if echo "$response" | grep -q "healthy"; then
+            echo "✅ API Gateway healthy"
+          else
+            echo "❌ API Gateway failed"
+            exit 1
+          fi
+
+      - name: Test API Gateway Status
+        run: |
+          response=$(curl -s https://blackroad-gateway-v2.amundsonalexa.workers.dev/api/v1/status)
+          echo "$response"
+          if echo "$response" | grep -q "kv_namespaces"; then
+            echo "✅ Status endpoint working"
+          else
+            echo "❌ Status endpoint failed"
+            exit 1
+          fi
+
+      - name: Test KV Manager Stats
+        run: |
+          response=$(curl -s https://blackroad-kv-manager.amundsonalexa.workers.dev/kv/stats)
+          echo "$response"
+          if echo "$response" | grep -q "namespaces"; then
+            echo "✅ KV Manager working"
+          else
+            echo "❌ KV Manager failed"
+            exit 1
+          fi
+
+      - name: Test D1 API
+        run: |
+          response=$(curl -s https://blackroad-d1-api.amundsonalexa.workers.dev/)
+          echo "$response"
+          if echo "$response" | grep -q "D1 API"; then
+            echo "✅ D1 API responding"
+          else
+            echo "❌ D1 API failed"
+            exit 1
+          fi
+
+      - name: Test Rate Limiter
+        run: |
+          response=$(curl -s https://blackroad-ratelimit.amundsonalexa.workers.dev/api/test)
+          echo "$response"
+          if echo "$response" | grep -q "allowed"; then
+            echo "✅ Rate Limiter working"
+          else
+            echo "❌ Rate Limiter failed"
+            exit 1
+          fi
+
+      - name: Test Auth Middleware
+        run: |
+          response=$(curl -s https://blackroad-auth.amundsonalexa.workers.dev/)
+          echo "$response"
+          if echo "$response" | grep -q "authenticated"; then
+            echo "✅ Auth Middleware working"
+          else
+            echo "❌ Auth Middleware failed"
+            exit 1
+          fi
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ ALL WORKERS PASSING"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "API Gateway: ✅"
+          echo "KV Manager: ✅"
+          echo "D1 API: ✅"
+          echo "Rate Limiter: ✅"
+          echo "Auth Middleware: ✅"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  test-domains:
+    runs-on: ubuntu-latest
+    name: Test Live Domains
+
+    steps:
+      - name: Test blackroad.io
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://blackroad.io)
+          if [ "$status" = "200" ]; then
+            echo "✅ blackroad.io: HTTP $status"
+          else
+            echo "⚠️  blackroad.io: HTTP $status"
+          fi
+
+      - name: Test blackroadai.com
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://blackroadai.com)
+          if [ "$status" = "200" ]; then
+            echo "✅ blackroadai.com: HTTP $status"
+          else
+            echo "⚠️  blackroadai.com: HTTP $status"
+          fi
+
+      - name: Test lucidia.earth
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://lucidia.earth)
+          if [ "$status" = "200" ]; then
+            echo "✅ lucidia.earth: HTTP $status"
+          else
+            echo "⚠️  lucidia.earth: HTTP $status"
+          fi
+
+      - name: Test app.blackroad.io
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://app.blackroad.io)
+          if [ "$status" = "200" ]; then
+            echo "✅ app.blackroad.io: HTTP $status"
+          else
+            echo "⚠️  app.blackroad.io: HTTP $status"
+          fi

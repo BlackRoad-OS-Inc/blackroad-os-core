@@ -1,0 +1,85 @@
+# ============================================================================
+# BlackRoad OS - Deploy Cloudflare Workers
+# Automated deployment on push to main
+# ============================================================================
+
+name: Deploy Workers
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'cloudflare-workers/**'
+      - '.github/workflows/deploy-workers.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Cloudflare Workers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Setup Node
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        with:
+          node-version: '20'
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Deploy API Gateway
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy api-gateway.js --name blackroad-gateway-v2
+
+      - name: Deploy KV Manager
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy kv-manager.js --name blackroad-kv-manager
+
+      - name: Deploy D1 API
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy d1-api.js --name blackroad-d1-api
+
+      - name: Deploy Rate Limiter
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy rate-limiter.js --name blackroad-ratelimit
+
+      - name: Deploy Auth Middleware
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy auth-middleware.js --name blackroad-auth
+
+      - name: Deploy Webhook Handler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd cloudflare-workers
+          wrangler deploy webhook-handler.js --name blackroad-webhooks
+
+      - name: Notify Deployment
+        if: success()
+        run: |
+          echo "✅ All workers deployed successfully"
+          echo "Workers: 6/6 live"

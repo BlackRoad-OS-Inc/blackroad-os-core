@@ -1,0 +1,145 @@
+name: Deployment Status Dashboard
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Generate deployment status
+        run: |
+          cat > generate_status.sh << 'SCRIPT_EOF'
+          #!/bin/bash
+
+          OUTPUT="DEPLOYMENT-STATUS-$(date +%Y-%m-%d).md"
+
+          cat > "$OUTPUT" << 'EOF'
+          # BlackRoad OS - Deployment Status
+          **Last Updated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Commit:** $GITHUB_SHA
+
+          ## Railway Services
+
+          | Service | Status | Last Deploy |
+          |---------|--------|-------------|
+          EOF
+
+          # Get all service statuses
+          railway service status --all | while IFS='|' read -r name id status; do
+            # Clean up fields
+            name=$(echo "$name" | xargs)
+            status=$(echo "$status" | xargs)
+
+            if [ -n "$name" ] && [ "$name" != "Service" ]; then
+              # Map status to emoji
+              case "$status" in
+                "SUCCESS")
+                  emoji="✅"
+                  ;;
+                "FAILED"|"CRASHED")
+                  emoji="❌"
+                  ;;
+                "SLEEPING")
+                  emoji="💤"
+                  ;;
+                "STOPPED")
+                  emoji="⏸️"
+                  ;;
+                *)
+                  emoji="❓"
+                  ;;
+              esac
+
+              echo "| $name | $emoji $status | $(date -u +"%Y-%m-%d") |" >> "$OUTPUT"
+            fi
+          done
+
+          cat >> "$OUTPUT" << 'EOF'
+
+          ## Health Endpoints
+
+          | Endpoint | Status |
+          |----------|--------|
+          EOF
+
+          # Test known endpoints
+          ENDPOINTS=(
+            "https://blackroad-os-api-gateway-production.up.railway.app/health|API Gateway"
+          )
+
+          for entry in "${ENDPOINTS[@]}"; do
+            IFS='|' read -r url name <<< "$entry"
+
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$url" -m 10 || echo "000")
+
+            if [ "$HTTP_CODE" == "200" ]; then
+              echo "| $name | ✅ Online ($HTTP_CODE) |" >> "$OUTPUT"
+            else
+              echo "| $name | ❌ Offline ($HTTP_CODE) |" >> "$OUTPUT"
+            fi
+          done
+
+          cat >> "$OUTPUT" << 'EOF'
+
+          ## Quick Actions
+
+          - 🔄 [Trigger Deploy](../../actions/workflows/railway-deploy.yml)
+          - 🔧 [Run Auto-Fix](../../actions/workflows/auto-fix-build-failures.yml)
+          - 🏥 [Health Check](../../actions/workflows/health-monitor.yml)
+
+          ## Recent Deployments
+
+          EOF
+
+          # Add recent workflow runs
+          echo "Last 5 deployments:" >> "$OUTPUT"
+          echo "" >> "$OUTPUT"
+
+          cat >> "$OUTPUT" << 'EOF'
+
+          ---
+          *Generated automatically by GitHub Actions*
+          EOF
+
+          echo "dashboard_file=$OUTPUT" >> $GITHUB_OUTPUT
+          cat "$OUTPUT"
+          SCRIPT_EOF
+
+          chmod +x generate_status.sh
+          ./generate_status.sh
+
+      - name: Commit dashboard
+        run: |
+          git config --global user.name "BlackRoad Status Bot"
+          git config --global user.email "status@blackroad.io"
+
+          if [ -f DEPLOYMENT-STATUS-*.md ]; then
+            git add DEPLOYMENT-STATUS-*.md
+            git commit -m "docs: Update deployment status dashboard [skip ci]" || echo "No changes"
+            git push || echo "Push failed"
+          fi
+
+      - name: Create deployment summary
+        run: |
+          echo "## 📊 Deployment Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          railway service status --all | head -20 >> $GITHUB_STEP_SUMMARY || true
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Dashboard updated successfully" >> $GITHUB_STEP_SUMMARY

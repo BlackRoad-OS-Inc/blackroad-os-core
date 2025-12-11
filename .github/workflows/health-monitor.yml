@@ -1,0 +1,182 @@
+name: Health Monitor & Auto-Heal
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Every 15 minutes
+  workflow_dispatch:
+
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Check all services health
+        id: health
+        run: |
+          cat > check_health.sh << 'SCRIPT_EOF'
+          #!/bin/bash
+
+          echo "╔════════════════════════════════════════════════════════╗"
+          echo "║  BlackRoad OS - Health Monitor                        ║"
+          echo "╚════════════════════════════════════════════════════════╝"
+          echo ""
+
+          # Get all service statuses
+          railway service status --all > services.txt
+
+          UNHEALTHY_COUNT=0
+          HEALTHY_COUNT=0
+
+          # Count failed/crashed services
+          FAILED=$(grep -E "FAILED|CRASHED" services.txt | wc -l || echo "0")
+          SUCCESS=$(grep "SUCCESS" services.txt | wc -l || echo "0")
+
+          echo "📊 Service Health Status:"
+          echo "  ✅ Healthy: $SUCCESS"
+          echo "  ❌ Unhealthy: $FAILED"
+          echo ""
+
+          # Save metrics
+          echo "healthy=$SUCCESS" >> $GITHUB_OUTPUT
+          echo "unhealthy=$FAILED" >> $GITHUB_OUTPUT
+
+          if [ "$FAILED" -gt 0 ]; then
+            echo "needs_healing=true" >> $GITHUB_OUTPUT
+
+            # Get failed service names
+            FAILED_SERVICES=$(grep -E "FAILED|CRASHED" services.txt | awk '{print $1}' | tr '\n' ',' || echo "")
+            echo "failed_services=$FAILED_SERVICES" >> $GITHUB_OUTPUT
+
+            echo "⚠️  Unhealthy services detected!"
+            exit 1
+          else
+            echo "needs_healing=false" >> $GITHUB_OUTPUT
+            echo "✅ All services healthy"
+          fi
+          SCRIPT_EOF
+
+          chmod +x check_health.sh
+          ./check_health.sh || true
+
+      - name: Test service endpoints
+        id: endpoints
+        run: |
+          cat > test_endpoints.sh << 'SCRIPT_EOF'
+          #!/bin/bash
+
+          # Known service endpoints
+          declare -a ENDPOINTS=(
+            "https://blackroad-os-api-gateway-production.up.railway.app/health"
+          )
+
+          FAILED_ENDPOINTS=()
+
+          for endpoint in "${ENDPOINTS[@]}"; do
+            echo "Testing: $endpoint"
+
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$endpoint" -m 10 || echo "000")
+
+            if [ "$HTTP_CODE" == "200" ] || [ "$HTTP_CODE" == "201" ]; then
+              echo "  ✅ $HTTP_CODE"
+            else
+              echo "  ❌ $HTTP_CODE"
+              FAILED_ENDPOINTS+=("$endpoint")
+            fi
+          done
+
+          if [ ${#FAILED_ENDPOINTS[@]} -gt 0 ]; then
+            echo "endpoint_failures=true" >> $GITHUB_OUTPUT
+            echo "⚠️  ${#FAILED_ENDPOINTS[@]} endpoints failed"
+          else
+            echo "endpoint_failures=false" >> $GITHUB_OUTPUT
+            echo "✅ All endpoints responding"
+          fi
+          SCRIPT_EOF
+
+          chmod +x test_endpoints.sh
+          ./test_endpoints.sh || true
+
+      - name: Auto-restart unhealthy services
+        if: steps.health.outputs.needs_healing == 'true'
+        run: |
+          echo "🔄 Restarting unhealthy services..."
+
+          FAILED_SERVICES="${{ steps.health.outputs.failed_services }}"
+          IFS=',' read -ra SERVICES <<< "$FAILED_SERVICES"
+
+          for service in "${SERVICES[@]}"; do
+            if [ -n "$service" ]; then
+              echo "Restarting: $service"
+              railway service link "$service" || true
+              railway service restart || true
+              sleep 5
+            fi
+          done
+
+          echo "✅ Restart commands sent"
+
+      - name: Trigger auto-fix workflow
+        if: steps.health.outputs.needs_healing == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'auto-fix-build-failures.yml',
+              ref: 'master'
+            });
+
+            console.log('✅ Triggered auto-fix workflow');
+
+      - name: Send notification
+        if: steps.health.outputs.needs_healing == 'true'
+        run: |
+          echo "📧 Health issues detected:"
+          echo "  Unhealthy services: ${{ steps.health.outputs.unhealthy }}"
+          echo "  Failed services: ${{ steps.health.outputs.failed_services }}"
+          echo ""
+          echo "Auto-healing initiated..."
+
+      - name: Create health report
+        if: always()
+        run: |
+          cat > health-report.md << EOF
+          # BlackRoad OS Health Report
+          **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Service Status
+          - ✅ Healthy: ${{ steps.health.outputs.healthy }}
+          - ❌ Unhealthy: ${{ steps.health.outputs.unhealthy }}
+
+          ## Endpoint Status
+          - Endpoint Failures: ${{ steps.health.outputs.endpoint_failures }}
+
+          ## Actions Taken
+          EOF
+
+          if [ "${{ steps.health.outputs.needs_healing }}" == "true" ]; then
+            echo "- 🔄 Restarted unhealthy services" >> health-report.md
+            echo "- 🤖 Triggered auto-fix workflow" >> health-report.md
+          else
+            echo "- ✅ No action needed - all systems healthy" >> health-report.md
+          fi
+
+          cat health-report.md
+
+      - name: Upload health report
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        with:
+          name: health-report-${{ github.run_number }}
+          path: health-report.md
+          retention-days: 7
