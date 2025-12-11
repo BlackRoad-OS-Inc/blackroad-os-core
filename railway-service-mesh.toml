@@ -1,0 +1,16 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-service-mesh.py"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "service-mesh"
+
+[services.env]
+PORT = "9100"
+PYTHONUNBUFFERED = "1"

@@ -1,0 +1,17 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-cache.py"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "cache"
+
+[services.env]
+PORT = "9850"
+NODE_ENV = "production"
+PYTHONUNBUFFERED = "1"

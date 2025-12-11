@@ -1,0 +1,23 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python3 blackroad-console-api.py"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "blackroad-console-api"
+port = 9999
+
+[env]
+PYTHON_VERSION = "3.11"
+PORT = "9999"
+
+# Secrets (set via Railway dashboard or CLI)
+# GITHUB_TOKEN
+# RAILWAY_TOKEN
+# CLOUDFLARE_API_TOKEN
+# CLOUDFLARE_ACCOUNT_ID

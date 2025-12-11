@@ -1,0 +1,245 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "echo 'Building BlackRoad OS services...'"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "services": [
+    {
+      "name": "auth-api",
+      "startCommand": "python3 blackroad-auth-system.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "11000",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "event-bus",
+      "startCommand": "python3 blackroad-event-bus.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9800",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "service-registry",
+      "startCommand": "python3 blackroad-service-registry.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9900",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "operator",
+      "startCommand": "python3 operator_http.py",
+      "healthcheckPath": "/status",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8000",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "agent-orchestrator",
+      "startCommand": "python3 blackroad-agent-orchestrator-v2.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "10100",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "integrations-hub",
+      "startCommand": "python3 blackroad_integrations_hub.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9700",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "vector-db",
+      "startCommand": "python3 blackroad-vectordb.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9600",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "stream",
+      "startCommand": "python3 blackroad-stream.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9500",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "message-queue",
+      "startCommand": "python3 blackroad-mq.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9400",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "llm-server",
+      "startCommand": "python3 blackroad-llm-server.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9300",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "api-gateway",
+      "startCommand": "python3 blackroad-api-gateway.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9200",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "service-mesh",
+      "startCommand": "python3 blackroad-service-mesh.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9100",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "backup",
+      "startCommand": "python3 blackroad-backup.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9000",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "cache",
+      "startCommand": "python3 blackroad-cache.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8900",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "ratelimiter",
+      "startCommand": "python3 blackroad-ratelimiter.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8800",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "observability",
+      "startCommand": "python3 blackroad-observability.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8700",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "agent-beacon",
+      "startCommand": "python3 blackroad-agent-beacon.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8600",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "leak-detector",
+      "startCommand": "python3 blackroad-leak-detector.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8500",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "console-server",
+      "startCommand": "python3 blackroad-console-server.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8888",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "terminal-server",
+      "startCommand": "python3 blackroad-terminal-server.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "8080",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    },
+    {
+      "name": "ws-server",
+      "startCommand": "python3 blackroad-ws-server.py",
+      "healthcheckPath": "/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "3000",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-leak-detector.py"
+healthcheckPath = "/api/leak/signatures"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[env]
+PORT = "11100"
+PYTHON_VERSION = "3.11"
+FLASK_ENV = "production"

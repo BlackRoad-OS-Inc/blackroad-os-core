@@ -1,0 +1,14 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-agent-beacon.py"
+healthcheckPath = "/api/beacon/agents"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[env]
+PORT = "11000"
+PYTHON_VERSION = "3.11"
+FLASK_ENV = "production"

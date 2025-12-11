@@ -1,0 +1,16 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-ws-server.py"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "ws-server"
+
+[services.env]
+PORT = "3000"
+PYTHONUNBUFFERED = "1"

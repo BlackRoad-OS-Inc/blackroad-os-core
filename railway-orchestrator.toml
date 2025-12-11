@@ -1,0 +1,24 @@
+# BlackRoad Railway Orchestrator Configuration
+# This service can deploy and manage all other services
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements-orchestrator.txt"
+
+[deploy]
+startCommand = "uvicorn blackroad-railway-orchestrator:app --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "blackroad-railway-orchestrator"
+port = 8500
+
+[env]
+PORT = "8500"
+RAILWAY_TOKEN = "${RAILWAY_TOKEN}"
+RAILWAY_PROJECT_ID = "${RAILWAY_PROJECT_ID}"
+RAILWAY_ENVIRONMENT_ID = "${RAILWAY_ENVIRONMENT_ID}"
+GITHUB_TOKEN = "${GITHUB_TOKEN}"

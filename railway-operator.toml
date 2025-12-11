@@ -1,0 +1,41 @@
+# Railway Configuration for blackroad-os-operator
+[build]
+builder = "nixpacks"
+buildCommand = "echo 'Building blackroad-os-operator...'"
+
+[deploy]
+startCommand = "./start-all.sh"
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 3
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+
+
+[[services]]
+name = "blackroad-os-operator-orchestrator"
+build.builder = "nixpacks"
+deploy.startCommand = "python3 blackroad-orchestrator.py"
+
+[[services]]
+name = "blackroad-os-operator-api"
+build.builder = "nixpacks"
+deploy.startCommand = "python3 blackroad-api.py"
+
+[[services]]
+name = "blackroad-os-operator-monitoring"
+
+[environments.production]
+RAILWAY_ENVIRONMENT = "production"
+NODE_ENV = "production"
+
+[environments.staging]
+RAILWAY_ENVIRONMENT = "staging"
+NODE_ENV = "development"
+
+# Primary Operator Repo
+[monitoring]
+enabled = true
+
+[alerts]
+enabled = true
+slack_webhook = "$SLACK_WEBHOOK"
