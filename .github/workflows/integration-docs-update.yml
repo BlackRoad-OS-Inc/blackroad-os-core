@@ -1,0 +1,90 @@
+name: Integrations - Auto-Update Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blackroad-integrations-hub.py'
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    name: Update Integration Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements-integrations.txt
+
+      - name: Generate API documentation
+        run: |
+          python << 'PYEOF'
+          from blackroad_integrations_hub import app
+          import json
+
+          schema = app.openapi()
+
+          # Generate markdown documentation
+          with open('API-REFERENCE.md', 'w') as f:
+              f.write('# Integrations Hub API Reference\n\n')
+              f.write(f'**Version**: {schema["info"]["version"]}\n\n')
+
+              f.write('## Endpoints\n\n')
+              for path, methods in schema['paths'].items():
+                  for method, details in methods.items():
+                      f.write(f'### {method.upper()} {path}\n')
+                      f.write(f'{details.get("summary", "No description")}\n\n')
+
+          print('✅ API reference generated')
+          PYEOF
+
+      - name: Update integration count
+        run: |
+          python << 'PYEOF'
+          from blackroad_integrations_hub import app
+          from fastapi.testclient import TestClient
+
+          client = TestClient(app)
+          response = client.get('/api/integrations/status')
+          integrations = response.json()['integrations']
+
+          with open('INTEGRATION-COUNT.md', 'w') as f:
+              f.write(f'# Integration Count\n\n')
+              f.write(f'**Total Integrations**: {len(integrations)}\n\n')
+
+              for name, status in integrations.items():
+                  emoji = '✅' if status['configured'] else '⏳'
+                  f.write(f'{emoji} **{name.title()}**: {status["status"]}\n')
+
+          print('✅ Integration count updated')
+          PYEOF
+
+      - name: Commit documentation changes
+        run: |
+          git config --local user.email "noreply@anthropic.com"
+          git config --local user.name "Claude Code"
+          git add API-REFERENCE.md INTEGRATION-COUNT.md
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "$(cat <<'COMMITMSG'
+          docs: auto-update integration documentation 📚
+
+          🤖 Generated with Claude Code
+          Co-Authored-By: Claude <noreply@anthropic.com>
+          COMMITMSG
+          )"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@d91a481090679876dfc4178fef17f286781251df # v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

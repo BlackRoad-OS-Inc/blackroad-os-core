@@ -1,0 +1,76 @@
+name: Health Monitor - All Services
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Check Service Health - ${{ matrix.service }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - name: Integrations Hub
+            url: https://integrations.blackroad.io/health
+          - name: Operator API
+            url: https://operator.blackroad.io/health
+          - name: Agent Hub
+            url: https://agents.blackroad.io/health
+          - name: Lucidia API
+            url: https://lucidia.blackroad.io/health
+          - name: Browser OS
+            url: https://browser.lucidia.earth/health
+
+    steps:
+      - name: Health check - ${{ matrix.service.name }}
+        id: health
+        continue-on-error: true
+        run: |
+          response=$(curl -sf --max-time 10 ${{ matrix.service.url }} || echo "FAILED")
+
+          if [[ "$response" == "FAILED" ]]; then
+            echo "status=down" >> $GITHUB_OUTPUT
+            echo "❌ ${{ matrix.service.name }} is DOWN"
+            exit 1
+          else
+            echo "status=up" >> $GITHUB_OUTPUT
+            echo "✅ ${{ matrix.service.name }} is UP"
+            echo "$response"
+          fi
+
+      - name: Alert if down
+        if: failure()
+        run: |
+          echo "🚨 ALERT: ${{ matrix.service.name }} is not responding!"
+          echo "URL: ${{ matrix.service.url }}"
+          # Would send Slack/Discord/email notification here
+
+  aggregate-health:
+    name: Aggregate Health Report
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: always()
+
+    steps:
+      - name: Generate health report
+        run: |
+          echo "# System Health Report" > health-report.md
+          echo "**Generated**: $(date)" >> health-report.md
+          echo "" >> health-report.md
+
+          # All services checked
+          echo "## Services Monitored: 5" >> health-report.md
+          echo "" >> health-report.md
+
+          cat health-report.md
+
+      - name: Upload report
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
+        with:
+          name: health-report
+          path: health-report.md
+          retention-days: 7
