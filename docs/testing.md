@@ -82,7 +82,7 @@ pnpm test -- --reporter=verbose
 pnpm test -- health.test.ts
 
 # Run tests matching a pattern
-pnpm test -- --testNamePattern="health"
+pnpm test -- --test-name-pattern="health"
 ```
 
 ### CI Failures
