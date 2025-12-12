@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "generated": "2025-12-11T00:00:00Z",
+    "total_services": 25,
+    "total_files": 199,
+    "description": "Complete catalog of ALL BlackRoad integrations - NEVER do connector hell again!"
+  },
+  "integrations": {
+    "stripe": {
+      "category": "payment",
+      "files": [
+        "blackroad-stripe-service.py",
+        "blackroad-stripe-checkout-api.py",
+        "blackroad-stripe-webhook-handler.py",
+        "blackroad-stripe-monetization-enhanced.py",
+        "blackroad-stripe.py",
+        "blackroad-payment-hub.py",
+        "blackroad-revenue-api.py",
+        "blackroad-monetization-engine.py"
+      ],
+      "ports": [9500],
+      "env_vars": ["STRIPE_SECRET_KEY", "STRIPE_PUBLISHABLE_KEY"],
+      "capabilities": ["checkout", "webhooks", "subscriptions", "invoices", "customers"]
+    },
+    "clerk": {
+      "category": "auth",
+      "files": [
+        "blackroad-clerk-service.py",
+        "blackroad-auth.py"
+      ],
+      "ports": [8889],
+      "env_vars": ["CLERK_SECRET_KEY", "CLERK_PUBLISHABLE_KEY"],
+      "capabilities": ["authentication", "user_management", "sessions", "oauth"]
+    },
+    "asana": {
+      "category": "project_management",
+      "files": [
+        "blackroad-asana-service.py",
+        "blackroad_integrations_hub.py",
+        "setup-asana-notion-integration.py"
+      ],
+      "ports": [9700],
+      "env_vars": ["ASANA_TOKEN"],
+      "capabilities": ["tasks", "projects", "workspaces", "teams"]
+    },
+    "notion": {
+      "category": "project_management",
+      "files": [
+        "blackroad-notion-service.py",
+        "blackroad-notion-integration.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [9800],
+      "env_vars": ["NOTION_TOKEN"],
+      "capabilities": ["databases", "pages", "blocks", "search"]
+    },
+    "jira": {
+      "category": "project_management",
+      "files": [
+        "blackroad-jira.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [10700],
+      "env_vars": ["JIRA_TOKEN", "JIRA_DOMAIN"],
+      "capabilities": ["issues", "projects", "boards", "sprints"]
+    },
+    "linear": {
+      "category": "project_management",
+      "files": [
+        "blackroad-linear.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [10600],
+      "env_vars": ["LINEAR_TOKEN"],
+      "capabilities": ["issues", "projects", "cycles", "teams"]
+    },
+    "slack": {
+      "category": "communication",
+      "files": [
+        "blackroad-slack.py",
+        "blackroad_integrations_hub.py",
+        "blackroad-notifications.py",
+        "blackroad-notify-hub.py"
+      ],
+      "ports": [10300],
+      "env_vars": ["SLACK_TOKEN", "SLACK_SIGNING_SECRET"],
+      "capabilities": ["messages", "channels", "users", "webhooks"]
+    },
+    "discord": {
+      "category": "communication",
+      "files": [
+        "blackroad-discord.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [10400],
+      "env_vars": ["DISCORD_TOKEN", "DISCORD_CLIENT_ID"],
+      "capabilities": ["messages", "channels", "guilds", "webhooks"]
+    },
+    "github": {
+      "category": "code",
+      "files": [
+        "blackroad-integrations.py",
+        "blackroad_integrations_hub.py",
+        "blackroad-github-forks-service.py",
+        "blackroad-sync-secrets-all-repos.py",
+        "blackroad-repo-buildout-master.py"
+      ],
+      "ports": [9900],
+      "env_vars": ["GITHUB_TOKEN"],
+      "capabilities": ["repos", "orgs", "commits", "actions", "webhooks", "secrets"]
+    },
+    "gitlab": {
+      "category": "code",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["GITLAB_TOKEN"],
+      "capabilities": ["projects", "commits", "pipelines", "webhooks"]
+    },
+    "gmail": {
+      "category": "email",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["GMAIL_TOKEN"],
+      "capabilities": ["send", "read", "labels", "threads"]
+    },
+    "outlook": {
+      "category": "email",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["OUTLOOK_TOKEN"],
+      "capabilities": ["send", "read", "folders", "calendar"]
+    },
+    "google_drive": {
+      "category": "storage",
+      "files": [
+        "blackroad-google-drive.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [10200],
+      "env_vars": ["GOOGLE_DRIVE_TOKEN"],
+      "capabilities": ["files", "folders", "permissions", "search"]
+    },
+    "dropbox": {
+      "category": "storage",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["DROPBOX_TOKEN"],
+      "capabilities": ["files", "folders", "sharing"]
+    },
+    "onedrive": {
+      "category": "storage",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["ONEDRIVE_TOKEN"],
+      "capabilities": ["files", "folders", "sharing"]
+    },
+    "google_calendar": {
+      "category": "calendar",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["GOOGLE_CALENDAR_TOKEN"],
+      "capabilities": ["events", "calendars", "reminders"]
+    },
+    "outlook_calendar": {
+      "category": "calendar",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["OUTLOOK_TOKEN"],
+      "capabilities": ["events", "calendars", "reminders"]
+    },
+    "figma": {
+      "category": "design",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["FIGMA_TOKEN"],
+      "capabilities": ["files", "projects", "comments", "export"]
+    },
+    "canva": {
+      "category": "design",
+      "files": [
+        "blackroad-canva-branding.py",
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["CANVA_TOKEN"],
+      "capabilities": ["designs", "templates", "export", "folders"]
+    },
+    "onenote": {
+      "category": "notes",
+      "files": [
+        "blackroad_integrations_hub.py"
+      ],
+      "ports": [],
+      "env_vars": ["ONENOTE_TOKEN", "OUTLOOK_TOKEN"],
+      "capabilities": ["notebooks", "sections", "pages"]
+    },
+    "airtable": {
+      "category": "database",
+      "files": [
+        "blackroad-integration-hub.py"
+      ],
+      "ports": [10100],
+      "env_vars": ["AIRTABLE_API_KEY", "AIRTABLE_BASE_ID"],
+      "capabilities": ["bases", "tables", "records", "views"]
+    },
+    "resend": {
+      "category": "email",
+      "files": [],
+      "ports": [],
+      "env_vars": ["RESEND_API_KEY"],
+      "capabilities": ["send", "templates", "tracking"]
+    },
+    "railway": {
+      "category": "infrastructure",
+      "files": [
+        "blackroad-integrations.py",
+        "blackroad-railway-orchestrator.py",
+        "railway-webhook-handler.py",
+        "generate-railway-configs.py"
+      ],
+      "ports": [8100],
+      "env_vars": ["RAILWAY_TOKEN"],
+      "capabilities": ["projects", "services", "deployments", "variables", "webhooks"]
+    },
+    "cloudflare": {
+      "category": "infrastructure",
+      "files": [
+        "blackroad-integrations.py",
+        "cloudflare-dns-manager.py",
+        "setup-cloudflare-zero-trust.py"
+      ],
+      "ports": [],
+      "env_vars": ["CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID"],
+      "capabilities": ["zones", "dns", "pages", "workers", "kv", "d1", "tunnels"]
+    },
+    "vercel": {
+      "category": "infrastructure",
+      "files": [
+        "blackroad-integrations.py"
+      ],
+      "ports": [],
+      "env_vars": ["VERCEL_TOKEN"],
+      "capabilities": ["projects", "deployments", "domains", "env_vars"]
+    },
+    "digitalocean": {
+      "category": "infrastructure",
+      "files": [
+        "blackroad-integrations.py"
+      ],
+      "ports": [],
+      "env_vars": ["DIGITALOCEAN_TOKEN"],
+      "capabilities": ["droplets", "databases", "volumes", "snapshots"]
+    }
+  },
+  "hubs": {
+    "blackroad_integrations_hub.py": {
+      "port": 9700,
+      "services": [
+        "asana",
+        "notion",
+        "jira",
+        "linear",
+        "gmail",
+        "outlook",
+        "google_drive",
+        "dropbox",
+        "onedrive",
+        "slack",
+        "discord",
+        "google_calendar",
+        "outlook_calendar",
+        "github",
+        "gitlab",
+        "figma",
+        "canva",
+        "onenote"
+      ],
+      "description": "Main integration hub with 18 platform connectors"
+    },
+    "blackroad-integration-hub.py": {
+      "port": 10100,
+      "services": [
+        "google_drive",
+        "notion",
+        "asana",
+        "slack",
+        "discord",
+        "dropbox",
+        "trello",
+        "linear",
+        "figma",
+        "jira",
+        "monday",
+        "airtable"
+      ],
+      "description": "Secondary integration hub with security audit"
+    },
+    "blackroad-integrations.py": {
+      "port": null,
+      "services": [
+        "github",
+        "railway",
+        "cloudflare",
+        "vercel",
+        "digitalocean"
+      ],
+      "description": "Infrastructure integrations CLI tool"
+    }
+  },
+  "categories": {
+    "payment": ["stripe"],
+    "auth": ["clerk"],
+    "project_management": ["asana", "notion", "jira", "linear"],
+    "communication": ["slack", "discord"],
+    "code": ["github", "gitlab"],
+    "email": ["gmail", "outlook", "resend"],
+    "storage": ["google_drive", "dropbox", "onedrive"],
+    "calendar": ["google_calendar", "outlook_calendar"],
+    "design": ["figma", "canva"],
+    "notes": ["onenote"],
+    "database": ["airtable"],
+    "infrastructure": ["railway", "cloudflare", "vercel", "digitalocean"]
+  },
+  "port_map": {
+    "8889": "clerk (auth)",
+    "9500": "stripe (checkout/webhooks)",
+    "9700": "integrations hub (main)",
+    "9800": "notion",
+    "9900": "github forks",
+    "10100": "integration hub (security)",
+    "10200": "google drive",
+    "10300": "slack",
+    "10400": "discord",
+    "10600": "linear",
+    "10700": "jira"
+  }
+}

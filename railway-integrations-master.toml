@@ -1,0 +1,72 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python3 blackroad-integrations-master.py"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "integrations-master"
+
+[services.env]
+PORT = "10000"
+PYTHONUNBUFFERED = "1"
+NODE_ENV = "production"
+
+# Integration tokens (set via Railway UI or secrets script)
+# Payment
+# STRIPE_SECRET_KEY
+# STRIPE_PUBLISHABLE_KEY
+
+# Auth
+# CLERK_SECRET_KEY
+# CLERK_PUBLISHABLE_KEY
+
+# Project Management
+# ASANA_TOKEN
+# NOTION_TOKEN
+# JIRA_TOKEN
+# JIRA_DOMAIN
+# LINEAR_TOKEN
+
+# Communication
+# SLACK_TOKEN
+# SLACK_SIGNING_SECRET
+# DISCORD_TOKEN
+# DISCORD_CLIENT_ID
+
+# Code
+# GITHUB_TOKEN
+# GITLAB_TOKEN
+
+# Email
+# GMAIL_TOKEN
+# OUTLOOK_TOKEN
+# RESEND_API_KEY
+
+# Storage
+# GOOGLE_DRIVE_TOKEN
+# DROPBOX_TOKEN
+# ONEDRIVE_TOKEN
+
+# Calendar
+# GOOGLE_CALENDAR_TOKEN
+# (uses OUTLOOK_TOKEN)
+
+# Design
+# FIGMA_TOKEN
+# CANVA_TOKEN
+
+# Database
+# AIRTABLE_API_KEY
+# AIRTABLE_BASE_ID
+
+# Infrastructure
+# RAILWAY_TOKEN
+# CLOUDFLARE_API_TOKEN
+# CLOUDFLARE_ACCOUNT_ID
+# VERCEL_TOKEN
+# DIGITALOCEAN_TOKEN

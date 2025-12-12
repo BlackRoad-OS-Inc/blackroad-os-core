@@ -1,0 +1,227 @@
+{
+  "version": "1.0",
+  "timestamp": "2025-12-11",
+  "domains": {
+    "blackroadquantum-com": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroadquantum-com",
+      "health_check": "https://api.blackroadquantum-com/health"
+    },
+    "blackroad-cloud": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-cloud",
+      "health_check": "https://api.blackroad-cloud/health"
+    },
+    "lucidia-earth": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.lucidia-earth",
+      "health_check": "https://api.lucidia-earth/health"
+    },
+    "blackroadai-com": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroadai-com",
+      "health_check": "https://api.blackroadai-com/health"
+    },
+    "lucidiastud-io": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.lucidiastud-io",
+      "health_check": "https://api.lucidiastud-io/health"
+    },
+    "blackroad-io": {
+      "services": [
+        "websocket_service",
+        "auth_service",
+        "api_service",
+        "cache_service",
+        "db_service"
+      ],
+      "base_url": "https://api.blackroad-io",
+      "health_check": "https://api.blackroad-io/health"
+    },
+    "blackroad-dev": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-dev",
+      "health_check": "https://api.blackroad-dev/health"
+    },
+    "blackroad-systems": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-systems",
+      "health_check": "https://api.blackroad-systems/health"
+    },
+    "blackroad-digital": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-digital",
+      "health_check": "https://api.blackroad-digital/health"
+    },
+    "blackroad-ventures": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-ventures",
+      "health_check": "https://api.blackroad-ventures/health"
+    },
+    "blackroad-inc-us": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-inc-us",
+      "health_check": "https://api.blackroad-inc-us/health"
+    },
+    "blackroad-capital": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-capital",
+      "health_check": "https://api.blackroad-capital/health"
+    },
+    "aliceqi-com": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.aliceqi-com",
+      "health_check": "https://api.aliceqi-com/health"
+    },
+    "blackroad-dao": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-dao",
+      "health_check": "https://api.blackroad-dao/health"
+    },
+    "blackroad-tech": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-tech",
+      "health_check": "https://api.blackroad-tech/health"
+    },
+    "lucidiaqi-com": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.lucidiaqi-com",
+      "health_check": "https://api.lucidiaqi-com/health"
+    },
+    "blackroad-fund": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-fund",
+      "health_check": "https://api.blackroad-fund/health"
+    },
+    "blackroad-me": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-me",
+      "health_check": "https://api.blackroad-me/health"
+    },
+    "blackroad-network": {
+      "services": [
+        "websocket_service",
+        "api_service"
+      ],
+      "base_url": "https://api.blackroad-network",
+      "health_check": "https://api.blackroad-network/health"
+    },
+    "blackroadagents-com": {
+      "services": [
+        "api_service"
+      ],
+      "base_url": "https://api.blackroadagents-com",
+      "health_check": "https://api.blackroadagents-com/health"
+    }
+  },
+  "core_services": {
+    "blackroad-auth-system": {
+      "port": 11000,
+      "health_check": "http://localhost:11000/api/health",
+      "railway_service": "auth-system"
+    },
+    "blackroad-event-bus": {
+      "port": 9800,
+      "health_check": "http://localhost:9800/api/health",
+      "railway_service": "event-bus"
+    },
+    "blackroad-service-registry": {
+      "port": 9900,
+      "health_check": "http://localhost:9900/api/health",
+      "railway_service": "service-registry"
+    },
+    "blackroad-api-gateway": {
+      "port": 8000,
+      "health_check": "http://localhost:8000/api/health",
+      "railway_service": "api-gateway"
+    },
+    "blackroad-agent-orchestrator-v2": {
+      "port": 10100,
+      "health_check": "http://localhost:10100/api/health",
+      "railway_service": "agent-orchestrator-v2"
+    },
+    "blackroad-vectordb": {
+      "port": 9600,
+      "health_check": "http://localhost:9600/api/health",
+      "railway_service": "vectordb"
+    },
+    "blackroad-stream": {
+      "port": 9500,
+      "health_check": "http://localhost:9500/api/health",
+      "railway_service": "stream"
+    },
+    "blackroad-mq": {
+      "port": 9400,
+      "health_check": "http://localhost:9400/api/health",
+      "railway_service": "mq"
+    },
+    "blackroad-llm-server": {
+      "port": 9300,
+      "health_check": "http://localhost:9300/api/health",
+      "railway_service": "llm-server"
+    },
+    "blackroad-stripe-checkout-api": {
+      "port": 9500,
+      "health_check": "http://localhost:9500/api/health",
+      "railway_service": "stripe-checkout-api"
+    },
+    "blackroad-stripe-webhook-handler": {
+      "port": 9501,
+      "health_check": "http://localhost:9501/api/health",
+      "railway_service": "stripe-webhook-handler"
+    },
+    "blackroad-integrations-master": {
+      "port": 10000,
+      "health_check": "http://localhost:10000/api/health",
+      "railway_service": "integrations-master",
+      "description": "Master integration hub - ALL 25+ platform connectors unified",
+      "integrations": ["stripe", "clerk", "asana", "notion", "jira", "linear", "slack", "discord", "github", "gitlab", "gmail", "outlook", "google_drive", "dropbox", "onedrive", "google_calendar", "outlook_calendar", "figma", "canva", "onenote", "airtable", "resend", "railway", "cloudflare", "vercel", "digitalocean"]
+    },
+    "blackroad_integrations_hub": {
+      "port": 9700,
+      "health_check": "http://localhost:9700/api/health",
+      "railway_service": "integrations-hub",
+      "description": "Secondary integration hub - 18 productivity platforms"
+    },
+    "blackroad-integration-hub": {
+      "port": 10100,
+      "health_check": "http://localhost:10100/health",
+      "railway_service": "integration-hub-secure",
+      "description": "Security-focused integration hub with audit logging"
+    }
+  }
+}
