@@ -10,6 +10,7 @@ Comprehensive tests for:
 """
 
 import pytest
+import pytest_asyncio
 import asyncio
 from pathlib import Path
 import tempfile
@@ -49,10 +50,10 @@ from blackroad_core.marketplace import (
 class TestAgentSpawner:
     """Test agent spawner lifecycle management."""
 
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def spawner(self):
         """Create spawner with dependencies."""
-        lucidia = LucidiaBreath()
+        lucidia = LucidiaBreath(parent_hash="test-parent-hash")
         event_bus = EventBus()
         capability_registry = CapabilityRegistry()
 
@@ -424,7 +425,7 @@ class TestIntegration:
     async def test_full_agent_lifecycle(self):
         """Test complete agent lifecycle with all components."""
         # Setup infrastructure
-        lucidia = LucidiaBreath()
+        lucidia = LucidiaBreath(parent_hash="integration-test-hash")
         event_bus = EventBus()
         capability_registry = CapabilityRegistry()
 

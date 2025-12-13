@@ -14,7 +14,7 @@ Based on Cece Agent Mode v2.0 coordination model.
 import asyncio
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Callable, Awaitable
-from datetime import datetime
+from datetime import datetime, UTC
 from enum import Enum
 import json
 from pathlib import Path
@@ -57,7 +57,7 @@ class Message:
     priority: MessagePriority = MessagePriority.NORMAL
 
     # Metadata
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     correlation_id: Optional[str] = None  # For request/response pairing
     reply_to: Optional[str] = None
     ttl_seconds: Optional[int] = None

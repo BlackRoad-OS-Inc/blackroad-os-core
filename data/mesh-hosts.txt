@@ -1,0 +1,16 @@
+# BlackRoad Mesh Hosts
+# Format: IP:hostname:notes
+# Lines starting with # are comments
+
+# Raspberry Pi nodes
+192.168.4.38:lucidia:Lucidia breath engine Pi
+192.168.4.64:blackroad-pi:BlackRoad node
+192.168.4.49:alice:Alice Pi node
+
+# iPhone (Pyto SSH client, not SSH server)
+192.168.4.68:iphone-koder:iPhone Koder (Pyto)
+
+# Jetson Orin (to be discovered - uncomment when found)
+# 192.168.4.X:jetson-orin:NVIDIA Jetson Orin edge compute
+
+# Add new devices here as they're discovered

@@ -15,7 +15,7 @@ Features:
 import asyncio
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
 from enum import Enum
 import json
@@ -73,7 +73,7 @@ class AgentTemplateMetadata:
     # Publication
     status: TemplateStatus = TemplateStatus.DRAFT
     published_at: Optional[str] = None
-    updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    updated_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     # Resources
     default_resources: Dict[str, Any] = field(default_factory=dict)
@@ -129,7 +129,7 @@ class AgentTemplateMetadata:
             review_count=data.get("review_count", 0),
             status=TemplateStatus(data.get("status", "draft")),
             published_at=data.get("published_at"),
-            updated_at=data.get("updated_at", datetime.utcnow().isoformat()),
+            updated_at=data.get("updated_at", datetime.now(UTC).isoformat()),
             default_resources=data.get("default_resources", {}),
             suggested_workflows=data.get("suggested_workflows", [])
         )
@@ -144,7 +144,7 @@ class AgentReview:
     rating: int  # 1-5
     title: str
     content: str
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     helpful_count: int = 0
 
 
@@ -208,7 +208,7 @@ class AgentMarketplace:
                 pack_requirements=["pack-finance"],
                 tags=["finance", "analytics", "reporting"],
                 status=TemplateStatus.PUBLISHED,
-                published_at=datetime.utcnow().isoformat(),
+                published_at=datetime.now(UTC).isoformat(),
                 rating=4.8,
                 downloads=1247,
                 review_count=89
@@ -230,7 +230,7 @@ class AgentMarketplace:
                 pack_requirements=["pack-research-lab"],
                 tags=["research", "academic", "literature-review"],
                 status=TemplateStatus.PUBLISHED,
-                published_at=datetime.utcnow().isoformat(),
+                published_at=datetime.now(UTC).isoformat(),
                 rating=4.6,
                 downloads=892,
                 review_count=54
@@ -252,7 +252,7 @@ class AgentMarketplace:
                 pack_requirements=["pack-infra-devops"],
                 tags=["devops", "deployment", "infrastructure"],
                 status=TemplateStatus.PUBLISHED,
-                published_at=datetime.utcnow().isoformat(),
+                published_at=datetime.now(UTC).isoformat(),
                 rating=4.9,
                 downloads=2103,
                 review_count=142
@@ -274,7 +274,7 @@ class AgentMarketplace:
                 pack_requirements=["pack-creator-studio"],
                 tags=["content", "creative", "writing"],
                 status=TemplateStatus.PUBLISHED,
-                published_at=datetime.utcnow().isoformat(),
+                published_at=datetime.now(UTC).isoformat(),
                 rating=4.5,
                 downloads=1567,
                 review_count=98
@@ -296,7 +296,7 @@ class AgentMarketplace:
                 pack_requirements=[],
                 tags=["support", "customer-service", "help-desk"],
                 status=TemplateStatus.PUBLISHED,
-                published_at=datetime.utcnow().isoformat(),
+                published_at=datetime.now(UTC).isoformat(),
                 rating=4.7,
                 downloads=3421,
                 review_count=234
@@ -319,8 +319,8 @@ class AgentMarketplace:
 
         # Set publication metadata
         template.status = TemplateStatus.PUBLISHED
-        template.published_at = datetime.utcnow().isoformat()
-        template.updated_at = datetime.utcnow().isoformat()
+        template.published_at = datetime.now(UTC).isoformat()
+        template.updated_at = datetime.now(UTC).isoformat()
 
         # Register
         self.templates[template.id] = template
@@ -460,7 +460,7 @@ class AgentMarketplace:
     def _generate_template_id(self, name: str) -> str:
         """Generate unique template ID from name."""
         base = name.lower().replace(" ", "-")
-        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
         return f"template-{base}-{timestamp}"
 
 

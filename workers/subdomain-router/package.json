@@ -1,0 +1,25 @@
+{
+  "name": "blackroad-subdomain-router",
+  "version": "1.0.0",
+  "description": "Dynamic subdomain router for BlackRoad OS - 100+ subdomains across 16 domains",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:production": "wrangler deploy --env production",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:all-domains": "node scripts/deploy-all-domains.js",
+    "tail": "wrangler tail"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "subdomain",
+    "router",
+    "blackroad"
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "wrangler": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}

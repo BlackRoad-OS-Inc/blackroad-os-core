@@ -359,8 +359,8 @@ class PackRegistry:
 
         # Mark as installed
         pack.status = PackStatus.INSTALLED
-        from datetime import datetime
-        pack.installed_at = datetime.utcnow().isoformat()
+        from datetime import datetime, UTC
+        pack.installed_at = datetime.now(UTC).isoformat()
 
         self.installed_packs[pack_id] = pack
 

@@ -20,7 +20,7 @@ from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Any, Set
 from enum import Enum
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 class RuntimeType(Enum):
@@ -63,7 +63,7 @@ class AgentManifest:
 
     # Lineage
     parent_agents: List[str] = field(default_factory=list)
-    creation_date: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    creation_date: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     evolution_history: List[Dict[str, Any]] = field(default_factory=list)
 
     # State
@@ -164,7 +164,7 @@ class MemoryJournal:
         Returns:
             Hash of the new entry
         """
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(UTC).isoformat()
         entry['timestamp'] = timestamp
 
         # Serialize entry

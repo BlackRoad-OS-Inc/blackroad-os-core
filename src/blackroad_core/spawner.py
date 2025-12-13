@@ -15,7 +15,7 @@ Key Features:
 import asyncio
 from typing import Dict, List, Optional, Set, Callable
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
 import json
 
@@ -156,7 +156,7 @@ class AgentSpawner:
         record = AgentRecord(
             agent=agent,
             status=AgentStatus.SPAWNING,
-            spawn_time=datetime.utcnow().isoformat(),
+            spawn_time=datetime.now(UTC).isoformat(),
             breath_cycle_born=self.lucidia.state.breath_count,
             parent_id=request.parent_id
         )
@@ -190,7 +190,7 @@ class AgentSpawner:
 
         record = self.agents[agent_id]
         record.status = AgentStatus.RUNNING
-        record.last_heartbeat = datetime.utcnow().isoformat()
+        record.last_heartbeat = datetime.now(UTC).isoformat()
 
         await self.event_bus.publish("agent.started", {
             "agent_id": agent_id,
@@ -235,7 +235,7 @@ class AgentSpawner:
 
         # Persist final state
         final_state = {
-            "terminated_at": datetime.utcnow().isoformat(),
+            "terminated_at": datetime.now(UTC).isoformat(),
             "reason": reason,
             "final_emotional_state": record.agent.manifest.emotional_state.value,
             "total_thoughts": len(record.agent.memory.load_all()),
@@ -306,7 +306,7 @@ class AgentSpawner:
         record = self.agents[agent_id]
         record.restart_count += 1
         record.status = AgentStatus.RUNNING
-        record.last_heartbeat = datetime.utcnow().isoformat()
+        record.last_heartbeat = datetime.now(UTC).isoformat()
 
         await self.event_bus.publish("agent.restarted", {
             "agent_id": agent_id,
@@ -331,7 +331,7 @@ class AgentSpawner:
     def _generate_agent_id(self, role: str) -> str:
         """Generate unique agent ID."""
         base = role.lower().replace(" ", "-")
-        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
         return f"agent-{base}-{timestamp}-{self.total_spawned:04d}"
 
 
