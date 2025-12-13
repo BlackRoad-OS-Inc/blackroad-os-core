@@ -151,7 +151,11 @@
       "Bash(wrangler pages deployment domain add:*)",
       "Bash(open \"https://dash.cloudflare.com/848cf0b18d51e0170e0d1537aec3505a/pages/view/blackroad-agents-spawner/settings/domains\")",
       "Bash(open \"https://dash.cloudflare.com/848cf0b18d51e0170e0d1537aec3505a/pages/view/blackroad-dashboard/settings/domains\")",
-      "Bash(open \"https://dash.cloudflare.com/848cf0b18d51e0170e0d1537aec3505a/pages/view/blackroad-api-explorer/settings/domains\")"
+      "Bash(open \"https://dash.cloudflare.com/848cf0b18d51e0170e0d1537aec3505a/pages/view/blackroad-api-explorer/settings/domains\")",
+      "Bash(gh secret set:*)",
+      "Bash(open \"https://github.com/BlackRoad-OS/blackroad-os-core/settings/secrets/actions\")",
+      "Bash(./test-all-domains.sh:*)",
+      "Bash(open \"https://github.com/BlackRoad-OS/blackroad-os-core/actions\")"
     ],
     "deny": [],
     "ask": []
