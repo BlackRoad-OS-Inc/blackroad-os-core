@@ -1,0 +1,5 @@
+#!/bin/bash
+# Quick launcher for financial analyst agent
+
+echo "🏦 Launching Financial Analyst Agent..."
+"$(dirname "$0")/br-agent" from-pack pack-finance financial-analyst

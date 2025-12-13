@@ -1,0 +1,89 @@
+{
+  "version": "1.0.0",
+  "defaults": {
+    "runtime_type": "llm_brain",
+    "auto_start": true,
+    "resources": {
+      "cpu": 2,
+      "memory": 4096
+    }
+  },
+  "packs": {
+    "pack-finance": {
+      "auto_install": true,
+      "agents": {
+        "financial-analyst": {
+          "capabilities": ["analyze_transactions", "generate_reports", "forecast_revenue"]
+        },
+        "revenue-forecaster": {
+          "capabilities": ["forecast_revenue", "analyze_trends"]
+        }
+      }
+    },
+    "pack-legal": {
+      "auto_install": true,
+      "agents": {
+        "contract-reviewer": {
+          "capabilities": ["review_contracts", "identify_risks", "draft_amendments"]
+        },
+        "compliance-checker": {
+          "capabilities": ["check_compliance", "audit_documents"]
+        }
+      }
+    },
+    "pack-research-lab": {
+      "auto_install": true,
+      "agents": {
+        "research-assistant": {
+          "capabilities": ["search_papers", "synthesize_knowledge", "cite_sources"]
+        },
+        "experiment-designer": {
+          "capabilities": ["design_experiments", "analyze_results"]
+        }
+      }
+    },
+    "pack-creator-studio": {
+      "auto_install": true,
+      "agents": {
+        "content-writer": {
+          "capabilities": ["generate_content", "edit_copy", "optimize_seo"]
+        },
+        "graphic-designer": {
+          "capabilities": ["design_graphics", "create_layouts"]
+        }
+      }
+    },
+    "pack-infra-devops": {
+      "auto_install": true,
+      "agents": {
+        "deployment-engineer": {
+          "capabilities": ["deploy_services", "manage_infrastructure", "configure_ci_cd"]
+        },
+        "sre-monitor": {
+          "capabilities": ["monitor_systems", "analyze_metrics", "respond_to_incidents"]
+        }
+      }
+    }
+  },
+  "marketplace": {
+    "default_sort": "downloads",
+    "min_rating": 4.0,
+    "auto_update": false
+  },
+  "communication": {
+    "default_timeout": 30,
+    "max_retries": 3,
+    "persist_messages": true
+  },
+  "spawning": {
+    "max_agents": 30000,
+    "max_restarts": 3,
+    "breath_sync": true,
+    "prefer_expansion_phase": true
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output": "stdout"
+  }
+}

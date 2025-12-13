@@ -1,0 +1,308 @@
+#!/usr/bin/env python3
+"""
+BlackRoad Agent CLI
+Terminal interface for spawning and managing BlackRoad agents
+"""
+
+import asyncio
+import sys
+import json
+from pathlib import Path
+from typing import Optional
+
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+from blackroad_core.lucidia import LucidiaBreath
+from blackroad_core.agents import EventBus, CapabilityRegistry
+from blackroad_core.spawner import AgentSpawner, SpawnRequest, RuntimeType
+from blackroad_core.communication import CommunicationBus, AgentCommunicator, MessageType
+from blackroad_core.marketplace import AgentMarketplace, TemplateCategory
+from blackroad_core.packs import PackRegistry
+
+
+class AgentCLI:
+    def __init__(self):
+        self.lucidia = LucidiaBreath()
+        self.event_bus = EventBus()
+        self.capability_registry = CapabilityRegistry()
+        self.spawner = AgentSpawner(self.lucidia, self.event_bus, self.capability_registry)
+        self.comm_bus = CommunicationBus()
+        self.marketplace = AgentMarketplace()
+        self.pack_registry = PackRegistry()
+
+    async def spawn(self, role: str, pack: Optional[str] = None, capabilities: Optional[list] = None):
+        """Spawn a new agent"""
+        print(f"🤖 Spawning {role} agent...")
+
+        # Default capabilities if not specified
+        if capabilities is None:
+            capabilities = []
+
+        request = SpawnRequest(
+            role=role,
+            capabilities=capabilities,
+            runtime_type=RuntimeType.LLM_BRAIN,
+            pack=pack,
+            auto_start=True
+        )
+
+        agent_id = await self.spawner.spawn_agent(request, force_immediate=True)
+        print(f"✅ Agent spawned: {agent_id}")
+        print(f"   Role: {role}")
+        print(f"   Pack: {pack or 'None'}")
+        print(f"   Capabilities: {', '.join(capabilities) or 'Default'}")
+        return agent_id
+
+    async def list_agents(self):
+        """List all active agents"""
+        agents = self.spawner.get_agents()
+
+        if not agents:
+            print("No active agents")
+            return
+
+        print(f"\n📋 Active Agents ({len(agents)}):\n")
+        for agent_id, manifest in agents.items():
+            status = manifest.get("status", "unknown")
+            role = manifest.get("role", "unknown")
+            pack = manifest.get("pack", "N/A")
+            print(f"  • {agent_id[:8]}... - {role}")
+            print(f"    Status: {status}, Pack: {pack}")
+
+    async def terminate(self, agent_id: str):
+        """Terminate an agent"""
+        print(f"🛑 Terminating agent {agent_id}...")
+        await self.spawner.terminate_agent(agent_id, reason="user_requested")
+        print("✅ Agent terminated")
+
+    async def search_marketplace(self, query: Optional[str] = None, category: Optional[str] = None):
+        """Search the agent marketplace"""
+        print("🔍 Searching marketplace...")
+
+        cat = None
+        if category:
+            cat = TemplateCategory[category.upper()]
+
+        templates = self.marketplace.search(
+            query=query or "",
+            category=cat,
+            sort_by="downloads"
+        )
+
+        if not templates:
+            print("No templates found")
+            return
+
+        print(f"\n📦 Found {len(templates)} templates:\n")
+        for template in templates:
+            print(f"  • {template.name} (v{template.version})")
+            print(f"    {template.description}")
+            print(f"    ⭐ {template.rating}/5.0 | 📥 {template.downloads} downloads")
+            print(f"    Category: {template.category.value} | Pack: {template.pack_requirements}")
+            print()
+
+    async def list_packs(self):
+        """List all available packs"""
+        packs = self.pack_registry.list_packs()
+
+        print(f"\n📦 Available Packs ({len(packs)}):\n")
+        for pack_id, pack_info in packs.items():
+            print(f"  • {pack_id}")
+            print(f"    {pack_info.get('description', 'No description')}")
+            agents = pack_info.get('agents', [])
+            print(f"    Agents: {', '.join(agents)}")
+            print()
+
+    async def install_pack(self, pack_id: str):
+        """Install a pack"""
+        print(f"📥 Installing pack: {pack_id}...")
+        pack = await self.pack_registry.install_pack(pack_id)
+        print(f"✅ Pack installed: {pack.name}")
+        print(f"   Agents available: {', '.join([a.name for a in pack.agent_templates])}")
+
+    async def spawn_from_pack(self, pack_id: str, agent_name: str):
+        """Spawn an agent from a pack template"""
+        print(f"🤖 Spawning {agent_name} from {pack_id}...")
+
+        pack = self.pack_registry.get_pack(pack_id)
+        if not pack:
+            print(f"❌ Pack not found: {pack_id}")
+            print("   Use 'br-agent packs' to list available packs")
+            return
+
+        template = pack.get_agent_template(agent_name)
+        if not template:
+            print(f"❌ Agent template not found: {agent_name}")
+            print(f"   Available agents in {pack_id}: {', '.join([a.name for a in pack.agent_templates])}")
+            return
+
+        request = SpawnRequest(
+            role=template.role,
+            capabilities=template.capabilities,
+            runtime_type=RuntimeType.LLM_BRAIN,
+            pack=pack_id,
+            resources=template.default_resources,
+            auto_start=True
+        )
+
+        agent_id = await self.spawner.spawn_agent(request, force_immediate=True)
+        print(f"✅ Agent spawned: {agent_id}")
+        print(f"   Template: {template.name}")
+        print(f"   Capabilities: {', '.join(template.capabilities)}")
+        return agent_id
+
+    async def stats(self):
+        """Show agent system statistics"""
+        agents = self.spawner.get_agents()
+        comm_stats = self.comm_bus.get_stats()
+        market_stats = self.marketplace.get_statistics()
+
+        print("\n📊 BlackRoad Agent System Statistics\n")
+        print(f"Agents:")
+        print(f"  Active: {len(agents)}")
+        print(f"  Capacity: {len(agents)}/30000")
+        print()
+        print(f"Communication:")
+        print(f"  Messages Sent: {comm_stats.get('sent', 0)}")
+        print(f"  Messages Received: {comm_stats.get('received', 0)}")
+        print(f"  Broadcasts: {comm_stats.get('broadcasts', 0)}")
+        print()
+        print(f"Marketplace:")
+        print(f"  Total Templates: {market_stats.get('total_templates', 0)}")
+        print(f"  Total Downloads: {market_stats.get('total_downloads', 0)}")
+        print(f"  Categories: {market_stats.get('categories', 0)}")
+        print()
+
+
+def print_usage():
+    print("""
+BlackRoad Agent CLI
+
+Usage:
+  br-agent spawn <role> [--pack <pack>] [--capabilities <cap1,cap2>]
+  br-agent list
+  br-agent terminate <agent-id>
+  br-agent search [--query <text>] [--category <cat>]
+  br-agent packs
+  br-agent install <pack-id>
+  br-agent from-pack <pack-id> <agent-name>
+  br-agent stats
+  br-agent help
+
+Examples:
+  # Spawn a custom agent
+  br-agent spawn "Financial Analyst" --pack pack-finance --capabilities analyze_transactions,generate_reports
+
+  # Spawn from pack template
+  br-agent from-pack pack-finance financial-analyst
+
+  # List active agents
+  br-agent list
+
+  # Search marketplace
+  br-agent search --query "financial" --category finance
+
+  # Install a pack
+  br-agent install pack-research-lab
+
+  # Show statistics
+  br-agent stats
+
+Categories:
+  finance, legal, research, creative, devops, support, analytics, automation, general
+""")
+
+
+async def main():
+    if len(sys.argv) < 2 or sys.argv[1] in ["help", "-h", "--help"]:
+        print_usage()
+        return
+
+    command = sys.argv[1]
+    cli = AgentCLI()
+
+    try:
+        if command == "spawn":
+            if len(sys.argv) < 3:
+                print("❌ Error: Role required")
+                print("Usage: br-agent spawn <role> [--pack <pack>] [--capabilities <cap1,cap2>]")
+                return
+
+            role = sys.argv[2]
+            pack = None
+            capabilities = None
+
+            # Parse optional flags
+            i = 3
+            while i < len(sys.argv):
+                if sys.argv[i] == "--pack" and i + 1 < len(sys.argv):
+                    pack = sys.argv[i + 1]
+                    i += 2
+                elif sys.argv[i] == "--capabilities" and i + 1 < len(sys.argv):
+                    capabilities = sys.argv[i + 1].split(",")
+                    i += 2
+                else:
+                    i += 1
+
+            await cli.spawn(role, pack, capabilities)
+
+        elif command == "list":
+            await cli.list_agents()
+
+        elif command == "terminate":
+            if len(sys.argv) < 3:
+                print("❌ Error: Agent ID required")
+                print("Usage: br-agent terminate <agent-id>")
+                return
+            await cli.terminate(sys.argv[2])
+
+        elif command == "search":
+            query = None
+            category = None
+
+            i = 2
+            while i < len(sys.argv):
+                if sys.argv[i] == "--query" and i + 1 < len(sys.argv):
+                    query = sys.argv[i + 1]
+                    i += 2
+                elif sys.argv[i] == "--category" and i + 1 < len(sys.argv):
+                    category = sys.argv[i + 1]
+                    i += 2
+                else:
+                    i += 1
+
+            await cli.search_marketplace(query, category)
+
+        elif command == "packs":
+            await cli.list_packs()
+
+        elif command == "install":
+            if len(sys.argv) < 3:
+                print("❌ Error: Pack ID required")
+                print("Usage: br-agent install <pack-id>")
+                return
+            await cli.install_pack(sys.argv[2])
+
+        elif command == "from-pack":
+            if len(sys.argv) < 4:
+                print("❌ Error: Pack ID and agent name required")
+                print("Usage: br-agent from-pack <pack-id> <agent-name>")
+                return
+            await cli.spawn_from_pack(sys.argv[2], sys.argv[3])
+
+        elif command == "stats":
+            await cli.stats()
+
+        else:
+            print(f"❌ Unknown command: {command}")
+            print_usage()
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

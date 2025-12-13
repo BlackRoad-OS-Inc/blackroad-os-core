@@ -21,3 +21,16 @@ package-lock.json
 *.pyo
 .pytest_cache
 pnpm-lock.yaml
+
+# Secrets and credentials
+_secrets/
+*.token
+*.key
+*_token
+*_key
+.cloudflare_dns_token
+credentials*.yaml
+crypto-holdings.yaml
+*.pem
+*.p12
+*.pfx
