@@ -8,38 +8,69 @@ Last Updated: 2025-12-14
 
 ## 🔑 Railway Project IDs
 
-### Active Projects
+### Active Projects (9 Total)
 
-1. **Project 1:** `9d3d2549-3778-4c86-8afd-cefceaaa74d2`
-2. **Project 2:** `6d4ab1b5-3e97-460e-bba0-4db86691c476`
-3. **Project 3:** `aa968fb7-ec35-4a8b-92dc-1eba70fa8478`
-4. **Project 4:** `e8b256aa-8708-4eb2-ba24-99eba4fe7c2e`
-5. **Project 5:** `85e6de55-fefd-4e8d-a9ec-d20c235c2551`
+1. **Project 01:** `9d3d2549-3778-4c86-8afd-cefceaaa74d2`
+2. **Project 02:** `6d4ab1b5-3e97-460e-bba0-4db86691c476`
+3. **Project 03:** `aa968fb7-ec35-4a8b-92dc-1eba70fa8478`
+4. **Project 04:** `e8b256aa-8708-4eb2-ba24-99eba4fe7c2e`
+5. **Project 05:** `85e6de55-fefd-4e8d-a9ec-d20c235c2551`
+6. **Project 06:** `8ac583cb-ffad-40bd-8676-6569783274d1`
+7. **Project 07:** `b61ecd98-adb2-4788-a2e0-f98e322af53a`
+8. **Project 08:** `47f557cf-09b8-40df-8d77-b34f91ba90cc`
+9. **Project 09:** `1a039a7e-a60c-42c5-be68-e66f9e269209`
 
 ---
 
 ## 📋 Project Assignments
 
-### Recommended Deployment Structure for RoadWork
+### Recommended Deployment Structure for BlackRoad OS Ecosystem
 
 ```
-Project 1 (9d3d2549-3778-4c86-8afd-cefceaaa74d2)
+Project 01 (9d3d2549-3778-4c86-8afd-cefceaaa74d2) - RoadWork Production
 ├── roadwork-api (FastAPI server)
+├── roadwork-worker (Celery worker)
+├── roadwork-beat (Celery beat scheduler)
 ├── postgres (PostgreSQL database)
 └── redis (Redis cache)
 
-Project 2 (6d4ab1b5-3e97-460e-bba0-4db86691c476)
-├── roadwork-worker (Celery worker)
-└── roadwork-beat (Celery beat scheduler)
+Project 02 (6d4ab1b5-3e97-460e-bba0-4db86691c476) - RoadWork Staging
+├── roadwork-api-staging
+├── postgres-staging
+└── redis-staging
 
-Project 3 (aa968fb7-ec35-4a8b-92dc-1eba70fa8478)
-└── [Available for future services]
+Project 03 (aa968fb7-ec35-4a8b-92dc-1eba70fa8478) - BlackRoad Core
+├── blackroad-os-core (Core library services)
+├── postgres
+└── redis
 
-Project 4 (e8b256aa-8708-4eb2-ba24-99eba4fe7c2e)
-└── [Available for future services]
+Project 04 (e8b256aa-8708-4eb2-ba24-99eba4fe7c2e) - BlackRoad Operator
+├── blackroad-os-operator (Orchestration layer - "Cece" agent)
+└── postgres
 
-Project 5 (85e6de55-fefd-4e8d-a9ec-d20c235c2551)
-└── [Available for future services]
+Project 05 (85e6de55-fefd-4e8d-a9ec-d20c235c2551) - BlackRoad Master
+├── blackroad-os-master (Master control services)
+└── postgres
+
+Project 06 (8ac583cb-ffad-40bd-8676-6569783274d1) - BlackRoad Beacon
+├── blackroad-os-beacon (Monitoring and health checks)
+└── redis
+
+Project 07 (b61ecd98-adb2-4788-a2e0-f98e322af53a) - BlackRoad Packs
+├── pack-finance (Financial pack services)
+├── pack-legal (Legal pack services)
+├── pack-research-lab (Research pack services)
+├── pack-creator-studio (Creative pack services)
+├── pack-infra-devops (DevOps pack services)
+└── postgres
+
+Project 08 (47f557cf-09b8-40df-8d77-b34f91ba90cc) - BlackRoad Dashboard
+├── blackroad-dashboard (Monitoring UI)
+└── Static hosting or Cloudflare Pages
+
+Project 09 (1a039a7e-a60c-42c5-be68-e66f9e269209) - BlackRoad Home
+├── blackroad-os-home (Marketing site)
+└── Static hosting or Cloudflare Pages
 ```
 
 ---
