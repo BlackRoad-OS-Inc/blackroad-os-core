@@ -29,6 +29,7 @@ from blackroad_core.agents import (
     PSSHA
 )
 from blackroad_core.lucidia import LucidiaBreath
+from blackroad_core.model_router import ModelRouter
 
 
 class AgentStatus:
