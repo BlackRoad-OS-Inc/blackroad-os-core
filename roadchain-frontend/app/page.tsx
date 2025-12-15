@@ -55,8 +55,11 @@ export default function RoadChainHome() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="#explorer" className="road-gradient px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-opacity glow">
+            <a href="/explorer" className="road-gradient px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-opacity glow">
               Explore Blockchain
+            </a>
+            <a href="/wallet" className="border-2 border-road-orange px-8 py-4 rounded-lg font-bold text-lg hover:bg-road-orange hover:border-road-orange transition-all">
+              Open Wallet
             </a>
             <a href="#about" className="border-2 border-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-all">
               Learn More
