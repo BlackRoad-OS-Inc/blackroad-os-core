@@ -2,6 +2,8 @@ export * from "./results/result";
 
 export * from "./identity/identityTypes";
 export * from "./identity/psShaInfinity";
+export * from "./identity/genesis";
+export * from "./identity/registry";
 
 export * from "./truth/textSnapshot";
 export * from "./truth/verificationJob";

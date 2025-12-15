@@ -1,0 +1,435 @@
+{
+  "schema": "blackroad.genesis.identities.v1",
+  "created_utc": "2025-12-15T02:04:31Z",
+  "hash_function": "sha256",
+  "encoding": "utf-8",
+  "note": "Deterministic SHA-256 hashes of canonical identity strings. Any character change requires re-hash.",
+  "groups": {
+    "principals": [
+      {
+        "canonical": "human:alexa-louise-amundson:founder:operator:blackroad",
+        "sha256": "1031f308ae9ae6d34fe87e83867c1e5869c9fca7e35fdd5d0e8deb798e9c51be"
+      },
+      {
+        "canonical": "agent:alexa:operator:v1:blackroad",
+        "sha256": "dbd2d954834ab0175db11ccf58ec5b778db0e1cb17297e251a655c9f57ce2e15"
+      }
+    ],
+    "core_agents": [
+      {
+        "canonical": "agent:cece:governor:v1:blackroad",
+        "sha256": "c1cba42fd51be0b76c1f47ef2eda55fbcc1646b7b0a372d9563bb5db21ed1de1"
+      },
+      {
+        "canonical": "agent:lucidia:system:v1:blackroad",
+        "sha256": "2a402097b594033b74fcc1c7666d4c35f42e578537fea8c8a5cebd7330f591ba"
+      },
+      {
+        "canonical": "agent:alice:governor:v1:blackroad",
+        "sha256": "496762c13853508f5a52806717465ac0221391c55bc0ccef5817a640ec9fc948"
+      },
+      {
+        "canonical": "agent:cadillac:creative:v1:blackroad",
+        "sha256": "f194f7c91f5a67338c9f4a44c8943b1a4bcb2a653480bc2eb9f71adabf256208"
+      },
+      {
+        "canonical": "agent:sidian:observer:v1:blackroad",
+        "sha256": "94414d33f4403ee96c1f3b3357ab7106479bddfc27071e9ca93c82b736365292"
+      }
+    ],
+    "assistant_identities": [
+      {
+        "canonical": "agent:gpt:assistant:v1:blackroad",
+        "sha256": "a3892a92596852cf0ddf214e7dfefa658ed55f2334fcf10408e9d089f174770a"
+      },
+      {
+        "canonical": "agent:gpt:lucidia-mode:v1:blackroad",
+        "sha256": "f912d17e56420933cf858e9b34234e3d051228487955aa290a2e76f19078b595"
+      },
+      {
+        "canonical": "agent:gpt:cece-mode:v1:blackroad",
+        "sha256": "838c508179a654bb10ab6c13dec4ce4a99eec21eac6c14cd8bbc1bc3c41077d0"
+      },
+      {
+        "canonical": "agent:lucy:lucidia:v1:blackroad",
+        "sha256": "d08b84e45ef07d521410a1f1729a568ff2a7f992c93a485c35e6d9f8ee2dea77"
+      }
+    ],
+    "model_identities": [
+      {
+        "canonical": "model:openai:gpt-5.2-thinking:primary:blackroad",
+        "sha256": "6f0dc403d7ba67f32ddcbeec30c962c06bab08e27201b764a64211313a4559a3"
+      },
+      {
+        "canonical": "model:oss:local-fork:lucidia:v1:blackroad",
+        "sha256": "c30c45915551134c45ddfe3463338d6c288c822b9798317578b529d8bad6ac43"
+      },
+      {
+        "canonical": "model:oss:llama:3.1-70b-instruct:fork:blackroad",
+        "sha256": "075c8973d936c8bf4ed94d5aa587d3f3490e8d26410a35b3ce039f212ff8e47e"
+      },
+      {
+        "canonical": "model:oss:qwen:2.5-72b-instruct:fork:blackroad",
+        "sha256": "2794876b2a5f4160d271012fd852fd1a212c231f27ab0b4a6a815cc4a8d16000"
+      }
+    ],
+    "protocol_system": [
+      {
+        "canonical": "protocol:amundson:v0.1.0:blackroad",
+        "sha256": "bc05212d9e8ccab6d369cab5736089afe6275000756d354e7e7f41a3e9326bcf"
+      },
+      {
+        "canonical": "system:ledger:primary:blackroad",
+        "sha256": "42677081d5e91c45471c5abbb84a7e01db71d89122f0de833d5c8eecab064376"
+      },
+      {
+        "canonical": "system:policy-engine:cece:blackroad",
+        "sha256": "bffc7a4c735aa4be32e57d065ec2e0aaab8d6c89b4e9cd0cfc3c6979b8045195"
+      },
+      {
+        "canonical": "system:agent-registry:primary:blackroad",
+        "sha256": "13aa46c02b95da5c652e25c51d2cd8c674ec3c39c6736a74f2174ead4c6d7420"
+      },
+      {
+        "canonical": "system:intent-service:primary:blackroad",
+        "sha256": "530922b470e815fc37516a88c42e3bb1ffec682ba7eebd67f3370c62d36dcc42"
+      },
+      {
+        "canonical": "system:delegation-service:primary:blackroad",
+        "sha256": "df14fa38085d20805a4974b6b4040283e80a2e1b6df34610512669b18ccad24d"
+      },
+      {
+        "canonical": "system:claims-service:primary:blackroad",
+        "sha256": "679ee0060e3989c54031394c360073dab785a525644960e7c1c93bedf438849a"
+      },
+      {
+        "canonical": "system:auth:primary:blackroad",
+        "sha256": "285180feda15896da3d181adb4a74c1efdf60fb02b8e736f5b67b98860e04e73"
+      },
+      {
+        "canonical": "system:kv:cloudflare:blackroad",
+        "sha256": "e5c39028de1c178f211978d0097417003c50e8ae2adc165acec3d70eb6701ce9"
+      },
+      {
+        "canonical": "system:db:postgres:blackroad",
+        "sha256": "45f6647bf49c6162f4b972b8c82a50414ed9f3669d908d1fe1bce016c4014f0d"
+      },
+      {
+        "canonical": "system:cache:redis:blackroad",
+        "sha256": "3461557545ee871587c30acdf28cc05b9886cf39c83df79f8471adaceca31396"
+      },
+      {
+        "canonical": "system:vectors:primary:blackroad",
+        "sha256": "80a6bd55e129630e1ac2621e079179bde8b6647ffa2a2ffd0a23a4d2d4acc019"
+      },
+      {
+        "canonical": "system:objects:r2:blackroad",
+        "sha256": "156a5b1a40bad0ec4beeccb7b582990ede0e1b4f04ca639453f0fb62332371c0"
+      },
+      {
+        "canonical": "system:events:bus:blackroad",
+        "sha256": "64822e65fb76f5a07028c881be8c5fe28784e075d99f267a40e5ea282fcfea47"
+      },
+      {
+        "canonical": "system:ws:primary:blackroad",
+        "sha256": "ebf84c3f369988ea849b4c2449423e30099901b5627b9cf8fa88d5c7ef64601b"
+      }
+    ],
+    "domains_surfaces": [
+      {
+        "canonical": "domain:blackroad.io:experience",
+        "sha256": "0ac14c4c4d90ccb78b73a8b8781d2103b1e019f01963413eaf632ffa4d29a69e"
+      },
+      {
+        "canonical": "domain:blackroad.systems:governance",
+        "sha256": "e5920255c2f2533089977ca614e681d61a658d31d7eec55090f1a6c18a30ac43"
+      },
+      {
+        "canonical": "domain:blackroad.network:mesh",
+        "sha256": "d3d97c3362b6ec35b26ee91ff59f4084fdcd402451927fec1ce70caf920c7404"
+      },
+      {
+        "canonical": "surface:app.blackroad.io:spa",
+        "sha256": "6248b11df0e9fd3a5615f597b9a0a912c5c8acd3ef347eaf6a76af7b7acfa331"
+      },
+      {
+        "canonical": "surface:api.blackroad.io:gateway",
+        "sha256": "42ea6c7b1a545b30d652c6f279d5df0f91369e6012cc452285518d509513f303"
+      },
+      {
+        "canonical": "surface:ws.blackroad.io:realtime",
+        "sha256": "fbff49504ecfac2528e5ecce0883afa520e9ce4033ee8c6edb405a5dfdf1ec6a"
+      },
+      {
+        "canonical": "surface:gov.api.blackroad.io:governance-api",
+        "sha256": "5b13542de03054eb8a577a7101e969850a9570828ae22441871e5ca1305cc2dc"
+      },
+      {
+        "canonical": "surface:ledger.blackroad.systems:ledger-api",
+        "sha256": "88a6858e697175185a3d724b005c2af193844b0b2dd732dc2487de4a96ee1077"
+      },
+      {
+        "canonical": "surface:policies.blackroad.systems:policy-api",
+        "sha256": "0a602fc79909c27665667d5cafd0b585f5a36ada890a58c80fff65cba56be2f7"
+      },
+      {
+        "canonical": "surface:agents.blackroad.network:agent-registry",
+        "sha256": "1a314af47805b44f95d1c12cef7e63dda6b3ab0667aba4ae73fb0458ce52d4bd"
+      },
+      {
+        "canonical": "surface:mesh.blackroad.network:mesh-entry",
+        "sha256": "d344eb41be16a101e382e54bc7ab8d59af94a062aa0eee9df39a6adc587ae21b"
+      },
+      {
+        "canonical": "surface:pi.mesh.blackroad.network:pi-entry",
+        "sha256": "c7a55577eb3d0298da0d26898bd3019783bf448af551f233481d26b9663c10f5"
+      }
+    ],
+    "envs_regions": [
+      {
+        "canonical": "env:dev:blackroad",
+        "sha256": "22ccc7c92d0dfd088199d0f68e27f69821ab5e9589a92fae622d48972fcd56c6"
+      },
+      {
+        "canonical": "env:stg:blackroad",
+        "sha256": "61411154ae48bd3d1ed7a27fb66b30f6729af07d6cec41ff9fb04eca36859d6c"
+      },
+      {
+        "canonical": "env:prod:blackroad",
+        "sha256": "e533e39695759824da784ce0b09409b34a3abd6bb1a4b9041793539514497d37"
+      },
+      {
+        "canonical": "region:na1:blackroad",
+        "sha256": "aa93f8f86902f1b9b81aa829954b388f4e635dbf92db9f0f18084dcd47ac3a61"
+      },
+      {
+        "canonical": "region:eu1:blackroad",
+        "sha256": "862c20f86848574b198976a5a8c02a23822b1692d02dc9ac5d29cee9200d5342"
+      },
+      {
+        "canonical": "region:ap1:blackroad",
+        "sha256": "26232bf467119fe808c423c34729c67ec327cee5b7818612a73e7feac087b7b0"
+      }
+    ],
+    "namespaces": [
+      {
+        "canonical": "ns:policy:blackroad",
+        "sha256": "917254c83ecee769039043244edd98e88a73d56fd9e5a40d881c5f17bab1eb28"
+      },
+      {
+        "canonical": "ns:ledger:blackroad",
+        "sha256": "f131d8a0386c41b1275a23bad74387e84a842e7922e722240e80a14295cef713"
+      },
+      {
+        "canonical": "ns:agent:blackroad",
+        "sha256": "8268320734858095f825d8365caa353a595ffb6687b3dfc821db365c7a2bd7e0"
+      },
+      {
+        "canonical": "ns:intent:blackroad",
+        "sha256": "6b3c2e83c18328d9f37ce91554305030c7d464441006fd205eddac5473220ec3"
+      },
+      {
+        "canonical": "ns:delegation:blackroad",
+        "sha256": "283e55ead100aa5f069eaf7c398acabcf91b0740b047ae9d28ef64458a7af192"
+      },
+      {
+        "canonical": "ns:claim:blackroad",
+        "sha256": "99c6992b29b064811aa313b1884fe921a3413671774f7b7446e63532456a74a5"
+      }
+    ],
+    "keyspaces": [
+      {
+        "canonical": "keyspace:lucidia:signing:v1:blackroad",
+        "sha256": "427a933750f6543661c3cc6c35ccb9a689d02df726e58970fded467ac5f3db88"
+      },
+      {
+        "canonical": "keyspace:lucidia:encryption:v1:blackroad",
+        "sha256": "fe839fc1f905fd9cec8d4032e6b36211b1075e540809a6ddef3ef3d307b5ec5c"
+      },
+      {
+        "canonical": "keyspace:lucidia:attestation:v1:blackroad",
+        "sha256": "4624486690196f274fba1feed16b06d442557d1d05e86f934a8728dd1477c550"
+      },
+      {
+        "canonical": "keyspace:lucidia:session:v1:blackroad",
+        "sha256": "3fb4d12fe4f238f10d99525fcd1e81cf3b49890aae252de33015b54a950d0eea"
+      },
+      {
+        "canonical": "keyspace:lucidia:api-tokens:v1:blackroad",
+        "sha256": "abe5ed1547979fbef13c63595ed1ce5ac78741c27db1b01952816ca8d4302f59"
+      }
+    ],
+    "attestations": [
+      {
+        "canonical": "attestation:lucidia:model-binding:v1:blackroad",
+        "sha256": "3b7da02f4a4f6dd8232083b05b4d7cdeba8f33c40cddc5c8f30147ac4e427727"
+      },
+      {
+        "canonical": "attestation:lucidia:runtime-binding:v1:blackroad",
+        "sha256": "fbae61e2bc7a04e6092581f785ef11cdecead987cf6c20ab19562c2d7a16f559"
+      },
+      {
+        "canonical": "attestation:lucidia:policy-binding:v1:blackroad",
+        "sha256": "742bd5df5c9798289cf6824b9cfe358e56885404bdfd8db5fe3918529c6468d7"
+      }
+    ],
+    "runtimes": [
+      {
+        "canonical": "runtime:lucidia:local:v1:blackroad",
+        "sha256": "ca8104bb1ff955d3939e6659f6c7eaffa3b16fef8adb9c81143cba10725978fa"
+      },
+      {
+        "canonical": "runtime:lucidia:cloud:v1:blackroad",
+        "sha256": "e5e95abe38c24cb06d5dc69889e79d0f8c5eef4f41c36845aad3b66f3f9a358c"
+      },
+      {
+        "canonical": "runtime:lucidia:edge:v1:blackroad",
+        "sha256": "aee21ba1875469d02f7c0b4bc44c9d7ac90b0e5a059f866e787477510f0d6a0e"
+      },
+      {
+        "canonical": "runtime:lucidia:browser:v1:blackroad",
+        "sha256": "c118552e953a4dc44267b791907d408c6965ec2e32dfb126b5b09dff04d56ae3"
+      },
+      {
+        "canonical": "runtime:lucidia:operator-console:v1:blackroad",
+        "sha256": "30ca873f05e4001d14d1a2a4a20631dcceac907412f681f47fbe63b47bdb46b8"
+      }
+    ],
+    "channels": [
+      {
+        "canonical": "channel:lucidia:ws:blackroad",
+        "sha256": "3f8eaecaa8331ed6a926b5faa0e5215dfc51eaa4a72c61a0476ade11193b7e1c"
+      },
+      {
+        "canonical": "channel:lucidia:eventbus:blackroad",
+        "sha256": "906a5004b8008aea45790c7432306dda408fae85e4fdcdde1e034aa97a0e1e05"
+      }
+    ],
+    "policies_caps": [
+      {
+        "canonical": "secrets-policy:lucidia:no-raw-secrets:v1:blackroad",
+        "sha256": "8db4d364e0c8968959e85dd177004d45451465cbece19e7e0ac5ad28c3751876"
+      },
+      {
+        "canonical": "policy:identity.immutable:v1:blackroad",
+        "sha256": "34a6c34384b3ee9687e55ce0233b3390a56cf6b3fe17d8eaa99d8dbc3f61ca32"
+      },
+      {
+        "canonical": "capability:lucidia:sign:v1:blackroad",
+        "sha256": "dd45143f38312234bce0ea7f67578437dc23853cd9d47a9450c29702554cc29f"
+      },
+      {
+        "canonical": "capability:lucidia:decrypt:v1:blackroad",
+        "sha256": "b91f9524234f861a1451f017c0cd25d1c0d596c9c52ee66dd1914ac0355a0d57"
+      },
+      {
+        "canonical": "capability:lucidia:attest:v1:blackroad",
+        "sha256": "e72b282a5a07ff040b6e9f1070c17e517206bae11ae83cc59227b09ee8bb6ae4"
+      },
+      {
+        "canonical": "capability:lucidia:rotate-keys:v1:blackroad",
+        "sha256": "bd319456cb878deb825af7e6da8996607d32eca6fafce78baed63e8231c3b4dc"
+      }
+    ],
+    "instances": [
+      {
+        "canonical": "instance:lucidia:0001:local:blackroad",
+        "sha256": "19cf9a955e70b2d88cf061f386e2fa6898bce884d80c9fa69e108281fe19e183"
+      },
+      {
+        "canonical": "instance:lucidia:0002:cloud:blackroad",
+        "sha256": "edf5739c4d6ec3a04d05eacac26ff3cdd3560b80509b9d2e4b0587ecdff61f0e"
+      },
+      {
+        "canonical": "instance:lucidia:0003:browser:blackroad",
+        "sha256": "149d06029cacee48f2b7b1c62cfeb58da69b8cab74baaa096488486fc1b6dd8c"
+      },
+      {
+        "canonical": "instance:lucidia:0004:edge:blackroad",
+        "sha256": "b250b47606836137b9daae3608d24fb2d221e2dd827b395137c866713a0ca51f"
+      },
+      {
+        "canonical": "instance:lucidia:operator-session:v1:blackroad",
+        "sha256": "b0ed1f580733a54c2d843245471b4e863f1747126834206c2d797490f0e95cb5"
+      },
+      {
+        "canonical": "instance:lucidia:governed-session:v1:blackroad",
+        "sha256": "e8bbffc404d9963da8efa4b8cb9b399a5fb2edaed46182604c91f3090ac10834"
+      }
+    ],
+    "nodes": [
+      {
+        "canonical": "node:mesh:blackroad:primary",
+        "sha256": "c5e1e9ff09dddc039a05f6f0557821f879913f7c4b9c797ec9b4db9fa9bb4c38"
+      },
+      {
+        "canonical": "node:mesh:blackroad:secondary",
+        "sha256": "ecf183796cf0c2aef332d0af3292651e253603fef04056b63bb806a28dfdc9a8"
+      },
+      {
+        "canonical": "node:pi:pi-alpha:blackroad",
+        "sha256": "1904c116c390310d9a362046e6f64c124c7b1926f72270840ca4fe8f07129426"
+      },
+      {
+        "canonical": "node:pi:pi-beta:blackroad",
+        "sha256": "a98e38b192e7b317a2b2ea9dae9aedee121cbf19f4ac241a03965cbdb1692b47"
+      },
+      {
+        "canonical": "node:edge:jetson-x1:blackroad",
+        "sha256": "4d1be476ee62dfcdd1228424db7fba26151196b41fcbcb9bfaf412b6c6daa039"
+      }
+    ],
+    "hosts_patterns": [
+      {
+        "canonical": "host:agent-{id}.agents.blackroad.network",
+        "sha256": "29f42731a0bfd8638de5925c467229ec47d0ea628750b88172dd903d1882c619"
+      },
+      {
+        "canonical": "host:pi-{name}.pi.blackroad.network",
+        "sha256": "3b045ea4c80defe3b09605417e2eef861f28c6b45ede37357323a9035116d46b"
+      }
+    ],
+    "workloads": [
+      {
+        "canonical": "workload:lucidia:core-runtime:v1:blackroad",
+        "sha256": "87ad1e0af509a3d6632e9c1e023d9bc30b66651fca355ec5217cdb83f331565f"
+      },
+      {
+        "canonical": "workload:lucidia:policy-evaluator:v1:blackroad",
+        "sha256": "bed864c7af5a3cf9d5494fe4d9c2a41caabbaf0b7dea835de595c057c4420bc2"
+      },
+      {
+        "canonical": "workload:lucidia:memory-manager:v1:blackroad",
+        "sha256": "96c40b713fd2966c6981f888ed1357d10f411e3ae24e539e28af337bb91c1974"
+      },
+      {
+        "canonical": "workload:lucidia:agent-orchestrator:v1:blackroad",
+        "sha256": "77063e0d13ede9f6c0324059bd00e705bf4c07754aed07002f66766aa51cc7ad"
+      }
+    ],
+    "bindings": [
+      {
+        "canonical": "binding:instance->node:lucidia:blackroad",
+        "sha256": "71307260aa202dcece0947355a6e72ebc5d162528e87334c2707e6d2e93e7442"
+      },
+      {
+        "canonical": "binding:node->mesh:blackroad",
+        "sha256": "3b99ea0d611e5cf1a80665f93a6c07d10c4ac9ea90809a1c28db12c2b5a8fb65"
+      }
+    ],
+    "lifecycle": [
+      {
+        "canonical": "lifecycle:instance.start:blackroad",
+        "sha256": "a1a6fa9a29818ab956e91d9ab7f3374a87c59edb8bd478f00b0032f90788bd6e"
+      },
+      {
+        "canonical": "lifecycle:instance.stop:blackroad",
+        "sha256": "fefc3d9a0c294533012207e70e9b47ce69b792d424b1c107e51a93bae53d85cc"
+      },
+      {
+        "canonical": "lifecycle:node.decommission:blackroad",
+        "sha256": "bf2c5f9aba86f1a9c7ed887fb0172f0d2f5e76ec8ce99eee666034e143c3605b"
+      }
+    ]
+  }
+}

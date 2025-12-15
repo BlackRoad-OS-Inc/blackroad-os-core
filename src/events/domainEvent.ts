@@ -1,4 +1,5 @@
 import type { PsShaInfinity } from "../identity/identityTypes";
+import type { IdentityHash } from "../identity/registry";
 
 export type EventSeverity = "info" | "warning" | "error";
 
@@ -13,6 +14,10 @@ export interface DomainEvent<TPayload extends DomainEventPayload = DomainEventPa
   severity: EventSeverity;
   timestamp: string;
   agentId?: PsShaInfinity;
+
+  // Identity anchoring (Genesis Block 0)
+  authorizedBy: IdentityHash; // Identity that authorized/emitted this event
+  authorityChain?: IdentityHash[]; // Full delegation chain back to genesis
 }
 
 /**

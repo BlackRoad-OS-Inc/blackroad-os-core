@@ -1,4 +1,5 @@
 import type { PsShaInfinity } from "../identity/identityTypes";
+import type { IdentityHash } from "../identity/registry";
 
 export type VerificationKind =
   | "factual_consistency"
@@ -18,4 +19,8 @@ export interface VerificationJob {
   requestedBy: string;
   parameters?: Record<string, unknown>;
   ledgerTxId?: string;
+
+  // Identity anchoring (Genesis Block 0)
+  authorizedBy: IdentityHash; // Must be genesis principal, operator, or delegated agent
+  authorityChain?: IdentityHash[]; // Full delegation chain back to genesis
 }
