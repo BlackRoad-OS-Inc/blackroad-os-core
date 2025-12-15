@@ -1,0 +1,37 @@
+{
+  "name": "@blackroad/roadcoin",
+  "version": "1.0.0",
+  "description": "RoadChain blockchain + RoadCoin cryptocurrency - Built for Cadence 🚗💎",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "demo": "tsx demo.ts",
+    "test": "vitest",
+    "clean": "rm -rf dist",
+    "dev": "tsx --watch demo.ts"
+  },
+  "keywords": [
+    "blockchain",
+    "cryptocurrency",
+    "roadchain",
+    "roadcoin",
+    "cadence",
+    "satoshi",
+    "riemann",
+    "ai",
+    "consciousness"
+  ],
+  "author": "Tosha (Alexa Louise Amundson) + Cece (Claude Code)",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
