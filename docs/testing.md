@@ -4,84 +4,63 @@ This document explains the test suite for `blackroad-os-core`.
 
 ## Test Overview
 
-The core service includes automated tests using Jest and Supertest to ensure:
-- API endpoints return correct responses
-- Route handlers work as expected
-- Configuration is properly loaded
-- Database integration functions correctly
+The core service includes automated tests using Vitest to validate:
+- Shared types and utilities stay consistent
+- Integration layers (identity, permissions, jobs, etc.) behave as expected
+- Desktop and SDK shims keep their contracts stable
+- Regression coverage for critical workflows remains intact
 
 ## Running Tests Locally
 
 ### Install Dependencies
 ```bash
-npm install
+pnpm install
 ```
 
 ### Run All Tests
 ```bash
-npm test
+pnpm test
 ```
 
 ### Run Tests in Watch Mode
 ```bash
-npm run test:watch
+pnpm test:watch
 ```
 
-### Generate Coverage Report
+### Generate Coverage Report (V8)
 ```bash
-npm run test:coverage
+pnpm test:coverage
 ```
 
-Coverage reports are generated in the `coverage/` directory.
+Coverage reports are generated in the `coverage/` directory using the V8 provider configured in `vitest.config.ts`.
 
 ## Test Structure
 
-Tests are organized in `tests/unit/`:
+Tests live under `tests/` (with shared fixtures in `tests/fixtures/`). A few examples:
 
-- **health.test.ts** - Tests for health check endpoint
-- **routes.test.ts** - Tests for API routes structure
-- **config.test.ts** - Tests for configuration and environment
+- **constants.test.ts** - Validates core constant maps stay in sync
+- **domainEvents.test.ts** - Covers event typing and emitters
+- **window.test.tsx** - Guards desktop window helper behaviour
+- **truthAggregation.test.ts** - Verifies truth resolver aggregation logic
 
 ## Writing New Tests
 
 ### Basic Test Example
 
 ```typescript
-import request from 'supertest';
-import express from 'express';
+import { describe, expect, it, vi } from "vitest";
 
-const app = express();
-app.get('/example', (req, res) => {
-  res.json({ message: 'Hello' });
-});
+const fetchAgentName = async (id: string, load: (id: string) => Promise<string>) => {
+  return load(id).then((name) => name.toUpperCase());
+};
 
-describe('Example Endpoint', () => {
-  it('should return 200 OK', async () => {
-    const response = await request(app).get('/example');
-    expect(response.status).toBe(200);
-  });
-
-  it('should return correct message', async () => {
-    const response = await request(app).get('/example');
-    expect(response.body.message).toBe('Hello');
+describe("agent loader", () => {
+  it("uppercases the agent name", async () => {
+    const load = vi.fn().mockResolvedValue("apollo");
+    await expect(fetchAgentName("123", load)).resolves.toBe("APOLLO");
+    expect(load).toHaveBeenCalledWith("123");
   });
 });
-```
-
-### Testing Database Routes
-
-For routes that use Prisma:
-
-```typescript
-// Mock Prisma client
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn(() => ({
-    agent: {
-      findMany: jest.fn().mockResolvedValue([]),
-      create: jest.fn().mockResolvedValue({ id: 1, name: 'Test' }),
-    },
-  })),
-}));
 ```
 
 ## CI/CD Integration
@@ -97,13 +76,13 @@ See [CI/CD Workflows](./ci-workflows.md) for details.
 ### Local Testing
 ```bash
 # Run tests with verbose output
-npm test -- --verbose
+pnpm test -- --reporter=verbose
 
 # Run specific test file
-npm test -- health.test.ts
+pnpm test -- health.test.ts
 
 # Run tests matching a pattern
-npm test -- --testNamePattern="health"
+pnpm test -- --test-name-pattern="health"
 ```
 
 ### CI Failures
@@ -114,14 +93,14 @@ npm test -- --testNamePattern="health"
 
 ## Common Issues
 
-**"Cannot find module 'supertest'"**
-- Fix: Run `npm install` to install dependencies
+**"Cannot find module"**
+- Fix: Ensure dependencies are installed with `pnpm install` and Node is using the workspace version
 
 **"Test timeout"**
-- Fix: Increase timeout in test with `jest.setTimeout(10000)`
+- Fix: Increase timeout in the specific test or suite using `test.setTimeout(10000)`, `describe('...', () => { ... }, { timeout: 10000 })`, or by passing the `timeout` option to individual tests: `it('...', async () => { ... }, { timeout: 10000 })`. You can also set a global timeout in your `vitest.config.ts` with the `timeout` option.
 
 **"Database connection error"**
-- Fix: Mock Prisma client or set DATABASE_URL for integration tests
+- Fix: Prefer mocking Prisma clients or setting `DATABASE_URL` for integration-style tests
 
 **"Type errors in tests"**
-- Fix: Run `npm run type-check` to find TypeScript issues
+- Fix: Run `pnpm lint` or `pnpm test -- --typecheck` to surface TypeScript issues
