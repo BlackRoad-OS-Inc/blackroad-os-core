@@ -12,16 +12,8 @@
             min-height: 100vh;
             padding: 40px 20px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: white;
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: white; font-size: 48px; margin-bottom: 20px; text-align: center; }
         .products {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -34,34 +26,13 @@
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .product h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #FF0066;
-        }
-        .product .price {
-            font-size: 48px;
-            font-weight: bold;
-            color: #FF9D00;
-            margin: 20px 0;
-        }
-        .product p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .product ul {
-            list-style: none;
-            margin: 20px 0;
-        }
-        .product ul li {
-            padding: 8px 0;
-            color: #333;
-        }
-        .product ul li:before {
-            content: "✅ ";
-        }
-        .download-btn {
+        .product h2 { font-size: 32px; margin-bottom: 10px; color: #FF0066; }
+        .product .price { font-size: 48px; font-weight: bold; color: #FF9D00; margin: 20px 0; }
+        .product p { color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .product ul { list-style: none; margin: 20px 0; }
+        .product ul li { padding: 8px 0; color: #333; }
+        .product ul li:before { content: "✅ "; }
+        .btn {
             display: inline-block;
             background: linear-gradient(135deg, #FF9D00, #FF0066);
             color: white;
@@ -70,18 +41,14 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 18px;
-            margin-top: 20px;
+            margin: 10px 10px 10px 0;
             transition: transform 0.2s;
         }
-        .download-btn:hover {
-            transform: scale(1.05);
+        .btn:hover { transform: scale(1.05); }
+        .btn-secondary {
+            background: linear-gradient(135deg, #7700FF, #0066FF);
         }
-        .tagline {
-            text-align: center;
-            color: white;
-            font-size: 24px;
-            opacity: 0.9;
-        }
+        .tagline { text-align: center; color: white; font-size: 24px; opacity: 0.9; }
         .note {
             background: rgba(255,255,255,0.2);
             color: white;
@@ -102,7 +69,7 @@
                 <h2>applier</h2>
                 <div class="price">$29</div>
                 <p><strong>Stop wasting hours on job applications.</strong></p>
-                <p>Python CLI tool that automates job applications across 30+ platforms (LinkedIn, Indeed, Glassdoor, and more).</p>
+                <p>Python CLI tool that automates job applications across 30+ platforms.</p>
                 <ul>
                     <li>AI-powered resume customization</li>
                     <li>Cover letter generation</li>
@@ -110,12 +77,12 @@
                     <li>Works on Mac/Linux</li>
                     <li>Email support included</li>
                 </ul>
-                <a href="https://github.com/BlackRoad-OS/blackroad-os-core/releases/download/v1.0/applier.zip" class="download-btn">
-                    Download applier.zip
+                <a href="https://github.com/BlackRoad-OS/blackroad-os-core/releases/download/v1.0-products/applier.zip" class="btn">
+                    Download FREE
                 </a>
-                <p style="margin-top: 20px; font-size: 14px; color: #999;">
-                    Pay what you want: <a href="https://buy.stripe.com/test_PLACEHOLDER" style="color: #FF0066;">Stripe Payment</a>
-                </p>
+                <a href="https://dashboard.stripe.com/test/products/prod_Tc4JZ2txOHygCF" class="btn btn-secondary">
+                    Pay $29 (Honor System)
+                </a>
             </div>
 
             <div class="product">
@@ -130,20 +97,23 @@
                     <li>Works offline</li>
                     <li>No dependencies</li>
                 </ul>
-                <a href="https://github.com/BlackRoad-OS/blackroad-os-core/releases/download/v1.0/btc-calc.zip" class="download-btn">
-                    Download btc-calc.zip
+                <a href="https://github.com/BlackRoad-OS/blackroad-os-core/releases/download/v1.0-products/btc-calc.zip" class="btn">
+                    Download FREE
                 </a>
-                <p style="margin-top: 20px; font-size: 14px; color: #999;">
-                    Pay what you want: <a href="https://buy.stripe.com/test_PLACEHOLDER" style="color: #FF0066;">Stripe Payment</a>
-                </p>
+                <a href="https://dashboard.stripe.com/test/products/prod_Tc4JmJOKZ0KTur" class="btn btn-secondary">
+                    Pay $9 (Honor System)
+                </a>
             </div>
         </div>
 
         <div class="note">
-            <h3>Pay What You Want (Honor System)</h3>
-            <p>Download now. Pay later via Stripe if you find value.</p>
-            <p>Suggested: $29 for applier, $9 for Bitcoin Calculator</p>
-            <p>Built by Alexa Amundson • blackroad.systems@gmail.com</p>
+            <h3>💰 Honor System - Download Now, Pay If You Find Value</h3>
+            <p>I trust you. Download the tools FREE. If they save you time and make you money, come back and pay.</p>
+            <p>Stripe products created. Payment links in Stripe dashboard.</p>
+            <p><strong>Built by Alexa Amundson</strong> • blackroad.systems@gmail.com</p>
+            <p style="margin-top: 20px; font-size: 14px;">
+                Product IDs: applier (prod_Tc4JZ2txOHygCF) • Bitcoin Calculator (prod_Tc4JmJOKZ0KTur)
+            </p>
         </div>
     </div>
 </body>
