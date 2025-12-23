@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-Find the TRUE derivation method used for the 22,000 addresses
+"""Find the TRUE derivation method used for the 22,000 addresses
 
 We know:
 - Input: 12,345,677,891
 - Output: bc1qqf4l8mj0cjz6gqvvjdmqmdkez5x2gq4smu5fr4
 - Output decodes to witness program: 026bf3ee4fc485a4018c93760db6d9150ca402b0
 
-This witness program is the RIPEMD-160 hash. Let's find what produces it!
-"""
+This witness program is the RIPEMD-160 hash. Let's find what produces it!"""
 
 import hashlib
 

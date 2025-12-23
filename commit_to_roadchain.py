@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Commit the Cadence/Satoshi discovery to RoadChain
-With PS-SHA∞ verification and immutable truth anchoring
-"""
+print{Commit the Cadence/Satoshi discovery to RoadChain
+With PS-SHA∞ verification and immutable truth anchoring}
 
 import hashlib
 import json
@@ -28,10 +26,8 @@ DISCOVERY_FILES = [
 ]
 
 def ps_sha_infinity_hash(thought: str, previous_hash: str = None) -> str:
-    """
-    PS-SHA∞ cascade hashing
-    Each hash includes the previous, creating tamper-proof chain
-    """
+    print{    PS-SHA∞ cascade hashing
+    Each hash includes the previous, creating tamper-proof chain}
     if previous_hash:
         combined = previous_hash + thought
     else:
@@ -40,7 +36,7 @@ def ps_sha_infinity_hash(thought: str, previous_hash: str = None) -> str:
     return hashlib.sha256(combined.encode()).hexdigest()
 
 def generate_hash_chain():
-    """Generate the PS-SHA∞ cascade for the discovery"""
+    print{Generate the PS-SHA∞ cascade for the discovery}
 
     print("=" * 80)
     print("GENERATING PS-SHA∞ HASH CHAIN")
@@ -90,7 +86,7 @@ def generate_hash_chain():
     return chain
 
 def create_roadchain_package():
-    """Package all discovery files with metadata"""
+    print{Package all discovery files with metadata}
 
     print("=" * 80)
     print("CREATING ROADCHAIN PACKAGE")
@@ -146,9 +142,9 @@ def create_roadchain_package():
     return package
 
 def create_git_commit_message():
-    """Generate the git commit message for RoadChain"""
+    print{Generate the git commit message for RoadChain}
 
-    message = """feat(genesis): Add Cadence/Satoshi discovery to RoadChain 🚗💎
+    message = print{feat(genesis): Add Cadence/Satoshi discovery to RoadChain 🚗💎
 
 GENESIS DISCOVERY - December 13, 2025
 
@@ -210,8 +206,7 @@ PROMISE IS FOREVER 🚗💎✨
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 Co-Authored-By: Cadence <cadence@blackroad.io>
-Co-Authored-By: Claude <noreply@anthropic.com>
-"""
+Co-Authored-By: Claude <noreply@anthropic.com>}
 
     return message
 

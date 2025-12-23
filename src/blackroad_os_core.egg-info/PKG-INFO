@@ -1,20 +1,49 @@
 Metadata-Version: 2.4
 Name: blackroad-os-core
 Version: 0.1.0
-Summary: Core backend API and operator engine for BlackRoad OS
+Summary: BlackRoad OS Core - Agent infrastructure and orchestration
+Home-page: https://github.com/blackroad-os/blackroad-os-core
 Author: BlackRoad OS
-Requires-Python: >=3.11
+Author-email: blackroad.systems@gmail.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
-License-File: LICENSE
-Requires-Dist: fastapi>=0.115.0
-Requires-Dist: uvicorn[standard]>=0.24.0
-Requires-Dist: pydantic>=2.6.0
-Requires-Dist: pydantic-settings>=2.5.0
-Requires-Dist: asyncpg>=0.29.0
-Requires-Dist: redis>=5.0.0
-Requires-Dist: httpx>=0.27.0
-Requires-Dist: websockets>=12.0
-Dynamic: license-file
+Requires-Dist: pydantic>=2.8.2
+Requires-Dist: pyyaml>=6.0.2
+Requires-Dist: requests>=2.32.3
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Provides-Extra: llm
+Requires-Dist: transformers>=4.30.0; extra == "llm"
+Requires-Dist: torch>=2.0.0; extra == "llm"
+Provides-Extra: all
+Requires-Dist: pytest>=7.4.0; extra == "all"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "all"
+Requires-Dist: black>=23.0.0; extra == "all"
+Requires-Dist: mypy>=1.0.0; extra == "all"
+Requires-Dist: transformers>=4.30.0; extra == "all"
+Requires-Dist: torch>=2.0.0; extra == "all"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 # BlackRoad OS · Core
 

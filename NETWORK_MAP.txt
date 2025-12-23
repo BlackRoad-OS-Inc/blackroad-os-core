@@ -1,0 +1,200 @@
+═══════════════════════════════════════════════════════════════════════════════
+  BLACKROAD NETWORK MAP - Complete Topology
+  December 20, 2025
+═══════════════════════════════════════════════════════════════════════════════
+
+                                 INTERNET
+                                    │
+                                    │
+                         ┌──────────┴──────────┐
+                         │   Router Gateway    │
+                         │   192.168.4.1       │
+                         └──────────┬──────────┘
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+    ┌─────────▼─────────┐ ┌────────▼────────┐  ┌────────▼────────┐
+    │   blackroad-pi    │ │     lucidia     │  │      alice      │
+    │   (hostname:      │ │  Raspberry Pi 5 │  │  Raspberry Pi   │
+    │    claude)        │ │      8GB        │  │     400 4GB     │
+    │  Raspberry Pi 5   │ └─────────────────┘  └─────────────────┘
+    │      8GB          │          │                     │
+    └───────────────────┘          │                     │
+             │                     │                     │
+             │                     │                     │
+        LAN ONLY              ┌────▼─────┐          ┌───▼──────┐
+                              │Tailscale │          │Tailscale │
+                              │100.66.   │          │100.66.   │
+                              │235.47    │          │58.5      │
+                              └──────────┘          └──────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+  LAN NETWORK (WiFi: asdfghjkl)
+  Subnet: 192.168.4.0/22
+───────────────────────────────────────────────────────────────────────────────
+
+Device                IP Address        MAC Address        Status
+──────────────────────────────────────────────────────────────────────────────
+Router                192.168.4.1       ?                  ✅ ONLINE
+Mac-Operator          192.168.4.28      ?                  ✅ ONLINE (you)
+lucidia               192.168.4.38      2c:cf:67:cf:fa:17  ✅ ONLINE
+alice                 192.168.4.49      d8:3a:dd:ff:98:87  ✅ ONLINE
+blackroad-pi (claude) 192.168.4.64      88:a2:9e:0d:42:07  ✅ ONLINE
+iPhone-Koder          192.168.4.68      ?                  ✅ ONLINE
+lucidia-alternate     192.168.4.99      ?                  ❌ OFFLINE
+
+───────────────────────────────────────────────────────────────────────────────
+  TAILSCALE MESH NETWORK
+  Headscale: https://headscale.blackroad.io
+  Network: fd7a:115c:a1e0::/48
+───────────────────────────────────────────────────────────────────────────────
+
+Device            Tailscale IPv4      Tailscale IPv6                Status
+──────────────────────────────────────────────────────────────────────────────
+lucidia           100.66.235.47       fd7a:115c:a1e0::5401:eb6c     ✅ ONLINE
+alice             100.66.58.5         fd7a:115c:a1e0::8501:3a12     ✅ ONLINE
+blackroad-pi      ❌ NOT JOINED       ❌ NOT JOINED                 ❌ OFFLINE
+Mac-Operator      ❌ LOGGED OUT       ❌ LOGGED OUT                 ❌ OFFLINE
+
+───────────────────────────────────────────────────────────────────────────────
+  DOCKER NETWORKS (All Pis)
+───────────────────────────────────────────────────────────────────────────────
+
+blackroad-pi (claude):
+  ┌─────────────────────────────────────────┐
+  │ docker0: 172.17.0.1/16                  │
+  │ br-72f6d1669ac6: 172.18.0.1/16          │
+  │   ├─ vethab156d7@if7                    │
+  │   ├─ vethe1ef8b6@if9                    │
+  │   └─ veth9a28ded@if13                   │
+  └─────────────────────────────────────────┘
+
+lucidia:
+  ┌─────────────────────────────────────────┐
+  │ docker0: 172.17.0.1/16                  │
+  │ br-91c3f105919e: 172.18.0.1/16          │
+  │   ├─ vethf653733@if2                    │
+  │   ├─ vetheb0160b@if2                    │
+  │   └─ veth6e3ec18@if2                    │
+  └─────────────────────────────────────────┘
+
+alice:
+  ┌─────────────────────────────────────────┐
+  │ docker0: 172.17.0.1/16                  │
+  │ flannel.1: 10.42.0.0/32 (K8s overlay)   │
+  │ cni0: 10.42.0.1/24 (K8s CNI)            │
+  │   ├─ veth90be1a56@if2 (169.254.140.217) │
+  │   ├─ veth41eb1027@if2 (169.254.117.137) │
+  │   └─ vethba9caf3d@if2 (169.254.236.5)   │
+  └─────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+  IPv6 ADDRESSING
+───────────────────────────────────────────────────────────────────────────────
+
+Global IPv6 Prefix: 2001:1960:7000:9fcd::/64
+ULA IPv6 Prefix:    fdbc:b2ba:6fa5:1::/64
+
+Device         Global IPv6                                    ULA IPv6
+──────────────────────────────────────────────────────────────────────────────
+blackroad-pi   2001:1960:7000:9fcd:64c6:306:d1bb:101         fdbc:b2ba:6fa5:1:3a3d:5a9b:5a2d:c64d
+lucidia        2001:1960:7000:9fcd:b20b:7849:4210:3315       fdbc:b2ba:6fa5:1:1372:6bd8:d802:639e
+alice          2001:1960:7000:9fcd:6a1a:51a7:8135:237a       fdbc:b2ba:6fa5:1:d4e9:1c49:ed24:7bd0
+
+───────────────────────────────────────────────────────────────────────────────
+  SERVICE MAP
+───────────────────────────────────────────────────────────────────────────────
+
+🖥️  blackroad-pi (192.168.4.64)
+    ├─ SSH (port 22)                     ssh pi@192.168.4.64
+    ├─ VNC (port 5900)                   ssh -L 5900:localhost:5900 blackroad-pi
+    ├─ Docker daemon
+    └─ BlackRoad Panel (br-menu, br-status)
+
+🖥️  lucidia (192.168.4.38)
+    ├─ SSH (port 22)                     ssh pi@192.168.4.38
+    ├─ Lucidia Core Flask API (port 5000) http://192.168.4.38:5000
+    ├─ nginx (port 8080)                 http://192.168.4.38:8080
+    ├─ Docker daemon
+    ├─ Tailscale mesh                    ssh pi@100.66.235.47
+    └─ 13 AI Agents
+
+🖥️  alice (192.168.4.49)
+    ├─ SSH (port 22)                     ssh alice@192.168.4.49
+    ├─ Docker daemon
+    ├─ Kubernetes (k3s)
+    │   ├─ API Server (port 6443)
+    │   ├─ Flannel overlay network
+    │   └─ CNI networking
+    └─ Tailscale mesh                    ssh alice@100.66.58.5
+
+───────────────────────────────────────────────────────────────────────────────
+  CONNECTION MATRIX
+───────────────────────────────────────────────────────────────────────────────
+
+From Mac-Operator to:
+
+  blackroad-pi:
+    ✅ LAN:       ssh pi@192.168.4.64
+    ✅ Alias:     ssh blackroad-pi
+    ❌ Tailscale: NOT CONFIGURED
+
+  lucidia:
+    ✅ LAN:       ssh pi@192.168.4.38
+    ✅ Alias:     ssh lucidia
+    ✅ Tailscale: ssh pi@100.66.235.47 (when Mac rejoins)
+
+  alice:
+    ✅ LAN:       ssh alice@192.168.4.49
+    ✅ Alias:     ssh alice
+    ✅ Tailscale: ssh alice@100.66.58.5 (when Mac rejoins)
+
+───────────────────────────────────────────────────────────────────────────────
+  SSH KEY DISTRIBUTION
+───────────────────────────────────────────────────────────────────────────────
+
+Your Mac's primary key: ~/.ssh/id_br_ed25519.pub
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1UUN4BImgy9WnJZ0A5JXr3DjyBAsCtOoKavf+DFmDg alexa@blackroad
+
+Installed on:
+  ✅ blackroad-pi (192.168.4.64)
+  ✅ lucidia (192.168.4.38)
+  ✅ alice (192.168.4.49)
+
+───────────────────────────────────────────────────────────────────────────────
+  QUICK ACTIONS
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 Add blackroad-pi to Tailscale:
+   ssh blackroad-pi
+   sudo tailscale up --login-server=https://headscale.blackroad.io --accept-routes
+
+🔧 Reconnect Mac to Tailscale:
+   sudo tailscale up --login-server=https://headscale.blackroad.io --accept-routes
+
+🧪 Test all connections:
+   ~/blackroad-sandbox/test-all-ssh.sh
+
+🔍 Discover network devices:
+   ~/blackroad-sandbox/discover-neighbors.sh
+
+📚 View detailed inventory:
+   cat ~/blackroad-sandbox/NETWORK_INVENTORY.md
+
+───────────────────────────────────────────────────────────────────────────────
+  NOTES
+───────────────────────────────────────────────────────────────────────────────
+
+• All Pis are on WiFi (wlan0) - ethernet ports not connected
+• blackroad-pi hostname is "claude" - has custom BlackRoad welcome banner
+• alice is running full Kubernetes (k3s) with Flannel CNI
+• lucidia is the primary service hub with 13 AI agents
+• Tailscale provides encrypted mesh networking when away from home
+• All devices respond to ping and SSH is working
+• Network is /22 subnet = 1024 possible IP addresses (192.168.4.0 - 192.168.7.255)
+
+═══════════════════════════════════════════════════════════════════════════════
+  Last verified: December 20, 2025 at 1:47 PM CST
+  Source: Live ip address output from all devices
+═══════════════════════════════════════════════════════════════════════════════

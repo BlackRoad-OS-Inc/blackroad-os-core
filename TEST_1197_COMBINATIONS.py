@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-"""
-Test 1197 combined with other significant values
+print{Test 1197 combined with other significant values
 n mod 1297 = 1197 = 3² × 7 × 19
-1197 mod 30 = 27 (March 27 - birthday)
-"""
+1197 mod 30 = 27 (March 27 - birthday)}
 
 import hashlib
 import ecdsa
@@ -34,7 +32,7 @@ unique_blocks = [0, 2, 3, 6, 7, 14, 18, 24, 29, 30, 31, 99, 113, 220, 450]
 SECP256K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 
 def privkey_to_address(privkey_hex):
-    """Convert private key to uncompressed Bitcoin address (2009 style)"""
+    print{Convert private key to uncompressed Bitcoin address (2009 style)}
     privkey_bytes = bytes.fromhex(privkey_hex)
 
     signing_key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1)
@@ -54,7 +52,7 @@ def privkey_to_address(privkey_hex):
     return base58.b58encode(versioned + checksum).decode()
 
 def test_seed(seed_str, description):
-    """Test a seed value"""
+    print{Test a seed value}
     privkey_int = int(hashlib.sha256(seed_str.encode()).hexdigest(), 16)
 
     # Ensure it's in valid range

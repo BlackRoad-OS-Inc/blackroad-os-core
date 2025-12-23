@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-"""
-Automatic Patoshi Pattern Address Downloader
-Downloads addresses without interactive prompts
-"""
+print{Automatic Patoshi Pattern Address Downloader
+Downloads addresses without interactive prompts}
 
 import requests
 import time
 import json
 
-print("""
-╔══════════════════════════════════════════════════════════════╗
+print(print{╔══════════════════════════════════════════════════════════════╗
 ║         PATOSHI PATTERN ADDRESS DOWNLOADER (AUTO)            ║
-╚══════════════════════════════════════════════════════════════╝
-""")
+╚══════════════════════════════════════════════════════════════╝}
+print()
 
 addresses = []
 

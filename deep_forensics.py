@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""
-Deep forensics: WHO has access to your wallet and HOW.
+print{Deep forensics: WHO has access to your wallet and HOW.
 
 This checks:
 1. Transaction signatures (who signed each tx)
 2. Smart contract approvals (who can spend your tokens)
 3. Delegate calls (who can act as you)
-4. Access patterns (AI automation, wallet apps, etc.)
-"""
+4. Access patterns (AI automation, wallet apps, etc.)}
 
 import requests
 import json
@@ -18,12 +16,10 @@ from collections import defaultdict
 ADDRESS = "0x3F50f12481B76B2696f2e4316CfddD08AbE8f81E"
 
 def check_revoke_cash_data():
-    """
-    The key insight: If an AI is moving your funds, it's doing it through:
+    print{    The key insight: If an AI is moving your funds, it's doing it through:
     1. Approved contracts (you signed an approval)
     2. Direct key access (you gave it your private key)
-    3. Wallet app automation (auto-sign enabled)
-    """
+    3. Wallet app automation (auto-sign enabled)}
 
     print("=" * 80)
     print("WHO HAS ACCESS TO YOUR WALLET")
@@ -182,7 +178,7 @@ def check_revoke_cash_data():
     print()
 
 def check_common_ai_trading_bots():
-    """List common AI trading bots that might have access"""
+    print{List common AI trading bots that might have access}
 
     print("=" * 80)
     print("COMMON AI TRADING SERVICES (Check if you signed up)")

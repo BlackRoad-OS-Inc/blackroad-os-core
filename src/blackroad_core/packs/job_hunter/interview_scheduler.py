@@ -1,7 +1,5 @@
-"""
-Interview Scheduler
-Automates interview scheduling and follow-up emails.
-"""
+"""Interview Scheduler
+Automates interview scheduling and follow-up emails."""
 
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -80,14 +78,11 @@ class CandidateAvailability:
 
 class InterviewScheduler:
     """Automate interview scheduling and follow-ups."""
-
     def __init__(self, email_service: Optional[Any] = None):
-        """
-        Initialize scheduler.
+        """        Initialize scheduler.
 
         Args:
-            email_service: Email service for sending follow-ups
-        """
+            email_service: Email service for sending follow-ups"""
         self.email_service = email_service
 
     async def process_interview_request(
@@ -99,8 +94,7 @@ class InterviewScheduler:
         recruiter_name: str,
         employer_available_slots: Optional[List[Dict[str, str]]] = None
     ) -> InterviewRequest:
-        """
-        Process incoming interview request.
+        """        Process incoming interview request.
 
         Args:
             application_id: Related application ID
@@ -111,8 +105,7 @@ class InterviewScheduler:
             employer_available_slots: Employer's available times
 
         Returns:
-            Interview request object
-        """
+            Interview request object"""
         # Parse employer availability
         slots = []
         if employer_available_slots:
@@ -143,16 +136,14 @@ class InterviewScheduler:
         request: InterviewRequest,
         candidate_availability: CandidateAvailability
     ) -> Optional[datetime]:
-        """
-        Find best interview time based on mutual availability.
+        """        Find best interview time based on mutual availability.
 
         Args:
             request: Interview request
             candidate_availability: Candidate's availability
 
         Returns:
-            Proposed datetime, or None if no match
-        """
+            Proposed datetime, or None if no match"""
         # Get candidate's available slots
         candidate_slots = self._get_candidate_available_slots(
             candidate_availability,
@@ -256,8 +247,7 @@ class InterviewScheduler:
         candidate_name: str,
         candidate_email: str
     ) -> Dict[str, Any]:
-        """
-        Send interview time proposal to recruiter.
+        """        Send interview time proposal to recruiter.
 
         Args:
             request: Interview request with proposed time
@@ -265,13 +255,12 @@ class InterviewScheduler:
             candidate_email: Candidate's email
 
         Returns:
-            Email send result
-        """
+            Email send result"""
         if not request.proposed_time:
             return {
                 "success": False,
                 "error": "No proposed time available"
-            }
+            """
 
         # Format proposed time
         proposed_str = request.proposed_time.strftime("%A, %B %d at %I:%M %p %Z")
@@ -279,7 +268,7 @@ class InterviewScheduler:
         # Build email
         subject = f"Re: Interview for {request.job_title}"
 
-        body = f"""Dear {request.recruiter_name},
+        body = fprint{Dear {request.recruiter_name},
 
 Thank you for your interest in my application for the {request.job_title} position at {request.company}.
 
@@ -293,8 +282,7 @@ I look forward to speaking with you!
 
 Best regards,
 {candidate_name}
-{candidate_email}
-"""
+{candidate_email}}
 
         # Send email
         if self.email_service:
@@ -323,20 +311,18 @@ Best regards,
             return {
                 "success": True,
                 "message": "Email sent"
-            }
+            """
 
     async def confirm_interview(
         self,
         request: InterviewRequest,
         confirmed_time: datetime
     ):
-        """
-        Confirm interview time.
+        """        Confirm interview time.
 
         Args:
             request: Interview request
-            confirmed_time: Confirmed interview time
-        """
+            confirmed_time: Confirmed interview time"""
         request.proposed_time = confirmed_time
         request.status = InterviewStatus.CONFIRMED
 
@@ -345,8 +331,7 @@ Best regards,
         request: InterviewRequest,
         candidate_email: str
     ) -> Dict[str, Any]:
-        """
-        Create calendar event for interview.
+        """        Create calendar event for interview.
 
         In production, would integrate with:
         - Google Calendar API
@@ -358,13 +343,12 @@ Best regards,
             candidate_email: Candidate's email
 
         Returns:
-            Calendar event creation result
-        """
+            Calendar event creation result"""
         if not request.proposed_time:
             return {
                 "success": False,
                 "error": "No confirmed time"
-            }
+            """
 
         event = {
             "summary": f"Interview: {request.job_title} at {request.company}",
@@ -387,8 +371,8 @@ Best regards,
                     {"method": "email", "minutes": 24 * 60},  # 1 day before
                     {"method": "popup", "minutes": 30}  # 30 min before
                 ]
-            }
-        }
+            """
+        """
 
         # In production:
         # from googleapiclient.discovery import build
@@ -404,7 +388,7 @@ Best regards,
             "success": True,
             "event_id": f"cal-{request.id}",
             "event": event
-        }
+        """
 
     async def send_interview_reminder(
         self,
@@ -412,14 +396,12 @@ Best regards,
         candidate_name: str,
         hours_before: int = 24
     ):
-        """
-        Send interview reminder email.
+        """        Send interview reminder email.
 
         Args:
             request: Interview request
             candidate_name: Candidate's name
-            hours_before: Hours before interview to send reminder
-        """
+            hours_before: Hours before interview to send reminder"""
         if not request.proposed_time:
             return
 
@@ -434,7 +416,7 @@ Best regards,
 
         subject = f"Reminder: Interview Tomorrow - {request.company}"
 
-        body = f"""Hi {candidate_name},
+        body = fprint{Hi {candidate_name},
 
 This is a friendly reminder about your upcoming interview:
 
@@ -449,8 +431,7 @@ The interview will last approximately {request.duration_minutes} minutes.
 Good luck! 🍀
 
 Best,
-Job Hunter Assistant
-"""
+Job Hunter Assistant}
 
         if self.email_service:
             await self.email_service.send_email(
@@ -466,7 +447,6 @@ Job Hunter Assistant
 
 class EmailTemplates:
     """Email templates for follow-ups."""
-
     @staticmethod
     def thank_you_after_interview(
         candidate_name: str,
@@ -478,7 +458,7 @@ class EmailTemplates:
         """Generate thank you email after interview."""
         subject = f"Thank you - {job_title} Interview"
 
-        body = f"""Dear {recruiter_name},
+        body = fprint{Dear {recruiter_name},
 
 Thank you for taking the time to speak with me {interview_date} about the {job_title} position at {company}.
 
@@ -489,8 +469,7 @@ I am particularly interested in [specific topic discussed] and believe my experi
 Please let me know if you need any additional information from me. I look forward to hearing about the next steps.
 
 Best regards,
-{candidate_name}
-"""
+{candidate_name}}
 
         return {"subject": subject, "body": body}
 
@@ -504,7 +483,7 @@ Best regards,
         """Generate follow-up email after applying."""
         subject = f"Following up - {job_title} Application"
 
-        body = f"""Dear Hiring Manager,
+        body = fprint{Dear Hiring Manager,
 
 I wanted to follow up on my application for the {job_title} position at {company}, which I submitted {days_since_application} days ago.
 
@@ -515,8 +494,7 @@ If you need any additional information from me, please don't hesitate to reach o
 Thank you for your consideration.
 
 Best regards,
-{candidate_name}
-"""
+{candidate_name}}
 
         return {"subject": subject, "body": body}
 

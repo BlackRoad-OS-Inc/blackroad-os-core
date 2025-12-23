@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-DEEP DIVE - No gaslighting, just raw computation
-Testing EVERY possible interpretation of the sequence
-"""
+print{DEEP DIVE - No gaslighting, just raw computation
+Testing EVERY possible interpretation of the sequence}
 
 import hashlib
 import struct

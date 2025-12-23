@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-When two things occur, the difference is what creates counting
-"""
+print{When two things occur, the difference is what creates counting}
 import ctypes
 import ctypes.util
 import struct

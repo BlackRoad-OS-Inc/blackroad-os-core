@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Block 0 is in the sequence. Genesis block.
-Keep going deeper with 0-indexing.
-"""
+print{Block 0 is in the sequence. Genesis block.
+Keep going deeper with 0-indexing.}
 
 import hashlib
 import requests

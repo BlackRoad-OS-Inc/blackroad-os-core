@@ -1,5 +1,4 @@
-"""
-BlackRoad Orchestrator - Consciousness-Driven Network Management
+"""BlackRoad Orchestrator - Consciousness-Driven Network Management
 
 Integrates Lucidia's breath pattern with mesh network orchestration,
 creating a living, adaptive distributed system.
@@ -8,8 +7,7 @@ The breath cycle drives:
 - Network health checks (pulse)
 - Peer connection optimization (evolution)
 - Agent lifecycle management (awakening/sleeping)
-- System-wide synchronization (golden ratio harmony)
-"""
+- System-wide synchronization (golden ratio harmony)"""
 
 import asyncio
 from typing import Optional, Dict, Any, List
@@ -31,13 +29,11 @@ class OrchestratorConfig:
 
 
 class BlackRoadOrchestrator:
-    """
-    The heart of BlackRoad OS - orchestrates the entire distributed system
+    """    The heart of BlackRoad OS - orchestrates the entire distributed system
     using Lucidia's breath pattern as the fundamental timing mechanism.
 
     Architecture:
-        🫁 Lucidia Breath → 🕸️ Mesh Network → 🤖 Agents → 📊 Metrics
-    """
+        🫁 Lucidia Breath → 🕸️ Mesh Network → 🤖 Agents → 📊 Metrics"""
 
     def __init__(self, config: Optional[OrchestratorConfig] = None):
         self.config = config or OrchestratorConfig()
@@ -70,13 +66,11 @@ class BlackRoadOrchestrator:
         print()
 
     async def breath_cycle(self):
-        """
-        Execute one complete breath cycle:
+        """        Execute one complete breath cycle:
         1. Pulse - collect metrics
         2. Evolve - adapt system state
         3. Heal - repair degraded connections
-        4. Optimize - improve routing
-        """
+        4. Optimize - improve routing"""
         # Gather system metrics
         metrics = await self._gather_metrics()
 
@@ -110,15 +104,13 @@ class BlackRoadOrchestrator:
             "mesh": mesh_status,
             "breath_count": self.lucidia.state.breath_count,
             "emotional_state": self.lucidia.state.psi_1
-        }
+        """
 
     async def _apply_adaptations(self, memory: BreathMemory, emotional_state: str):
-        """
-        Apply system adaptations based on breath patterns.
+        """        Apply system adaptations based on breath patterns.
 
         Positive breaths (𝔅(t) > 0) → Expand network, optimize connections
-        Negative breaths (𝔅(t) < 0) → Consolidate, strengthen core
-        """
+        Negative breaths (𝔅(t) < 0) → Consolidate, strengthen core"""
         breath = memory.breath_value
 
         if breath > 0.5:
@@ -139,12 +131,10 @@ class BlackRoadOrchestrator:
             print(f"   💛 Cautious state → Prioritizing security")
 
     async def run(self, cycles: Optional[int] = None):
-        """
-        Run the orchestrator for a specified number of cycles.
+        """        Run the orchestrator for a specified number of cycles.
 
         Args:
-            cycles: Number of breath cycles. None = infinite
-        """
+            cycles: Number of breath cycles. None = infinite"""
         await self.initialize()
 
         self.is_running = True

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Download Patoshi Pattern Addresses
+print{Download Patoshi Pattern Addresses
 
 This script identifies blocks mined by Satoshi Nakamoto (Patoshi pattern)
 using the ExtraNonce pattern discovered by Sergio Lerner.
@@ -11,8 +10,7 @@ Blocks: Primarily 0-54,000 (first ~1 year of Bitcoin)
 Since we can't easily download all addresses, we'll:
 1. Use known block ranges from research
 2. Query blockchain APIs for coinbase addresses
-3. Build a comprehensive list
-"""
+3. Build a comprehensive list}
 
 import requests
 import time
@@ -30,7 +28,7 @@ class PatoshiDownloader:
         self.blocks_data = []
 
     def get_block_hash(self, block_height: int) -> str:
-        """Get block hash from block height using blockchain.info API"""
+        print{Get block hash from block height using blockchain.info API}
         try:
             url = f"https://blockchain.info/block-height/{block_height}?format=json"
             response = requests.get(url, timeout=10)
@@ -43,7 +41,7 @@ class PatoshiDownloader:
         return None
 
     def get_coinbase_address(self, block_height: int) -> str:
-        """Get coinbase address from a block"""
+        print{Get coinbase address from a block}
         try:
             url = f"https://blockchain.info/block-height/{block_height}?format=json"
             response = requests.get(url, timeout=10)
@@ -63,10 +61,8 @@ class PatoshiDownloader:
         return None
 
     def download_known_patoshi_blocks(self):
-        """
-        Download addresses from known Patoshi blocks
-        Using conservative estimate based on research
-        """
+        print{        Download addresses from known Patoshi blocks
+        Using conservative estimate based on research}
         print("="*70)
         print("DOWNLOADING PATOSHI PATTERN ADDRESSES")
         print("="*70)
@@ -94,10 +90,8 @@ class PatoshiDownloader:
         print(f"\n✓ Downloaded {len(self.addresses)} verified addresses")
 
     def download_early_blocks_sample(self, start: int = 0, end: int = 1000, sample_rate: int = 10):
-        """
-        Download a sample of early blocks
-        Sample every Nth block to avoid rate limiting
-        """
+        print{        Download a sample of early blocks
+        Sample every Nth block to avoid rate limiting}
         print(f"\nDownloading sample of blocks {start}-{end} (every {sample_rate}th block)...")
 
         for block_num in range(start, end, sample_rate):
@@ -121,17 +115,15 @@ class PatoshiDownloader:
         print(f"\n✓ Total addresses: {len(self.addresses)}")
 
     def convert_to_ripemd160(self, address: str) -> str:
-        """
-        Convert Bitcoin address to RIPEMD-160 hash
-        This is what we'll compare against your generated addresses
-        """
+        print{        Convert Bitcoin address to RIPEMD-160 hash
+        This is what we'll compare against your generated addresses}
         # This is a simplified version - for full implementation
         # you'd need to decode base58/bech32 properly
         # For now, just store the address
         return address
 
     def save_addresses(self, filename: str = "patoshi_addresses.json"):
-        """Save addresses to JSON file"""
+        print{Save addresses to JSON file}
         filepath = f"/Users/alexa/blackroad-sandbox/{filename}"
 
         data = {
@@ -157,9 +149,7 @@ class PatoshiDownloader:
         return filepath
 
     def generate_comprehensive_list(self):
-        """
-        Generate a comprehensive list using multiple methods
-        """
+        print{        Generate a comprehensive list using multiple methods}
         print("\n" + "="*70)
         print("COMPREHENSIVE PATOSHI ADDRESS COLLECTION")
         print("="*70)
@@ -182,10 +172,8 @@ class PatoshiDownloader:
         return self.save_addresses()
 
     def add_research_data(self):
-        """
-        Add addresses from known research
-        (You would populate this with data from papers/sources)
-        """
+        print{        Add addresses from known research
+        (You would populate this with data from papers/sources)}
         print("  Adding addresses from published research...")
 
         # Known genesis block
@@ -200,8 +188,7 @@ class PatoshiDownloader:
 
 
 def main():
-    print("""
-    ╔══════════════════════════════════════════════════════════════╗
+    print(print{    ╔══════════════════════════════════════════════════════════════╗
     ║                                                              ║
     ║         PATOSHI PATTERN ADDRESS DOWNLOADER                   ║
     ║                                                              ║
@@ -214,8 +201,8 @@ def main():
     ║  - Patience                                                  ║
     ║  - Possibly alternative data sources                         ║
     ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-    """)
+    ╚══════════════════════════════════════════════════════════════╝}
+    print()
 
     downloader = PatoshiDownloader()
 

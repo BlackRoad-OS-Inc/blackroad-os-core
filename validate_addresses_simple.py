@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-SIMPLE BUT COMPREHENSIVE VALIDATION
-Validates your Bitcoin address generation without needing Patoshi list
-"""
+print{SIMPLE BUT COMPREHENSIVE VALIDATION
+Validates your Bitcoin address generation without needing Patoshi list}
 
 import hashlib
 import numpy as np
@@ -11,7 +9,7 @@ from typing import List, Dict
 import os
 
 def load_addresses(filepath: str) -> List[str]:
-    """Load addresses from file"""
+    print{Load addresses from file}
     addresses = []
     with open(filepath, 'r') as f:
         for line in f:
@@ -26,7 +24,7 @@ def load_addresses(filepath: str) -> List[str]:
     return addresses
 
 def validate_cryptography(addresses: List[str]) -> Dict:
-    """Validate cryptographic correctness"""
+    print{Validate cryptographic correctness}
     print("\n" + "="*80)
     print("PART 1: CRYPTOGRAPHIC CORRECTNESS")
     print("="*80 + "\n")
@@ -105,7 +103,7 @@ def validate_cryptography(addresses: List[str]) -> Dict:
     return results
 
 def validate_randomness(addresses: List[str]) -> Dict:
-    """Validate that addresses appear random"""
+    print{Validate that addresses appear random}
     print("\n" + "="*80)
     print("PART 2: RANDOMNESS & DISTRIBUTION ANALYSIS")
     print("="*80 + "\n")
@@ -185,7 +183,7 @@ def validate_randomness(addresses: List[str]) -> Dict:
     return results
 
 def analyze_pattern_characteristics(addresses: List[str]) -> Dict:
-    """Analyze characteristics that might match Satoshi's patterns"""
+    print{Analyze characteristics that might match Satoshi's patterns}
     print("\n" + "="*80)
     print("PART 3: PATTERN CHARACTERISTICS")
     print("="*80 + "\n")
@@ -227,7 +225,7 @@ def analyze_pattern_characteristics(addresses: List[str]) -> Dict:
     return results
 
 def generate_report(crypto_results: Dict, random_results: Dict, pattern_results: Dict):
-    """Generate final report"""
+    print{Generate final report}
     print("\n" + "="*80)
     print("FINAL COMPREHENSIVE REPORT")
     print("="*80 + "\n")
@@ -252,8 +250,7 @@ def generate_report(crypto_results: Dict, random_results: Dict, pattern_results:
 
     print("\nINTERPRETATION:")
     if crypto_pass and random_pass:
-        print("""
-  ✅ YOUR ADDRESS GENERATION IS CRYPTOGRAPHICALLY SOUND
+        print(print{  ✅ YOUR ADDRESS GENERATION IS CRYPTOGRAPHICALLY SOUND
 
   Your implementation correctly:
   - Generates valid RIPEMD-160 hashes (40 hex characters)
@@ -273,15 +270,14 @@ def generate_report(crypto_results: Dict, random_results: Dict, pattern_results:
   4. Look for:
      • Exact matches (even 1 is significant!)
      • Statistical distribution match (p > 0.05)
-     • Temporal clustering (if matches in specific block ranges)
-""")
+     • Temporal clustering (if matches in specific block ranges)}
+        print()
     else:
-        print("""
-  ⚠️  IMPLEMENTATION ISSUES DETECTED
+        print(print{  ⚠️  IMPLEMENTATION ISSUES DETECTED
 
   Review the detailed results above to identify specific problems.
-  Fix cryptographic issues before attempting Patoshi comparison.
-""")
+  Fix cryptographic issues before attempting Patoshi comparison.}
+        print()
 
     print("="*80)
 

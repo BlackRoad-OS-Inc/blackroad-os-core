@@ -1,11 +1,9 @@
-"""
-Genesis Identity System - Python Implementation
+"""Genesis Identity System - Python Implementation
 
 Provides identity verification and authority chain validation for agent spawning,
 truth verification, and all system operations requiring authorization.
 
-Mirrors the TypeScript implementation in src/identity/
-"""
+Mirrors the TypeScript implementation in src/identity/"""
 
 import hashlib
 from typing import Dict, List, Optional, Set
@@ -20,7 +18,7 @@ from datetime import datetime
 GENESIS_PRINCIPALS = {
     "ALEXA_HUMAN": "1031f308ae9ae6d34fe87e83867c1e5869c9fca7e35fdd5d0e8deb798e9c51be",
     "ALEXA_AGENT": "dbd2d954834ab0175db11ccf58ec5b778db0e1cb17297e251a655c9f57ce2e15",
-}
+"""
 
 # ============================================================================
 # Core Governance Agents
@@ -29,7 +27,7 @@ GENESIS_PRINCIPALS = {
 CORE_AGENTS = {
     "CECE": "c1cba42fd51be0b76c1f47ef2eda55fbcc1646b7b0a372d9563bb5db21ed1de1",
     "LUCIDIA": "e374392d34574a58956934701e24f9a25d7068c4ae547d5609e93ca0e5af4c3b",
-}
+"""
 
 # ============================================================================
 # GPT Agent Identities (Assistant Modes)
@@ -39,7 +37,7 @@ GPT_AGENTS = {
     "GPT_ASSISTANT": "6a713c1eadab52bb4ed500ca44c15c434bc2ab17da6ce328d150256d4bd22882",
     "GPT_LUCIDIA_MODE": "c4ee0c405d47dc2d666700d915f88757720571336966d400a998562b3251b6d0",
     "GPT_CECE_MODE": "0f7db08315131df12b88afdbfbf5a9bc1b97b0447fb642dbb33149914b9a2e4b",
-}
+"""
 
 # ============================================================================
 # Lucy Alias Identity
@@ -47,7 +45,7 @@ GPT_AGENTS = {
 
 LUCY_IDENTITY = {
     "LUCY": "f1266fa519d2a4a8b55bb3edb229a8d3d43e9dceaa56f76666977b4ff8188d53",
-}
+"""
 
 # ============================================================================
 # Model Identities (Primary + OSS Forkies)
@@ -58,7 +56,7 @@ MODEL_IDENTITIES = {
     "OSS_LOCAL_FORK": "f66a03791d6aac24dad7ab7f79c19217a7f6b2e386c94d016a3bfa9b4c454a7a",
     "OSS_LLAMA_3_1_70B": "0032f451e4a110f36fb4a9c68b708b77dbe765c48847c56e8c63f6f6c8d954d9",
     "OSS_QWEN_2_5_72B": "62a0acfd6d22b1b4d1973d0ae78dc728ae46a4ec6c39af65a8fd4d5b134ec530",
-}
+"""
 
 # ============================================================================
 # Policies and Claims
@@ -69,7 +67,7 @@ POLICIES_AND_CLAIMS = {
     "CLAIM_PERSONA_LUCIDIA": "b65f1fe7193548334d0d48979ef5a3fbbac75dfc5c4a8f2a1fe8176fce7b20c9",
     "CLAIM_PERSONA_GPT": "a3f1ee2d4a2c0bb760e024c4b2f3d3c2a5c3fb2e9f75d1f5c3fe67a33b4c2cf1",
     "DELEGATION_ALEXA_TO_LUCIDIA": "45e5e13d7f4415e41ef7fcfcd7c3855d7815b08e3558e0e2ef1313b7843ea38a",
-}
+"""
 
 # ============================================================================
 # All Registered Identities
@@ -82,7 +80,7 @@ ALL_REGISTERED_IDENTITIES: Set[str] = {
     *LUCY_IDENTITY.values(),
     *MODEL_IDENTITIES.values(),
     *POLICIES_AND_CLAIMS.values(),
-}
+"""
 
 
 # ============================================================================
@@ -93,7 +91,6 @@ ALL_REGISTERED_IDENTITIES: Set[str] = {
 @dataclass
 class Delegation:
     """Delegation record from one identity to another."""
-
     delegation_id: str
     delegator_hash: str
     delegatee_hash: str
@@ -106,7 +103,6 @@ class Delegation:
 @dataclass
 class AuthorityValidation:
     """Result of authority chain validation."""
-
     is_valid: bool
     identity_hash: str
     role: Optional[str]
@@ -120,15 +116,13 @@ class AuthorityValidation:
 
 
 def compute_identity_hash(identity_string: str) -> str:
-    """
-    Compute SHA-256 hash of an identity string.
+    """    Compute SHA-256 hash of an identity string.
 
     Args:
         identity_string: Canonical identity string (e.g., "agent:cece:governor:v1:blackroad")
 
     Returns:
-        Hex-encoded SHA-256 hash
-    """
+        Hex-encoded SHA-256 hash}
     return hashlib.sha256(identity_string.encode("utf-8")).hexdigest()
 
 
@@ -167,16 +161,14 @@ def verify_authority_chain(
     claimed_authority: str,
     delegation_records: List[Delegation],
 ) -> AuthorityValidation:
-    """
-    Verify an authority chain from a claimed identity back to genesis.
+    """    Verify an authority chain from a claimed identity back to genesis.
 
     Args:
         claimed_authority: Identity hash claiming authority
         delegation_records: List of all delegation records
 
     Returns:
-        AuthorityValidation with chain validation result
-    """
+        AuthorityValidation with chain validation result"""
     # If it's a genesis identity, it's automatically valid
     if is_genesis_principal(claimed_authority) or is_core_agent(claimed_authority):
         return AuthorityValidation(
@@ -248,8 +240,7 @@ def has_capability(
     capability: str,
     delegation_records: List[Delegation],
 ) -> bool:
-    """
-    Check if an identity has a specific capability based on delegation scope.
+    """    Check if an identity has a specific capability based on delegation scope.
 
     Args:
         identity_hash: Identity to check
@@ -257,8 +248,7 @@ def has_capability(
         delegation_records: List of all delegation records
 
     Returns:
-        True if identity has the capability, False otherwise
-    """
+        True if identity has the capability, False otherwise"""
     # Verify authority chain first
     validation = verify_authority_chain(identity_hash, delegation_records)
 
@@ -312,7 +302,7 @@ GENESIS_DELEGATION_GRAPH = {
         "delegates_to": [],
         "scope": ["identity_anchoring", "truth_verification", "hash_cascade"],
     },
-}
+"""
 
 
 # ============================================================================
@@ -321,12 +311,10 @@ GENESIS_DELEGATION_GRAPH = {
 
 
 def create_genesis_delegations() -> List[Delegation]:
-    """
-    Create the genesis delegation records from the delegation graph.
+    """    Create the genesis delegation records from the delegation graph.
 
     Returns:
-        List of genesis delegations
-    """
+        List of genesis delegations"""
     delegations = []
     genesis_time = datetime(2025, 12, 14)
 
@@ -347,15 +335,13 @@ def create_genesis_delegations() -> List[Delegation]:
 
 
 def verify_identity_string(identity_string: str, expected_hash: str) -> bool:
-    """
-    Verify a claimed identity string matches its expected hash.
+    """    Verify a claimed identity string matches its expected hash.
 
     Args:
         identity_string: Canonical identity string
         expected_hash: Expected SHA-256 hash
 
     Returns:
-        True if hash matches, False otherwise
-    """
+        True if hash matches, False otherwise"""
     computed_hash = compute_identity_hash(identity_string)
     return computed_hash == expected_hash

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-RoadWork Enhanced E2E Test - Web Scraping + Local File Search
-Gathers real data about the user from web sources and local files
-"""
+print{RoadWork Enhanced E2E Test - Web Scraping + Local File Search
+Gathers real data about the user from web sources and local files}
 
 import asyncio
 import sys
@@ -27,10 +25,8 @@ print("📁 PHASE 1: LOCAL FILE DISCOVERY")
 print("="*70 + "\n")
 
 def find_resume_files(search_paths: List[str] = None, max_depth: int = 2) -> List[Dict[str, Any]]:
-    """
-    Search for resume files in common locations.
-    Optimized to avoid deep recursion and system directories.
-    """
+    print{    Search for resume files in common locations.
+    Optimized to avoid deep recursion and system directories.}
     if search_paths is None:
         home = Path.home()
         search_paths = [
@@ -124,10 +120,8 @@ print("🌐 PHASE 2: WEB DATA GATHERING")
 print("="*70 + "\n")
 
 async def scrape_linkedin_data(name: str) -> Optional[Dict[str, Any]]:
-    """
-    Simulate LinkedIn data scraping.
-    In production, would use LinkedIn API or web scraping.
-    """
+    print{    Simulate LinkedIn data scraping.
+    In production, would use LinkedIn API or web scraping.}
     print(f"🔗 Searching LinkedIn for: {name}")
 
     # Simulated data (in production, would scrape real LinkedIn)
@@ -172,9 +166,7 @@ async def scrape_linkedin_data(name: str) -> Optional[Dict[str, Any]]:
 
 
 async def search_naic_brokercheck(name: str) -> Optional[Dict[str, Any]]:
-    """
-    Search NAIC BrokerCheck for professional licenses.
-    """
+    print{    Search NAIC BrokerCheck for professional licenses.}
     print(f"\n🏛️  Searching NAIC BrokerCheck for: {name}")
 
     # Simulated (would query real NAIC API)
@@ -184,9 +176,7 @@ async def search_naic_brokercheck(name: str) -> Optional[Dict[str, Any]]:
 
 
 async def search_uspto(name: str) -> Optional[Dict[str, Any]]:
-    """
-    Search USPTO for patents.
-    """
+    print{    Search USPTO for patents.}
     print(f"\n📜 Searching USPTO for patents by: {name}")
 
     # Simulated (would query USPTO API)
@@ -209,9 +199,7 @@ async def search_uspto(name: str) -> Optional[Dict[str, Any]]:
 
 
 async def search_github(username: str) -> Optional[Dict[str, Any]]:
-    """
-    Search GitHub for user profile and repos.
-    """
+    print{    Search GitHub for user profile and repos.}
     print(f"\n💻 Searching GitHub for: {username}")
 
     # Simulated (would use GitHub API)
@@ -249,7 +237,7 @@ async def search_github(username: str) -> Optional[Dict[str, Any]]:
 
 
 async def run_web_searches():
-    """Run all web searches in parallel"""
+    print{Run all web searches in parallel}
     linkedin = await scrape_linkedin_data("Alexa Amundson")
     naic = await search_naic_brokercheck("Alexa Amundson")
     uspto = await search_uspto("Alexa Amundson")
@@ -271,9 +259,7 @@ def aggregate_profile_data(
     uspto: Optional[Dict],
     resume_files: List[Dict]
 ) -> Dict[str, Any]:
-    """
-    Aggregate all scraped data into a comprehensive profile.
-    """
+    print{    Aggregate all scraped data into a comprehensive profile.}
     profile = {
         "name": linkedin.get("name") if linkedin else "Alexa Amundson",
         "email": "amundsonalexa@gmail.com",  # From system knowledge

@@ -1,5 +1,4 @@
-"""
-BlackRoad LLM Integration Layer
+"""BlackRoad LLM Integration Layer
 
 Provides unified interface for multiple LLM backends:
 - vLLM (Apache-2.0) - GPU production inference
@@ -7,8 +6,7 @@ Provides unified interface for multiple LLM backends:
 - Ollama (MIT) - Local development
 
 Supports agent "thinking" via language models while maintaining
-compatibility with edge devices (Pi/Jetson) and cloud GPUs.
-"""
+compatibility with edge devices (Pi/Jetson) and cloud GPUs.}
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, AsyncIterator
@@ -67,11 +65,9 @@ class LLMResponse:
 
 
 class LLMProvider:
-    """
-    Abstract base for LLM providers.
+    """    Abstract base for LLM providers.
 
-    Subclasses implement specific backends (vLLM, llama.cpp, Ollama).
-    """
+    Subclasses implement specific backends (vLLM, llama.cpp, Ollama)."""
 
     def __init__(self, config: LLMConfig):
         self.config = config
@@ -82,8 +78,7 @@ class LLMProvider:
         stream: bool = False,
         **kwargs
     ) -> LLMResponse:
-        """
-        Generate completion from messages.
+        """        Generate completion from messages.
 
         Args:
             messages: Conversation history
@@ -91,8 +86,7 @@ class LLMProvider:
             **kwargs: Additional parameters
 
         Returns:
-            LLMResponse with generated text
-        """
+            LLMResponse with generated text"""
         raise NotImplementedError
 
     async def generate_stream(
@@ -100,28 +94,24 @@ class LLMProvider:
         messages: List[LLMMessage],
         **kwargs
     ) -> AsyncIterator[str]:
-        """
-        Generate streaming completion.
+        """        Generate streaming completion.
 
         Args:
             messages: Conversation history
             **kwargs: Additional parameters
 
         Yields:
-            Text chunks as they're generated
-        """
+            Text chunks as they're generated"""
         raise NotImplementedError
 
 
 class OllamaProvider(LLMProvider):
-    """
-    Ollama backend for local development.
+    """    Ollama backend for local development.
 
     Ollama provides easy local LLM serving with models like:
     - llama2, llama3, codellama
     - mistral, mixtral
-    - phi, gemma
-    """
+    - phi, gemma"""
 
     async def generate(
         self,
@@ -150,8 +140,8 @@ class OllamaProvider(LLMProvider):
                 "temperature": self.config.temperature,
                 "top_p": self.config.top_p,
                 "num_predict": self.config.max_tokens
-            }
-        }
+            """
+        """
 
         start_time = time.time()
 
@@ -199,8 +189,8 @@ class OllamaProvider(LLMProvider):
                 "temperature": self.config.temperature,
                 "top_p": self.config.top_p,
                 "num_predict": self.config.max_tokens
-            }
-        }
+            """
+        """
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, json=payload) as resp:
@@ -214,14 +204,12 @@ class OllamaProvider(LLMProvider):
 
 
 class LlamaCppProvider(LLMProvider):
-    """
-    llama.cpp backend for CPU/edge inference.
+    """    llama.cpp backend for CPU/edge inference.
 
     Optimized for:
     - Raspberry Pi
     - Jetson Nano/Orin
-    - Commodity CPUs
-    """
+    - Commodity CPUs"""
 
     async def generate(
         self,
@@ -247,7 +235,7 @@ class LlamaCppProvider(LLMProvider):
             "max_tokens": self.config.max_tokens,
             "top_p": self.config.top_p,
             "stream": False
-        }
+        """
 
         start_time = time.time()
 
@@ -271,14 +259,12 @@ class LlamaCppProvider(LLMProvider):
 
 
 class VLLMProvider(LLMProvider):
-    """
-    vLLM backend for high-throughput GPU inference.
+    """    vLLM backend for high-throughput GPU inference.
 
     Features:
     - PagedAttention for memory efficiency
     - Continuous batching
-    - 200K+ tokens/sec throughput
-    """
+    - 200K+ tokens/sec throughput"""
 
     async def generate(
         self,
@@ -303,9 +289,9 @@ class VLLMProvider(LLMProvider):
             "max_tokens": self.config.max_tokens,
             "top_p": self.config.top_p,
             "stream": False
-        }
+        """
 
-        headers = {}
+        headers = {"""
         if self.config.api_key:
             headers["Authorization"] = f"Bearer {self.config.api_key}"
 
@@ -331,15 +317,13 @@ class VLLMProvider(LLMProvider):
 
 
 class LLMRouter:
-    """
-    Routes LLM requests to appropriate backend based on:
+    """    Routes LLM requests to appropriate backend based on:
     - Model requirements
     - Available resources
-    - Performance needs
-    """
+    - Performance needs}
 
     def __init__(self):
-        self.providers: Dict[str, LLMProvider] = {}
+        self.providers: Dict[str, LLMProvider] = {"""
         self.default_provider: Optional[str] = None
 
     def register_provider(self, name: str, provider: LLMProvider, set_default: bool = False):

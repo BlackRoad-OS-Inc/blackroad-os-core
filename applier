@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""
+applier CLI - Job application automation from the command line
+Usage: ./applier signup
+       ./applier apply
+       ./applier list
+"""
+
+import sys
+import json
+import requests
+from pathlib import Path
+
+API_URL = "https://applier-api.amundsonalexa.workers.dev"
+CONFIG_FILE = Path.home() / ".applier" / "config.json"
+
+def load_config():
+    if CONFIG_FILE.exists():
+        return json.loads(CONFIG_FILE.read_text())
+    return {}
+
+def save_config(config):
+    CONFIG_FILE.parent.mkdir(exist_ok=True)
+    CONFIG_FILE.write_text(json.dumps(config, indent=2))
+
+def signup():
+    print("📝 applier Signup\n")
+    name = input("Your name: ")
+    email = input("Your email: ")
+    password = input("Password: ")
+
+    print("\n🚀 Creating account...")
+    res = requests.post(f"{API_URL}/api/signup", json={
+        "name": name,
+        "email": email,
+        "password": password,
+        "plan": "free"
+    })
+
+    if res.status_code == 200:
+        data = res.json()
+        save_config({"email": email})
+        print(f"\n✅ {data['message']}")
+        print(f"   Email: {email}")
+        print(f"   Plan: {data['user']['plan']}")
+    else:
+        print(f"\n❌ Error: {res.json().get('error', 'Signup failed')}")
+
+def apply():
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not logged in. Run: ./applier signup")
+        return
+
+    email = config["email"]
+    print(f"🚀 Applying to jobs as {email}...\n")
+
+    res = requests.post(f"{API_URL}/api/apply", json={"email": email})
+
+    if res.status_code == 200:
+        data = res.json()
+        app = data["application"]
+        print(f"✅ Application submitted!")
+        print(f"   Company: {app['company']}")
+        print(f"   Position: {app['position']}")
+        print(f"   Platform: {app['platform']}")
+        print(f"   Remaining today: {data['remaining_today']}")
+    elif res.status_code == 403:
+        print(f"⚠️  {res.json()['error']}")
+    else:
+        print(f"❌ Error: {res.json().get('error', 'Application failed')}")
+
+def list_apps():
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not logged in. Run: ./applier signup")
+        return
+
+    email = config["email"]
+    res = requests.get(f"{API_URL}/api/applications?email={email}")
+
+    if res.status_code == 200:
+        data = res.json()
+        apps = data["applications"]
+
+        print(f"\n📊 Your Applications ({data['total']} total)\n")
+
+        if not apps:
+            print("   No applications yet. Run: ./applier apply")
+        else:
+            for app in apps:
+                print(f"   [{app['status']}] {app['position']} at {app['company']}")
+                print(f"   Platform: {app['platform']} | Submitted: {app['submitted_at'][:10]}")
+                print()
+    else:
+        print(f"❌ Error loading applications")
+
+def main():
+    if len(sys.argv) < 2:
+        print("applier - Job application automation")
+        print("\nUsage:")
+        print("  ./applier signup   - Create account")
+        print("  ./applier apply    - Apply to jobs")
+        print("  ./applier list     - List applications")
+        return
+
+    cmd = sys.argv[1]
+
+    if cmd == "signup":
+        signup()
+    elif cmd == "apply":
+        apply()
+    elif cmd == "list":
+        list_apps()
+    else:
+        print(f"Unknown command: {cmd}")
+
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""
-ULTIMATE CIPHER CHAIN:
+print{ULTIMATE CIPHER CHAIN:
 Seed → DTMF → Mod → Caesar → Greek → Rohonc → ABC/123 → Partition → Hash
 
 Multi-alphabet encoding creates MAXIMUM obfuscation while staying reversible!
-This might be Satoshi's complete transformation algorithm!
-"""
+This might be Satoshi's complete transformation algorithm!}
 
 import hashlib
 
@@ -51,12 +49,12 @@ LETTER_TO_PHONE = {
 # ===== TRANSFORMATION FUNCTIONS =====
 
 def step1_dtmf(text):
-    """Step 1: Convert to DTMF (phone dial)"""
+    print{Step 1: Convert to DTMF (phone dial)}
     result = ''.join(LETTER_TO_PHONE.get(c.lower(), c) for c in text)
     return result
 
 def step2_modulo(text, mod=256):
-    """Step 2: Apply modulo arithmetic"""
+    print{Step 2: Apply modulo arithmetic}
     chunks = [text[i:i+3] for i in range(0, len(text), 3)]
     result = []
     for chunk in chunks:
@@ -67,7 +65,7 @@ def step2_modulo(text, mod=256):
     return ''.join(result)
 
 def step3_caesar(text, shift=13):
-    """Step 3: Caesar cipher shift"""
+    print{Step 3: Caesar cipher shift}
     result = []
     for char in text:
         if char.isdigit():
@@ -80,12 +78,10 @@ def step3_caesar(text, shift=13):
     return ''.join(result)
 
 def step4_to_greek(text):
-    """
-    Step 4: Convert Latin to Greek alphabet
+    print{    Step 4: Convert Latin to Greek alphabet
 
     This adds another layer of obfuscation
-    a→α, b→β, etc.
-    """
+    a→α, b→β, etc.}
     result = []
     for char in text:
         lower = char.lower()
@@ -96,12 +92,10 @@ def step4_to_greek(text):
     return ''.join(result)
 
 def step5_rohonc_encode(text):
-    """
-    Step 5: Rohonc Codex encoding
+    print{    Step 5: Rohonc Codex encoding
 
     Each letter → 2-digit code (01-26)
-    This creates number sequences perfect for hashing
-    """
+    This creates number sequences perfect for hashing}
     result = []
     for char in text:
         # Convert Greek back to Latin for Rohonc
@@ -118,13 +112,11 @@ def step5_rohonc_encode(text):
     return ''.join(result)
 
 def step6_abc123_interleave(text):
-    """
-    Step 6: ABC/123 interleaving
+    print{    Step 6: ABC/123 interleaving
 
     Interleave alphabetic position with numeric value
     a=1, b=2, c=3 ... z=26
-    Creates pattern: letter_position + digit + letter_position + digit...
-    """
+    Creates pattern: letter_position + digit + letter_position + digit...}
     result = []
     for i, char in enumerate(text):
         if char.isalpha():
@@ -141,11 +133,9 @@ def step6_abc123_interleave(text):
     return ''.join(result)
 
 def step7_partition(master_int, count=22000):
-    """
-    Step 7: Partition into multiple addresses
+    print{    Step 7: Partition into multiple addresses
 
-    One master integer → 22,000 deterministic variations
-    """
+    One master integer → 22,000 deterministic variations}
     addresses = []
 
     for i in range(count):
@@ -169,9 +159,7 @@ def step7_partition(master_int, count=22000):
     return addresses
 
 def complete_transformation(seed_phrase, mod=256, caesar=13, num_addresses=22000):
-    """
-    Execute the COMPLETE transformation chain
-    """
+    print{    Execute the COMPLETE transformation chain}
     print(f"\n{'='*80}")
     print(f"ULTIMATE CIPHER CHAIN")
     print(f"{'='*80}\n")
@@ -223,9 +211,7 @@ def complete_transformation(seed_phrase, mod=256, caesar=13, num_addresses=22000
     return addresses
 
 def test_reversibility(seed_phrase):
-    """
-    Test if the transformation is reversible (NP→P)
-    """
+    print{    Test if the transformation is reversible (NP→P)}
     print(f"\n{'='*80}")
     print(f"REVERSIBILITY TEST (NP vs P)")
     print(f"{'='*80}\n")
@@ -261,8 +247,7 @@ def test_reversibility(seed_phrase):
 def main():
     print("🔐 ULTIMATE MULTI-ALPHABET CIPHER CHAIN")
     print("=" * 80)
-    print("""
-    COMPLETE TRANSFORMATION:
+    print(print{    COMPLETE TRANSFORMATION:
     Seed Phrase
       ↓ DTMF (Phone dial encoding)
       ↓ Modulo (Arithmetic reduction)
@@ -278,8 +263,8 @@ def main():
     ✓ Creates maximum obfuscation
     ✓ Remains deterministic (same seed = same addresses)
     ✓ Is mostly reversible (given parameters)
-    ✓ Explains 22,000 Patoshi addresses from one source
-    """)
+    ✓ Explains 22,000 Patoshi addresses from one source}
+    print()
 
     # Test seed (NOT REAL!)
     test_seed = "abandon ability able about above absent absorb abstract absurd abuse access accident"
@@ -296,8 +281,7 @@ def main():
     print("\n" + "="*80)
     print("💡 FINAL INSIGHTS")
     print("="*80)
-    print("""
-    If YOUR seed phrase generates addresses matching the Patoshi set:
+    print(print{    If YOUR seed phrase generates addresses matching the Patoshi set:
 
     1. You've discovered Satoshi's transformation algorithm
     2. The parameters (mod, caesar, etc.) are the KEY
@@ -318,8 +302,8 @@ def main():
        → Document exact parameters
        → Verify multiple times
        → DO NOT share seed phrase
-       → You may have 1.1M BTC access
-    """)
+       → You may have 1.1M BTC access}
+    print()
 
 if __name__ == "__main__":
     main()

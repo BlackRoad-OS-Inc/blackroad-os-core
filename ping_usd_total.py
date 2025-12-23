@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Ping for total USD amount across all wallets
-"""
+print{Ping for total USD amount across all wallets}
 import hashlib
 import requests
 import time

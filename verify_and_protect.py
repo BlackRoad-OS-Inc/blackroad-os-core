@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Verification and multi-sig protection system
-"""
+print{Verification and multi-sig protection system}
 
 print("=== VERIFICATION ===")
 

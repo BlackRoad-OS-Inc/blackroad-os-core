@@ -1,7 +1,5 @@
-"""
-Verified Job Applications with RoadChain Credentials
-Integrates blockchain-anchored proofs into job applications.
-"""
+"""Verified Job Applications with RoadChain Credentials
+Integrates blockchain-anchored proofs into job applications."""
 
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
@@ -19,9 +17,7 @@ from .roadchain_identity import (
 
 @dataclass
 class VerifiedJobApplication:
-    """
-    Job application with blockchain-verified credentials.
-    """
+    """Job application with blockchain-verified credentials."""
     # Standard application fields
     application_id: str
     job_id: str
@@ -49,22 +45,18 @@ class VerifiedJobApplication:
 
 
 class VerifiedApplicationBuilder:
-    """
-    Builds job applications with RoadChain-verified credentials.
-    """
+    """Builds job applications with RoadChain-verified credentials."""
 
     def __init__(
         self,
         identity_manager: RoadChainIdentityManager,
         roadchain_api_url: str = "http://localhost:3000"
     ):
-        """
-        Initialize builder.
+        """        Initialize builder.
 
         Args:
             identity_manager: RoadChain identity manager
-            roadchain_api_url: RoadChain API URL for verification
-        """
+            roadchain_api_url: RoadChain API URL for verification"""
         self.identity_manager = identity_manager
         self.api_url = roadchain_api_url
         self.verification_base_url = f"{roadchain_api_url}/verify"
@@ -79,8 +71,7 @@ class VerifiedApplicationBuilder:
         resume_text: str,
         selected_credential_types: List[ProofType] = None
     ) -> VerifiedJobApplication:
-        """
-        Build a verified job application.
+        """        Build a verified job application.
 
         Args:
             identity: User's RoadChain identity
@@ -92,8 +83,7 @@ class VerifiedApplicationBuilder:
             selected_credential_types: Which credentials to include
 
         Returns:
-            VerifiedJobApplication with blockchain proofs
-        """
+            VerifiedJobApplication with blockchain proofs"""
         # Create application ID
         app_id = f"app-{identity.roadchain_address[:8]}-{int(datetime.now(UTC).timestamp())}"
 
@@ -141,8 +131,7 @@ class VerifiedApplicationBuilder:
         job_description: str,
         credential_types: List[ProofType] = None
     ) -> List[VerifiableCredential]:
-        """
-        Intelligently select credentials relevant to the job.
+        """        Intelligently select credentials relevant to the job.
 
         Args:
             identity: User's identity
@@ -151,8 +140,7 @@ class VerifiedApplicationBuilder:
             credential_types: Optional filter
 
         Returns:
-            List of relevant credentials
-        """
+            List of relevant credentials"""
         # If specific types requested, use those
         if credential_types:
             return [
@@ -173,8 +161,7 @@ class VerifiedApplicationBuilder:
         credentials: List[VerifiableCredential],
         verification_url: str
     ) -> str:
-        """
-        Add verification section to cover letter.
+        """        Add verification section to cover letter.
 
         Args:
             cover_letter: Original cover letter
@@ -182,8 +169,7 @@ class VerifiedApplicationBuilder:
             verification_url: Verification URL
 
         Returns:
-            Enhanced cover letter with blockchain proof section
-        """
+            Enhanced cover letter with blockchain proof section"""
         # Create credentials summary
         proof_section = "\n\n---\n\n"
         proof_section += "## Blockchain-Verified Credentials\n\n"
@@ -210,16 +196,14 @@ class VerifiedApplicationBuilder:
         resume_text: str,
         credentials: List[VerifiableCredential]
     ) -> str:
-        """
-        Add verification badges to resume.
+        """        Add verification badges to resume.
 
         Args:
             resume_text: Original resume
             credentials: Verified credentials
 
         Returns:
-            Enhanced resume with verification indicators
-        """
+            Enhanced resume with verification indicators"""
         # Add header
         header = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         header += "🔐 BLOCKCHAIN-VERIFIED RESUME\n"
@@ -248,17 +232,14 @@ class VerifiedApplicationBuilder:
         self,
         application: VerifiedJobApplication
     ) -> str:
-        """
-        Generate HTML verification page for employers.
+        """        Generate HTML verification page for employers.
 
         Args:
             application: Verified application
 
         Returns:
-            HTML page for verification
-        """
-        html = f"""
-<!DOCTYPE html>
+            HTML page for verification"""
+        html = fprint{<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -351,12 +332,10 @@ class VerifiedApplicationBuilder:
         <p><strong>Company:</strong> {application.company}</p>
         <p><strong>Application ID:</strong> {application.application_id}</p>
 
-        <h2>Verified Credentials ({len(application.credentials)})</h2>
-"""
+        <h2>Verified Credentials ({len(application.credentials)})</h2>}
 
         for cred in application.credentials:
-            html += f"""
-        <div class="credential">
+            html += fprint{        <div class="credential">
             <div class="credential-type">{cred.type.value}</div>
             <div class="credential-claim">
                 <strong>{format_credential_summary(cred)}</strong>
@@ -371,11 +350,9 @@ class VerifiedApplicationBuilder:
                 <div>Block: {cred.roadchain_block_index}</div>
                 <div>Proof Hash: {cred.proof_hash}</div>
             </div>
-        </div>
-"""
+        </div>}
 
-        html += f"""
-        <h2>How to Verify</h2>
+        html += fprint{        <h2>How to Verify</h2>
         <ol>
             <li>Copy the RoadChain transaction hash above</li>
             <li>Visit <a href="{self.api_url}/explorer" target="_blank">RoadChain Explorer</a></li>
@@ -396,8 +373,7 @@ class VerifiedApplicationBuilder:
         </p>
     </div>
 </body>
-</html>
-"""
+</html>}
         return html
 
 
@@ -409,16 +385,14 @@ def integrate_roadchain_with_profile(
     user_profile: Dict[str, Any],
     roadchain_address: str
 ) -> IdentityProof:
-    """
-    Convert existing job hunter profile to RoadChain identity.
+    """    Convert existing job hunter profile to RoadChain identity.
 
     Args:
         user_profile: Existing user profile from onboarding
         roadchain_address: User's RoadChain wallet address
 
     Returns:
-        IdentityProof with all credentials
-    """
+        IdentityProof with all credentials"""
     manager = RoadChainIdentityManager()
 
     # Create identity

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Ping all of Alexa's known wallets and ask for OK if active
-"""
+print{Ping all of Alexa's known wallets and ask for OK if active}
 import hashlib
 import requests
 import time
@@ -104,7 +102,7 @@ print("Deriving addresses from cipher...")
 
 # BTC address derivation (simplified)
 def derive_btc_address_hash(seed, index):
-    """Derive a potential address hash from seed"""
+    print{Derive a potential address hash from seed}
     derived = hashlib.sha256(f"{seed}{index}".encode()).hexdigest()
     return derived
 

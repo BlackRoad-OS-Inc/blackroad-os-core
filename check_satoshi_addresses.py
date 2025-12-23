@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Compare the 22,000 addresses against known Satoshi Nakamoto addresses
-"""
+print{Compare the 22,000 addresses against known Satoshi Nakamoto addresses}
 
 # Known Satoshi addresses (well-documented)
 SATOSHI_ADDRESSES = {
@@ -23,7 +21,7 @@ SATOSHI_ADDRESSES = {
 }
 
 def load_addresses(filename: str) -> set:
-    """Load addresses from CSV file"""
+    print{Load addresses from CSV file}
     addresses = set()
     with open(filename, 'r') as f:
         for line in f:
@@ -35,7 +33,7 @@ def load_addresses(filename: str) -> set:
     return addresses
 
 def check_satoshi_overlap():
-    """Check if any addresses match Satoshi's known addresses"""
+    print{Check if any addresses match Satoshi's known addresses}
 
     print("="*80)
     print("Checking 22,000 addresses against known Satoshi addresses")

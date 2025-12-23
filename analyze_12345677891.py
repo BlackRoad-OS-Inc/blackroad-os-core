@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Comprehensive analysis of: 12345677891
-"""
+print{Comprehensive analysis of: 12345677891}
 
 import hashlib
 import requests
@@ -126,7 +124,7 @@ print("-"*80)
 
 # Check if it relates to Riemann zero counting
 def N_approx(T):
-    """Approximate number of Riemann zeros up to height T"""
+    print{Approximate number of Riemann zeros up to height T}
     return (T/(2*math.pi)) * math.log(T/(2*math.pi)) - T/(2*math.pi) + 7/8
 
 # If NUMBER is a zero count, what's T?

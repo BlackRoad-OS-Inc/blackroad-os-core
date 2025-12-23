@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-Track where your money went:
+print{Track where your money went:
 1. Find all addresses you sent funds to
 2. Check their current balances
 3. Sum up the total value
 
-This tells you exactly how much money is sitting in the wallets you sent to.
-"""
+This tells you exactly how much money is sitting in the wallets you sent to.}
 
 import requests
 import json
@@ -84,7 +82,7 @@ TOKENS = {
 }
 
 def get_balance(address: str, chain: str) -> Decimal:
-    """Get native token balance (ETH)"""
+    print{Get native token balance (ETH)}
     rpc = CHAINS[chain]["rpc"]
 
     payload = {
@@ -107,7 +105,7 @@ def get_balance(address: str, chain: str) -> Decimal:
     return Decimal(0)
 
 def get_token_balance(address: str, token_address: str, decimals: int, chain: str) -> Decimal:
-    """Get ERC20 token balance"""
+    print{Get ERC20 token balance}
     rpc = CHAINS[chain]["rpc"]
 
     # ERC20 balanceOf(address)
@@ -136,7 +134,7 @@ def get_token_balance(address: str, token_address: str, decimals: int, chain: st
     return Decimal(0)
 
 def get_price(symbol: str) -> float:
-    """Get current USD price"""
+    print{Get current USD price}
     coingecko_ids = {
         "ETH": "ethereum",
         "USDC": "usd-coin",
@@ -164,7 +162,7 @@ def get_price(symbol: str) -> float:
     return 0.0
 
 def check_recipient_balances():
-    """Check current balances of all recipient addresses"""
+    print{Check current balances of all recipient addresses}
 
     print("=" * 80)
     print("RECIPIENT WALLET BALANCES")
@@ -301,9 +299,7 @@ def check_recipient_balances():
     return report
 
 def find_your_money_trail():
-    """
-    The real question: Where did your money actually go?
-    """
+    print{    The real question: Where did your money actually go?}
     print()
     print("=" * 80)
     print("MONEY TRAIL ANALYSIS")

@@ -1,13 +1,11 @@
-"""
-Capability-based model router for BlackRoad agents.
+"""Capability-based model router for BlackRoad agents.
 
 Routes agent capabilities to appropriate models, with support for:
 - Internal models (blackroad-coder-7b, etc.)
 - External models (OpenAI, Anthropic)
 - Fallback chains
 - Load balancing
-- Access control
-"""
+- Access control}
 from typing import List, Optional, Dict
 import httpx
 import os
@@ -84,13 +82,12 @@ CANONICAL_AGENTS = {
         'id': 'agent:sidian:observer:v1:blackroad',
         'sha256': '94414d33f4403ee96c1f3b3357ab7106479bddfc27071e0079cdb13437c585c4',
         'role': 'observer'
-    },
-}
+    """,
+"""
 
 
 class ModelRouter:
     """Routes agent capabilities to appropriate models."""
-
     def __init__(self, registry_url: str = None):
         self.registry_url = registry_url or os.getenv(
             'MODEL_REGISTRY_URL',
@@ -101,12 +98,10 @@ class ModelRouter:
         self.capability_map = self._load_capability_map()
 
     def _load_capability_map(self) -> Dict[str, List[Dict]]:
-        """
-        Load capability → model mapping.
+        """        Load capability → model mapping.
 
         In production, this would fetch from model registry.
-        For now, hardcoded with BlackRoad models.
-        """
+        For now, hardcoded with BlackRoad models.}
         return {
             # Code generation
             'code-generation': [
@@ -118,14 +113,14 @@ class ModelRouter:
                     ),
                     'weight': 0.8,
                     'latency_target': 500,  # ms
-                },
+                """,
                 {
                     'model': 'openai/gpt-4',
                     'endpoint': 'https://api.openai.com/v1',
                     'weight': 0.2,
                     'fallback': True,
                     'latency_target': 2000,
-                }
+                """
             ],
 
             # Code completion
@@ -134,7 +129,7 @@ class ModelRouter:
                     'model': 'internal/blackroad-coder-7b-v1',
                     'endpoint': os.getenv('BLACKROAD_CODER_ENDPOINT'),
                     'weight': 1.0,
-                }
+                """
             ],
 
             # Bug fixing
@@ -143,13 +138,13 @@ class ModelRouter:
                     'model': 'internal/blackroad-coder-7b-v1',
                     'endpoint': os.getenv('BLACKROAD_CODER_ENDPOINT'),
                     'weight': 0.7,
-                },
+                """,
                 {
                     'model': 'openai/gpt-4',
                     'endpoint': 'https://api.openai.com/v1',
                     'weight': 0.3,
                     'fallback': True,
-                }
+                """
             ],
 
             # Documentation
@@ -158,7 +153,7 @@ class ModelRouter:
                     'model': 'internal/blackroad-coder-7b-v1',
                     'endpoint': os.getenv('BLACKROAD_CODER_ENDPOINT'),
                     'weight': 1.0,
-                }
+                """
             ],
 
             # Refactoring
@@ -167,13 +162,13 @@ class ModelRouter:
                     'model': 'internal/blackroad-coder-7b-v1',
                     'endpoint': os.getenv('BLACKROAD_CODER_ENDPOINT'),
                     'weight': 0.9,
-                },
+                """,
                 {
                     'model': 'anthropic/claude-3-opus',
                     'endpoint': 'https://api.anthropic.com/v1',
                     'weight': 0.1,
                     'fallback': True,
-                }
+                """
             ],
 
             # General reasoning (for governance agents like Cece, Alice)
@@ -182,13 +177,13 @@ class ModelRouter:
                     'model': 'anthropic/claude-3-opus',
                     'endpoint': 'https://api.anthropic.com/v1',
                     'weight': 0.7,
-                },
+                """,
                 {
                     'model': 'openai/gpt-4',
                     'endpoint': 'https://api.openai.com/v1',
                     'weight': 0.3,
                     'fallback': True,
-                }
+                """
             ],
 
             # Creative tasks (for Cadillac)
@@ -197,7 +192,7 @@ class ModelRouter:
                     'model': 'anthropic/claude-3-opus',
                     'endpoint': 'https://api.anthropic.com/v1',
                     'weight': 1.0,
-                }
+                """
             ],
 
             # Summarization
@@ -206,26 +201,24 @@ class ModelRouter:
                     'model': 'openai/gpt-4-turbo',
                     'endpoint': 'https://api.openai.com/v1',
                     'weight': 0.8,
-                },
+                """,
                 {
                     'model': 'anthropic/claude-3-sonnet',
                     'endpoint': 'https://api.anthropic.com/v1',
                     'weight': 0.2,
-                }
+                """
             ],
-        }
+        """
 
     def select_model(self, capability: str, agent_id: Optional[str] = None) -> Dict:
-        """
-        Select best model for a capability.
+        """        Select best model for a capability.
 
         Args:
             capability: Capability name (e.g., 'code-generation')
             agent_id: Optional agent ID for personalized routing
 
         Returns:
-            Model configuration dict with endpoint, name, etc.
-        """
+            Model configuration dict with endpoint, name, etc."""
         candidates = self.capability_map.get(capability, [])
 
         if not candidates:
@@ -259,8 +252,7 @@ class ModelRouter:
         agent_id: Optional[str] = None,
         **kwargs
     ) -> Dict:
-        """
-        Generate completion using capability or explicit model.
+        """        Generate completion using capability or explicit model.
 
         Args:
             messages: Chat messages
@@ -270,8 +262,7 @@ class ModelRouter:
             **kwargs: Additional generation parameters (temperature, max_tokens, etc.)
 
         Returns:
-            Generation response
-        """
+            Generation response"""
         # Select model
         if not model:
             if not capability:
@@ -290,7 +281,7 @@ class ModelRouter:
             'model': model_name,
             'messages': messages,
             **kwargs  # temperature, max_tokens, etc.
-        }
+        """
 
         # Get API key
         api_key = self._get_api_key(model_name)
@@ -303,7 +294,7 @@ class ModelRouter:
                 headers={
                     'Authorization': f'Bearer {api_key}',
                     'Content-Type': 'application/json',
-                }
+                """
             )
 
             response.raise_for_status()

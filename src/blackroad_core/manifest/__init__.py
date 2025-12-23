@@ -1,8 +1,6 @@
-"""
-Manifest Schemas and Validation
+"""Manifest Schemas and Validation
 
-Defines the structure of agent and pack manifests with validation utilities.
-"""
+Defines the structure of agent and pack manifests with validation utilities."""
 
 from dataclasses import dataclass, field, asdict
 from typing import Any, Optional
@@ -63,8 +61,7 @@ class Permissions:
 
 @dataclass
 class AgentManifest:
-    """
-    Complete agent manifest definition.
+    """    Complete agent manifest definition.
 
     This defines everything about how an agent operates:
     - Identity and metadata
@@ -72,8 +69,7 @@ class AgentManifest:
     - Resource requirements
     - LLM settings (if applicable)
     - Permissions and capabilities
-    - Logging and audit settings
-    """
+    - Logging and audit settings"""
     id: str
     name: str
     pack: str
@@ -128,11 +124,9 @@ class AgentManifest:
 
 @dataclass
 class PackManifest:
-    """
-    Pack manifest definition.
+    """    Pack manifest definition.
 
-    Defines a collection of agent templates for a specific domain.
-    """
+    Defines a collection of agent templates for a specific domain."""
     key: str
     name: str
     description: str = ""
@@ -159,15 +153,13 @@ class PackManifest:
 
 
 def validate_agent_manifest(manifest: dict[str, Any]) -> tuple[bool, list[str]]:
-    """
-    Validate an agent manifest dictionary.
+    """    Validate an agent manifest dictionary.
 
     Args:
         manifest: The manifest to validate
 
     Returns:
-        Tuple of (is_valid, list of error messages)
-    """
+        Tuple of (is_valid, list of error messages)"""
     errors = []
 
     # Required fields
@@ -203,15 +195,13 @@ def validate_agent_manifest(manifest: dict[str, Any]) -> tuple[bool, list[str]]:
 
 
 def validate_pack_manifest(manifest: dict[str, Any]) -> tuple[bool, list[str]]:
-    """
-    Validate a pack manifest dictionary.
+    """    Validate a pack manifest dictionary.
 
     Args:
         manifest: The manifest to validate
 
     Returns:
-        Tuple of (is_valid, list of error messages)
-    """
+        Tuple of (is_valid, list of error messages)"""
     errors = []
 
     required = ["key", "name"]
@@ -231,8 +221,7 @@ def merge_manifests(
     base: dict[str, Any],
     overrides: dict[str, Any],
 ) -> dict[str, Any]:
-    """
-    Merge a base manifest with org-specific overrides.
+    """    Merge a base manifest with org-specific overrides.
 
     Creates the effective_manifest for an agent instance.
     Overrides are applied recursively for nested dicts.
@@ -242,8 +231,7 @@ def merge_manifests(
         overrides: Org-specific overrides
 
     Returns:
-        Merged manifest dictionary
-    """
+        Merged manifest dictionary"""
     result = base.copy()
 
     for key, value in overrides.items():

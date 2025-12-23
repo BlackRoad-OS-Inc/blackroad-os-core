@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-Get EXACT holdings by:
+print{Get EXACT holdings by:
 1. Checking all token balances on all chains
 2. Checking NFT/LP positions via APIs
 3. Providing a clear breakdown you can verify
 
-This gives you the EXACT number.
-"""
+This gives you the EXACT number.}
 
 import requests
 from decimal import Decimal
@@ -85,7 +83,7 @@ CHAIN_CONFIGS = {
 PRICE_CACHE = {}
 
 def get_token_price(coingecko_id: str) -> Optional[float]:
-    """Get current USD price from CoinGecko"""
+    print{Get current USD price from CoinGecko}
     if coingecko_id in PRICE_CACHE:
         return PRICE_CACHE[coingecko_id]
 
@@ -104,7 +102,7 @@ def get_token_price(coingecko_id: str) -> Optional[float]:
     return None
 
 def get_native_balance(chain: str) -> tuple[Decimal, float]:
-    """Get native token balance and USD value"""
+    print{Get native token balance and USD value}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     payload = {
@@ -134,7 +132,7 @@ def get_native_balance(chain: str) -> tuple[Decimal, float]:
     return Decimal(0), 0.0
 
 def get_token_balance(chain: str, token_address: str, decimals: int) -> Decimal:
-    """Get ERC20 token balance"""
+    print{Get ERC20 token balance}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     # ERC20 balanceOf(address)
@@ -164,7 +162,7 @@ def get_token_balance(chain: str, token_address: str, decimals: int) -> Decimal:
     return Decimal(0)
 
 def get_nft_balance(chain: str, nft_address: str) -> int:
-    """Get NFT balance (number of NFTs owned)"""
+    print{Get NFT balance (number of NFTs owned)}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     # ERC721 balanceOf(address)

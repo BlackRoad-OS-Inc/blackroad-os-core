@@ -1,7 +1,5 @@
-"""
-Document Parser
-Converts long-form work history documents into machine-readable structured data.
-"""
+"""Document Parser
+Converts long-form work history documents into machine-readable structured data."""
 
 from typing import List, Dict, Any, Optional
 import re
@@ -10,35 +8,29 @@ from .onboarding import WorkHistoryDocument
 
 
 class WorkHistoryParser:
-    """
-    Parse work history documents into structured data.
+    """    Parse work history documents into structured data.
 
     Supports:
     - PDF resumes/CVs
     - Word documents
     - Plain text
-    - Long-form work history narratives
-    """
+    - Long-form work history narratives"""
 
     def __init__(self, llm_provider: Optional[Any] = None):
-        """
-        Initialize parser.
+        """        Initialize parser.
 
         Args:
-            llm_provider: LLM for intelligent parsing
-        """
+            llm_provider: LLM for intelligent parsing"""
         self.llm_provider = llm_provider
 
     async def parse_document(self, doc: WorkHistoryDocument) -> WorkHistoryDocument:
-        """
-        Parse document into structured data.
+        """        Parse document into structured data.
 
         Args:
             doc: Work history document to parse
 
         Returns:
-            Updated document with parsed data
-        """
+            Updated document with parsed data"""
         text = doc.raw_text
 
         # Parse different sections
@@ -51,7 +43,6 @@ class WorkHistoryParser:
 
     async def _parse_work_experience(self, text: str) -> List[Dict[str, Any]]:
         """Parse work experience section."""
-
         if self.llm_provider:
             # Use LLM for intelligent parsing
             return await self._llm_parse_experience(text)
@@ -83,7 +74,7 @@ class WorkHistoryParser:
         lines = section.strip().split('\n')
 
         # Look for date patterns (common in job entries)
-        date_pattern = r'(\d{4})\s*[-–—]\s*(\d{4}|present|current)'
+        date_pattern = r'(\d{4})\s*[-–—]\s*(\d{4"""|present|current)'
         date_match = re.search(date_pattern, section, re.IGNORECASE)
 
         if not date_match:
@@ -143,7 +134,7 @@ class WorkHistoryParser:
             "description": description,
             "responsibilities": responsibilities,
             "location": self._extract_location(section)
-        }
+        """
 
     def _extract_bullet_points(self, text: str) -> List[str]:
         """Extract bullet points from text."""
@@ -171,7 +162,7 @@ class WorkHistoryParser:
         """Extract location from text."""
         # Common location patterns
         patterns = [
-            r'([A-Z][a-zA-Z\s]+,\s*[A-Z]{2})',  # City, ST
+            r'([A-Z][a-zA-Z\s]+,\s*[A-Z]{2""")',  # City, ST
             r'([A-Z][a-zA-Z\s]+,\s*[A-Z][a-zA-Z]+)',  # City, State/Country
             r'(Remote)',
         ]
@@ -197,7 +188,7 @@ class WorkHistoryParser:
 
         # Parse degree entries
         # Pattern: Degree in Field, Institution, Year
-        degree_pattern = r'(Bachelor|Master|PhD|Associate|B\.S\.|M\.S\.|B\.A\.|M\.A\.)[^,\n]+,\s*([^,\n]+),?\s*(\d{4})?'
+        degree_pattern = r'(Bachelor|Master|PhD|Associate|B\.S\.|M\.S\.|B\.A\.|M\.A\.)[^,\n]+,\s*([^,\n]+),?\s*(\d{4""")?'
 
         matches = re.finditer(degree_pattern, edu_section, re.IGNORECASE)
 
@@ -305,7 +296,7 @@ class WorkHistoryParser:
             year = year_match.group(1) or year_match.group(2) if year_match else None
 
             # Remove year from name
-            name = re.sub(r'\(?\d{4}\)?', '', line).strip()
+            name = re.sub(r'\(?\d{4"""\)?', '', line).strip()
 
             # Remove bullet points
             name = re.sub(r'^[•●■▪▸►\-–—\*]\s*', '', name)
@@ -340,7 +331,7 @@ class WorkHistoryParser:
 
         for keyword in keywords:
             # Find the keyword
-            pattern = rf'\n\s*{keyword}\s*\n'
+            pattern = rf'\n\s*{keyword"""\s*\n'
             match = re.search(pattern, text_lower)
 
             if match:
@@ -365,8 +356,7 @@ class WorkHistoryParser:
             return self._rule_based_parse_experience(text)
 
         # In production, would use LLM with structured output
-        prompt = f"""
-        Extract work experience from the following text. For each job, extract:
+        prompt = fprint{        Extract work experience from the following text. For each job, extract:
         - Company name
         - Job title
         - Start date (year)
@@ -377,8 +367,7 @@ class WorkHistoryParser:
         Return as JSON array.
 
         Text:
-        {text[:5000]}  # Limit context
-        """
+        {text[:5000]}  # Limit context}
 
         # Would call: response = await self.llm_provider.generate(prompt)
         # Then parse JSON response
@@ -389,7 +378,6 @@ class WorkHistoryParser:
 
 class ExperienceCategorizer:
     """Categorize work experience by job category."""
-
     def __init__(self, llm_provider: Optional[Any] = None):
         self.llm_provider = llm_provider
 
@@ -419,24 +407,22 @@ class ExperienceCategorizer:
                 "sales", "account executive", "business development",
                 "revenue", "quota", "crm"
             ]
-        }
+        """
 
     async def categorize_experience(
         self,
         jobs: List[Dict[str, Any]],
         preferred_categories: List[str]
     ) -> Dict[str, List[Dict[str, Any]]]:
-        """
-        Categorize jobs by job category.
+        """        Categorize jobs by job category.
 
         Args:
             jobs: List of parsed jobs
             preferred_categories: User's preferred job categories
 
         Returns:
-            Dict mapping category to list of relevant jobs
-        """
-        categorized = {cat: [] for cat in preferred_categories}
+            Dict mapping category to list of relevant jobs}
+        categorized = {cat: [] for cat in preferred_categories"""
 
         for job in jobs:
             # Determine which categories this job fits

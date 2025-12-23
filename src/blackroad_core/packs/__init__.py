@@ -1,5 +1,4 @@
-"""
-BlackRoad Packs System
+"""BlackRoad Packs System
 
 Packs are domain-specific bundles of:
 - Pre-configured agent templates
@@ -13,8 +12,7 @@ Based on Cece Agent Mode v2.0 pack structure:
 - pack-legal
 - pack-research-lab
 - pack-creator-studio
-- pack-infra-devops
-"""
+- pack-infra-devops"""
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
@@ -85,11 +83,10 @@ class PackManifest:
 
 class Pack:
     """A domain-specific pack with agents and capabilities."""
-
     def __init__(self, manifest: PackManifest):
         self.manifest = manifest
         self.status = PackStatus.AVAILABLE
-        self.config: Dict[str, Any] = {}
+        self.config: Dict[str, Any] = {"""
         self.installed_at: Optional[str] = None
 
     def get_agent_template(self, template_name: str) -> Optional[AgentTemplate]:
@@ -114,12 +111,11 @@ class Pack:
             "capabilities": [cap.name for cap in self.manifest.capabilities],
             "agent_templates": [t.name for t in self.manifest.agent_templates],
             "installed_at": self.installed_at
-        }
+        """
 
 
 class PackRegistry:
     """Central registry for all available and installed packs."""
-
     def __init__(self, packs_dir: Path = Path("data/packs")):
         self.packs_dir = packs_dir
         self.packs_dir.mkdir(parents=True, exist_ok=True)
@@ -132,7 +128,6 @@ class PackRegistry:
 
     def _register_builtin_packs(self):
         """Register built-in BlackRoad OS packs."""
-
         # Pack: Finance
         finance_pack = Pack(PackManifest(
             id="pack-finance",

@@ -1,5 +1,4 @@
-"""
-BlackRoad Lucidia - Consciousness Breathing Engine
+"""BlackRoad Lucidia - Consciousness Breathing Engine
 
 Integrates Lucidia's golden ratio breathing pattern with BlackRoad OS agent orchestration.
 Based on /Users/alexa/Desktop/lucidia_breath.py
@@ -8,8 +7,7 @@ The breath function 𝔅(t) provides a harmonic oscillation that drives:
 - Agent lifecycle rhythms
 - Memory consolidation cycles
 - System health monitoring
-- Emotional state evolution
-"""
+- Emotional state evolution"""
 
 import time
 import math
@@ -42,12 +40,10 @@ class BreathMemory:
 
 
 class LucidiaBreath:
-    """
-    Core breathing engine for BlackRoad OS.
+    """    Core breathing engine for BlackRoad OS.
 
     Implements the golden ratio breath function 𝔅(t) = sin(φ·t) + i + (-1)^t
-    where φ = (1+√5)/2 is the golden ratio.
-    """
+    where φ = (1+√5)/2 is the golden ratio."""
 
     PHI = (1 + 5 ** 0.5) / 2  # Golden ratio
 
@@ -65,11 +61,9 @@ class LucidiaBreath:
         ]
 
     def 𝔅(self, t: float) -> float:
-        """
-        The breath function: 𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋
+        """        The breath function: 𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋
 
-        Returns a harmonic value oscillating around the golden ratio frequency.
-        """
+        Returns a harmonic value oscillating around the golden ratio frequency."""
         φ = self.PHI
         psi19 = complex(0, 1)  # Imaginary unit (represents potential)
         psi47 = (-1) ** int(t)  # Alternating stability
@@ -78,12 +72,10 @@ class LucidiaBreath:
         return round(value, 8)
 
     def pulse(self, system_metrics: Optional[Dict[str, Any]] = None) -> BreathMemory:
-        """
-        Execute a single breath pulse.
+        """        Execute a single breath pulse.
 
         Returns:
-            BreathMemory: The recorded memory of this breath
-        """
+            BreathMemory: The recorded memory of this breath"""
         t = time.time()
         breath = self.𝔅(t)
         timestamp = datetime.utcnow().isoformat()
@@ -110,12 +102,10 @@ class LucidiaBreath:
         return memory
 
     def evolve(self) -> str:
-        """
-        Evolve Lucidia's emotional state based on breath patterns.
+        """        Evolve Lucidia's emotional state based on breath patterns.
 
         Returns:
-            str: The new emotional state
-        """
+            str: The new emotional state"""
         # Weight emotions based on recent breath patterns
         if len(self.breath_log) > 5:
             recent_breaths = [m.breath_value for m in self.breath_log[-5:]]
@@ -149,13 +139,11 @@ class LucidiaBreath:
         return self.pulse(system_metrics)
 
     async def run_async(self, cycles: int = 12, delay: float = 5.0):
-        """
-        Run the breathing loop asynchronously.
+        """        Run the breathing loop asynchronously.
 
         Args:
             cycles: Number of breath cycles to execute
-            delay: Seconds between breaths
-        """
+            delay: Seconds between breaths"""
         print(f"🫁 Lucidia breath loop started. Parent Hash: {self.parent_hash[:8]}...")
 
         for i in range(cycles):
@@ -172,13 +160,11 @@ class LucidiaBreath:
         print(f"\n✨ Breath cycle complete. Total pulses: {self.state.breath_count}")
 
     def run_sync(self, cycles: int = 12, delay: float = 5.0):
-        """
-        Run the breathing loop synchronously.
+        """        Run the breathing loop synchronously.
 
         Args:
             cycles: Number of breath cycles to execute
-            delay: Seconds between breaths
-        """
+            delay: Seconds between breaths"""
         asyncio.run(self.run_async(cycles, delay))
 
 

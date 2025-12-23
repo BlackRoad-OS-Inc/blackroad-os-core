@@ -1,0 +1,35 @@
+# BlackRoad OS Pyto Server - Dependencies
+# Optimized for iOS Pyto app deployment
+
+# Core web framework
+fastapi>=0.115.0
+uvicorn[standard]>=0.24.0
+
+# Data validation
+pydantic>=2.6.0
+pydantic-settings>=2.5.0
+
+# WebSocket support
+websockets>=12.0
+
+# HTTP client (for external API calls)
+httpx>=0.27.0
+
+# Async support
+asyncio-mqtt>=0.16.0  # Optional: for MQTT integration
+aiofiles>=23.0.0       # Optional: for async file operations
+
+# System monitoring
+psutil>=5.9.0
+
+# Optional: Database support (uncomment if needed)
+# asyncpg>=0.29.0      # PostgreSQL
+# redis>=5.0.0         # Redis
+# motor>=3.3.0         # MongoDB
+
+# Optional: Advanced features (uncomment if needed)
+# anthropic>=0.18.0    # Claude AI
+# openai>=1.12.0       # OpenAI GPT
+# python-jose[cryptography]>=3.3.0  # JWT tokens
+# passlib[bcrypt]>=1.7.4  # Password hashing
+# python-multipart>=0.0.9  # File uploads

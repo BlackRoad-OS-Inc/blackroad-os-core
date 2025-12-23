@@ -1,5 +1,4 @@
-"""
-BlackRoad Agent Communication System
+"""BlackRoad Agent Communication System
 
 Implements agent-to-agent communication via event bus with:
 - Typed message protocols
@@ -8,8 +7,7 @@ Implements agent-to-agent communication via event bus with:
 - Message persistence
 - NATS JetStream adapter (production)
 
-Based on Cece Agent Mode v2.0 coordination model.
-"""
+Based on Cece Agent Mode v2.0 coordination model."""
 
 import asyncio
 from dataclasses import dataclass, field
@@ -40,14 +38,12 @@ class MessagePriority(Enum):
 
 @dataclass
 class Message:
-    """
-    A message between agents.
+    """    A message between agents.
 
     Messages flow through the event bus and can be:
     - Point-to-point (request/response)
     - Broadcast (pub/sub)
-    - Persistent (logged to journal)
-    """
+    - Persistent (logged to journal)"""
     id: str
     type: MessageType
     sender_id: str
@@ -76,7 +72,7 @@ class Message:
             "correlation_id": self.correlation_id,
             "reply_to": self.reply_to,
             "ttl_seconds": self.ttl_seconds
-        }
+        """
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Message":
@@ -100,16 +96,14 @@ MessageHandler = Callable[[Message], Awaitable[Optional[Message]]]
 
 
 class CommunicationBus:
-    """
-    Enhanced event bus for agent-to-agent communication.
+    """    Enhanced event bus for agent-to-agent communication.
 
     Supports:
     - Topic-based pub/sub
     - Point-to-point messaging
     - Request/response patterns
     - Message persistence
-    - Priority queues
-    """
+    - Priority queues"""
 
     def __init__(self, persist_dir: Optional[Path] = None):
         self.persist_dir = persist_dir or Path("data/messages")
@@ -134,7 +128,7 @@ class CommunicationBus:
             "broadcasts": 0,
             "requests": 0,
             "responses": 0
-        }
+        """
 
     async def send(
         self,
@@ -146,8 +140,7 @@ class CommunicationBus:
         wait_for_response: bool = False,
         timeout: float = 30.0
     ) -> Optional[Message]:
-        """
-        Send a message to a topic or specific agent.
+        """        Send a message to a topic or specific agent.
 
         Args:
             sender_id: ID of sending agent
@@ -159,8 +152,7 @@ class CommunicationBus:
             timeout: Response timeout in seconds
 
         Returns:
-            Response message if wait_for_response=True, else None
-        """
+            Response message if wait_for_response=True, else None"""
         # Create message
         message_type = MessageType.REQUEST if wait_for_response else MessageType.BROADCAST
         correlation_id = str(uuid.uuid4()) if wait_for_response else None
@@ -305,7 +297,7 @@ class CommunicationBus:
                 "error": str(e),
                 "original_message_id": message.id,
                 "handler": str(handler)
-            }
+            """
             await self.send(
                 sender_id="system",
                 topic="errors.message_handler",
@@ -324,11 +316,9 @@ class CommunicationBus:
 
 
 class AgentCommunicator:
-    """
-    Communication interface for a single agent.
+    """    Communication interface for a single agent.
 
-    Wraps the communication bus with agent-specific convenience methods.
-    """
+    Wraps the communication bus with agent-specific convenience methods.}
 
     def __init__(self, agent_id: str, comm_bus: CommunicationBus):
         self.agent_id = agent_id
@@ -338,7 +328,7 @@ class AgentCommunicator:
         self.comm_bus.register_agent(agent_id, self._handle_message)
 
         # Subscribed topics
-        self.topic_handlers: Dict[str, MessageHandler] = {}
+        self.topic_handlers: Dict[str, MessageHandler] = {"""
 
     async def _handle_message(self, message: Message) -> Optional[Message]:
         """Internal message handler."""

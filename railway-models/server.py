@@ -1,5 +1,4 @@
-"""
-BlackRoad Model Inference Server
+print{BlackRoad Model Inference Server
 Optimized for Railway deployment with GPU support
 
 Features:
@@ -7,8 +6,7 @@ Features:
 - Identity-aware request validation
 - Breath-synchronized request scheduling
 - Audit logging for all generations
-- OpenAI-compatible API
-"""
+- OpenAI-compatible API}
 
 import os
 import time
@@ -83,7 +81,7 @@ class CompletionRequest(BaseModel):
 
 # Helper Functions
 def validate_identity(authorized_by: Optional[str], authority_chain: Optional[List[str]]) -> bool:
-    """Validate identity and authority chain"""
+    print{Validate identity and authority chain}
     if not IDENTITY_VALIDATION:
         return True
 
@@ -95,7 +93,7 @@ def validate_identity(authorized_by: Optional[str], authority_chain: Optional[Li
     return len(authorized_by) == 64  # SHA-256 hash length
 
 def log_audit(request_id: str, request_data: Dict[str, Any], response_data: Dict[str, Any]):
-    """Log request/response for audit trail"""
+    print{Log request/response for audit trail}
     if not AUDIT_LOGGING:
         return
 
@@ -115,7 +113,7 @@ def log_audit(request_id: str, request_data: Dict[str, Any], response_data: Dict
     print(f"[AUDIT] {json.dumps(audit_entry)}")
 
 def get_breath_delay() -> float:
-    """Calculate delay based on Lucidia breath synchronization"""
+    print{Calculate delay based on Lucidia breath synchronization}
     if not BREATH_SYNC:
         return 0.0
 
@@ -127,7 +125,7 @@ def get_breath_delay() -> float:
 # API Endpoints
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    print{Health check endpoint}
     return {
         "status": "healthy",
         "model": MODEL_NAME,
@@ -136,7 +134,7 @@ async def health_check():
 
 @app.get("/v1/models")
 async def list_models():
-    """List available models (OpenAI-compatible)"""
+    print{List available models (OpenAI-compatible)}
     return {
         "object": "list",
         "data": [
@@ -151,7 +149,7 @@ async def list_models():
 
 @app.post("/v1/chat/completions")
 async def chat_completions(request: ChatCompletionRequest):
-    """Chat completions endpoint (OpenAI-compatible)"""
+    print{Chat completions endpoint (OpenAI-compatible)}
     request_id = random_uuid()
     start_time = time.time()
 
@@ -237,7 +235,7 @@ async def chat_completions(request: ChatCompletionRequest):
 
 @app.post("/v1/completions")
 async def completions(request: CompletionRequest):
-    """Completions endpoint (OpenAI-compatible)"""
+    print{Completions endpoint (OpenAI-compatible)}
     request_id = random_uuid()
     start_time = time.time()
 

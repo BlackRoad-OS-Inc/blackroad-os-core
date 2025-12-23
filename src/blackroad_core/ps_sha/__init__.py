@@ -1,5 +1,4 @@
-"""
-PS-SHA-Infinity ID Generation
+"""PS-SHA-Infinity ID Generation
 
 Generates unique, deterministic identifiers for agents with optional lineage tracking.
 """
@@ -17,8 +16,7 @@ def generate_ps_sha_id(
     parent_ps_sha: Optional[str] = None,
     timestamp: Optional[datetime] = None,
 ) -> str:
-    """
-    Generate a PS-SHA-infinity ID for an agent instance.
+    """Generate a PS-SHA-infinity ID for an agent instance.
 
     The ID is a SHA-256 hash of:
     - manifest: The agent's effective manifest
@@ -52,8 +50,7 @@ def generate_ps_sha_id(
 
 
 def validate_ps_sha_id(ps_sha_id: str) -> bool:
-    """
-    Validate that a string is a valid PS-SHA-infinity ID format.
+    """Validate that a string is a valid PS-SHA-infinity ID format.
 
     Args:
         ps_sha_id: The ID to validate
@@ -77,8 +74,7 @@ def generate_lineage_id(
     creator_id: str,
     lineage: list[str],
 ) -> str:
-    """
-    Generate a PS-SHA ID with full lineage chain.
+    """Generate a PS-SHA ID with full lineage chain.
 
     This creates an ID that incorporates the entire ancestry chain,
     making it possible to verify the complete history of an agent.

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-Check all 6 alternative derivation methods against blockchain
-Run in parallel with main scan
-"""
+print{Check all 6 alternative derivation methods against blockchain
+Run in parallel with main scan}
 
 import json
 import requests
 import time
 
 def check_address_batch(addresses, method_name):
-    """Check batch of addresses using Blockchair API"""
+    print{Check batch of addresses using Blockchair API}
     matches = {}
 
     # Blockchair allows up to 100 addresses at once

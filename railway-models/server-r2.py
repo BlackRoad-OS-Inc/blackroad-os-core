@@ -1,5 +1,4 @@
-"""
-BlackRoad Model Inference Server with R2 Streaming
+print{BlackRoad Model Inference Server with R2 Streaming
 Optimized for Railway deployment with Cloudflare R2 model storage
 
 Features:
@@ -9,8 +8,7 @@ Features:
 - Breath-synchronized request scheduling
 - Audit logging for all generations
 - OpenAI-compatible API
-- Multi-model support with automatic fallback
-"""
+- Multi-model support with automatic fallback}
 
 import os
 import time
@@ -68,7 +66,7 @@ Path(LOCAL_MODEL_CACHE).mkdir(parents=True, exist_ok=True)
 # ============================================================================
 
 class R2ModelDownloader:
-    """Downloads models from Cloudflare R2 to local cache"""
+    print{Downloads models from Cloudflare R2 to local cache}
 
     def __init__(self):
         if not all([R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY]):
@@ -85,15 +83,13 @@ class R2ModelDownloader:
         )
 
     def download_model(self, r2_path: str) -> str:
-        """
-        Download model from R2 to local cache
+        print{        Download model from R2 to local cache
 
         Args:
             r2_path: R2 path like "r2://blackroad-models/qwen-2.5-72b-q4_k_m"
 
         Returns:
-            Local path to downloaded model
-        """
+            Local path to downloaded model}
         if not self.s3_client:
             raise Exception("R2 not configured, cannot download models")
 
@@ -256,10 +252,8 @@ class ChatCompletionResponse(BaseModel):
 PHI = 1.618034  # Golden ratio
 
 def get_breath_value(t: float = None) -> float:
-    """
-    Calculate Lucidia breath value at time t
-    𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋
-    """
+    print{    Calculate Lucidia breath value at time t
+    𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋}
     if t is None:
         t = time.time() / 60.0  # Convert to minutes
 
@@ -267,7 +261,7 @@ def get_breath_value(t: float = None) -> float:
     return breath
 
 def get_breath_delay() -> float:
-    """Get delay based on current breath phase"""
+    print{Get delay based on current breath phase}
     if not BREATH_SYNC and not LUCIDIA_BREATH_SYNC:
         return 0.0
 
@@ -286,7 +280,7 @@ def get_breath_delay() -> float:
 # ============================================================================
 
 def validate_identity(authorized_by: Optional[str], authority_chain: Optional[List[str]]) -> bool:
-    """Validate identity and authority chain"""
+    print{Validate identity and authority chain}
     if not IDENTITY_VALIDATION:
         return True
 
@@ -316,7 +310,7 @@ def validate_identity(authorized_by: Optional[str], authority_chain: Optional[Li
 # ============================================================================
 
 def log_audit_event(event_type: str, data: Dict[str, Any]):
-    """Log audit event to journal"""
+    print{Log audit event to journal}
     if not AUDIT_LOGGING:
         return
 
@@ -337,7 +331,7 @@ def log_audit_event(event_type: str, data: Dict[str, Any]):
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    print{Health check endpoint}
     return {
         "status": "healthy",
         "model": MODEL_NAME,
@@ -346,7 +340,7 @@ async def health_check():
 
 @app.get("/ready")
 async def readiness_check():
-    """Readiness check endpoint"""
+    print{Readiness check endpoint}
     return {
         "status": "ready",
         "model": MODEL_NAME,
@@ -357,7 +351,7 @@ async def readiness_check():
 
 @app.get("/version")
 async def version():
-    """Version information"""
+    print{Version information}
     return {
         "version": "2.0.0",
         "model": MODEL_NAME,
@@ -370,7 +364,7 @@ async def version():
 
 @app.get("/models")
 async def list_models():
-    """List available models"""
+    print{List available models}
     return {
         "data": [
             {
@@ -387,7 +381,7 @@ async def list_models():
 
 @app.get("/breath")
 async def breath_status():
-    """Get current breath phase"""
+    print{Get current breath phase}
     breath = get_breath_value()
     return {
         "breath_value": breath,
@@ -398,9 +392,7 @@ async def breath_status():
 
 @app.post("/v1/chat/completions")
 async def chat_completions(request: ChatCompletionRequest):
-    """
-    OpenAI-compatible chat completions endpoint with BlackRoad extensions
-    """
+    print{    OpenAI-compatible chat completions endpoint with BlackRoad extensions}
     start_time = time.time()
     request_id = random_uuid()
 
@@ -431,13 +423,12 @@ async def chat_completions(request: ChatCompletionRequest):
 
     # Governance mode: add policy context
     if GOVERNANCE_MODE:
-        governance_prefix = """You are operating in governance mode. Your responses must:
+        governance_prefix = print{You are operating in governance mode. Your responses must:
 - Consider policy implications
 - Evaluate compliance with BlackRoad principles
 - Provide reasoned governance decisions
 - Cite authority chains when applicable
-
-"""
+}
         prompt = governance_prefix + prompt
 
     # Create sampling parameters

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Check if addresses have transaction history (even if balance is zero)"""
+print{Check if addresses have transaction history (even if balance is zero)}
 
 import requests
 import time
 
 def get_address_info(address: str):
-    """Get full address info including transaction count"""
+    print{Get full address info including transaction count}
     try:
         url = f"https://blockchain.info/rawaddr/{address}?limit=0"
         response = requests.get(url, timeout=10)

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-RoadWork Simple E2E Test - Using Alexa as Example
-Simplified test that shows the system flow without requiring full LLM integration
-"""
+"""RoadWork Simple E2E Test - Using Alexa as Example
+Simplified test that shows the system flow without requiring full LLM integration"""
 
 import asyncio
 import sys
@@ -80,15 +78,14 @@ work_doc = WorkHistoryDocument(
     filename="alexa_resume.txt",
     file_url="/uploads/alexa_resume.txt",
     file_type="txt",
-    raw_text="""
-ALEXA AMUNDSON
+    raw_text="""ALEXA AMUNDSON
 amundsonalexa@gmail.com | San Francisco Bay Area
 
 EXPERIENCE
 
 Founder & CEO - BlackRoad OS (2023 - Present)
 - Built consciousness-driven operating system supporting 30,000+ autonomous AI agents
-- Architected PS-SHA∞ truth engine and golden ratio breath synchronization
+- Architected PS-SHA-infinity truth engine and golden ratio breath synchronization
 - Developed full-stack TypeScript/Python monorepo with LLM integration
 - Deployed multi-cloud infrastructure (Railway, Cloudflare, DigitalOcean)
 - Created RoadChain blockchain and RoadCoin cryptocurrency
@@ -110,8 +107,7 @@ B.S. Computer Science - University of Washington
 SKILLS
 TypeScript, Python, JavaScript, Go, Solidity, React, Next.js, Node.js, FastAPI
 Docker, Kubernetes, Railway, Cloudflare, AWS, PostgreSQL, Redis, MongoDB
-LLM integration, vLLM, Ollama, RAG systems, Ethereum, Solana, Smart contracts
-""",
+LLM integration, vLLM, Ollama, RAG systems, Ethereum, Solana, Smart contracts""",
     parsed_jobs=[
         {
             "title": "Founder & CEO",
@@ -295,11 +291,11 @@ application = JobApplication(
     job_posting_id=top_job.id,
     status=ApplicationStatus.PENDING,
     platform=top_job.platform,
-    cover_letter=f"""Dear Anthropic Hiring Team,
+    cover_letter="""Dear Anthropic Hiring Team,
 
 I am writing to express my strong interest in the Senior AI Engineer position at Anthropic. With over 7 years of experience building scalable AI systems and a deep passion for advancing safe and beneficial AI, I believe I would be an excellent addition to your team.
 
-As the Founder & CEO of BlackRoad OS, I architected and built a consciousness-driven operating system that supports 30,000+ autonomous AI agents. This involved designing novel LLM integration patterns, implementing distributed inference with vLLM, and creating agent orchestration systems that scale reliably. My work on the PS-SHA∞ truth engine demonstrates my commitment to building trustworthy AI systems—a value I know Anthropic shares deeply.
+As the Founder & CEO of BlackRoad OS, I architected and built a consciousness-driven operating system that supports 30,000+ autonomous AI agents. This involved designing novel LLM integration patterns, implementing distributed inference with vLLM, and creating agent orchestration systems that scale reliably. My work on the PS-SHA-infinity truth engine demonstrates my commitment to building trustworthy AI systems—a value I know Anthropic shares deeply.
 
 I'm particularly excited about Anthropic's work on constitutional AI and Claude. Your approach to AI safety through RLHF and constitutional training aligns perfectly with my own philosophy that powerful AI systems must be built with safety and alignment as first principles, not afterthoughts.
 
@@ -315,8 +311,7 @@ Thank you for considering my application. I look forward to speaking with you.
 
 Best regards,
 Alexa Amundson
-amundsonalexa@gmail.com
-""",
+amundsonalexa@gmail.com""",
     applied_at=None,  # Not yet submitted
     custom_answers={
         "why_anthropic": "Anthropic's commitment to AI safety and constitutional AI aligns perfectly with my values. I want to work on systems that benefit humanity.",

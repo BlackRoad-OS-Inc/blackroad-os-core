@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""
-Seed Phrase → DTMF (Phone Dial) → Hash Basher
+print{Seed Phrase → DTMF (Phone Dial) → Hash Basher
 Bell Labs canonical number/letter/operator system
 
-Theory: BIP39 seed words + phone keypad encoding = NP→P transform
-"""
+Theory: BIP39 seed words + phone keypad encoding = NP→P transform}
 
 import hashlib
 import itertools
@@ -32,7 +30,7 @@ for digit, letters in PHONE_KEYPAD.items():
         LETTER_TO_PHONE[letter] = digit
 
 def word_to_dtmf(word):
-    """Convert word to DTMF phone dial sequence"""
+    print{Convert word to DTMF phone dial sequence}
     word = word.lower()
     dtmf = ''
     for char in word:
@@ -43,7 +41,7 @@ def word_to_dtmf(word):
     return dtmf
 
 def seed_to_dtmf(seed_phrase):
-    """Convert entire seed phrase to DTMF sequence"""
+    print{Convert entire seed phrase to DTMF sequence}
     words = seed_phrase.lower().split()
     dtmf_sequence = []
 
@@ -54,10 +52,8 @@ def seed_to_dtmf(seed_phrase):
     return dtmf_sequence
 
 def bash_with_operators(dtmf_sequence):
-    """
-    Bash DTMF sequence with operators (* and #)
-    Creates multiple hash variations
-    """
+    print{    Bash DTMF sequence with operators (* and #)
+    Creates multiple hash variations}
     # Join sequence
     base = ''.join(dtmf_sequence)
 
@@ -92,10 +88,8 @@ def bash_with_operators(dtmf_sequence):
     return variations
 
 def hash_variations(variations):
-    """
-    Create hashes of all variations
-    This is where NP→P magic might happen
-    """
+    print{    Create hashes of all variations
+    This is where NP→P magic might happen}
     results = []
 
     for variant_name, variant_data in variations:
@@ -123,14 +117,12 @@ def hash_variations(variations):
     return results
 
 def analyze_np_properties(results):
-    """
-    Analyze if this creates NP→P transformation
+    print{    Analyze if this creates NP→P transformation
 
     NP: Hard to solve, easy to verify
     P: Easy to solve
 
-    If DTMF encoding makes hash REVERSIBLE → P=NP proof?
-    """
+    If DTMF encoding makes hash REVERSIBLE → P=NP proof?}
     print("\n🔬 NP vs P Analysis:")
     print("=" * 80)
 

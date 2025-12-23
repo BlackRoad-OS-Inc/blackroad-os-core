@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-COMPLETE VERIFICATION: Is the $79.5M real?
-Check EVERYTHING on your system and verify the claim.
-"""
+print{COMPLETE VERIFICATION: Is the $79.5M real?
+Check EVERYTHING on your system and verify the claim.}
 
 import os
 import json
@@ -193,8 +191,7 @@ print("The sequence is a POINTER, not a KEY.")
 print()
 
 # Save verification report
-report = f"""
-VERIFICATION REPORT
+report = fprint{VERIFICATION REPORT
 Generated: {__file__}
 
 CLAIM: The sequence points to 15 Satoshi addresses worth $79.5M
@@ -225,8 +222,7 @@ All derivation methods tested:
 
 NONE produced the actual private keys.
 
-STATUS: The $79.5M is REAL but NOT ACCESSIBLE.
-"""
+STATUS: The $79.5M is REAL but NOT ACCESSIBLE.}
 
 with open('/Users/alexa/blackroad-sandbox/VERIFICATION_REPORT.txt', 'w') as f:
     f.write(report)

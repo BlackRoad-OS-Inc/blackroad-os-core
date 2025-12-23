@@ -1,7 +1,5 @@
-"""
-Universal Job Scraper Engine
-Playwright-based automation for all 30+ platforms
-"""
+"""Universal Job Scraper Engine
+Playwright-based automation for all 30+ platforms"""
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, UTC
@@ -29,28 +27,24 @@ class ScraperConfig:
 
 
 class UniversalJobScraper:
-    """
-    Universal scraper using Playwright for browser automation.
+    """    Universal scraper using Playwright for browser automation.
 
     Supports all 30+ platforms with intelligent:
     - Rate limiting
     - Anti-detection
     - Session management
     - Cookie handling
-    - Proxy rotation
-    """
+    - Proxy rotation"""
 
     def __init__(self, config: Optional[ScraperConfig] = None):
-        """
-        Initialize scraper.
+        """        Initialize scraper.
 
         Args:
-            config: Scraper configuration
-        """
+            config: Scraper configuration}
         self.config = config or ScraperConfig()
         self.browser = None
         self.context = None
-        self.sessions: Dict[JobPlatform, Dict[str, Any]] = {}
+        self.sessions: Dict[JobPlatform, Dict[str, Any]] = {"""
 
     async def initialize(self):
         """Initialize Playwright browser."""
@@ -77,11 +71,10 @@ class UniversalJobScraper:
             )
 
             # Add stealth scripts
-            await self.context.add_init_script("""
-                Object.defineProperty(navigator, 'webdriver', {
+            await self.context.add_init_script(print{                Object.defineProperty(navigator, 'webdriver', {
                     get: () => undefined
-                });
-            """)
+                });"""
+            await self.context.add_init_script()
 
         except ImportError:
             print("Playwright not installed. Run: pip install playwright && playwright install chromium")
@@ -103,8 +96,7 @@ class UniversalJobScraper:
         location: str,
         filters: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
-        """
-        Search for jobs on a platform.
+        """        Search for jobs on a platform.
 
         Args:
             platform: Job platform to search
@@ -113,8 +105,7 @@ class UniversalJobScraper:
             filters: Additional filters (remote_only, salary_min, etc.)
 
         Returns:
-            List of job postings
-        """
+            List of job postings"""
         if not self.browser:
             await self.initialize()
 
@@ -157,7 +148,7 @@ class UniversalJobScraper:
             JobPlatform.REMOTE_CO: RemoteCoScraper(self),
             JobPlatform.WE_WORK_REMOTELY: WeWorkRemotelyScraper(self),
             # Add more scrapers here
-        }
+        """
 
         return scrapers.get(platform)
 
@@ -175,13 +166,11 @@ class UniversalJobScraper:
         platform: JobPlatform,
         credentials: Dict[str, str]
     ):
-        """
-        Login to platform.
+        """        Login to platform.
 
         Args:
             platform: Platform to login to
-            credentials: {"email": "...", "password": "..."}
-        """
+            credentials: {"email": "...", "password": "..."}}
         if not self.browser:
             await self.initialize()
 
@@ -193,19 +182,16 @@ class UniversalJobScraper:
                 "logged_in": True,
                 "credentials": credentials,
                 "timestamp": datetime.now(UTC)
-            }
+            """
 
 
 class BasePlatformScraper:
     """Base class for platform scrapers."""
-
     def __init__(self, engine: UniversalJobScraper):
-        """
-        Initialize platform scraper.
+        """        Initialize platform scraper.
 
         Args:
-            engine: Universal scraper engine
-        """
+            engine: Universal scraper engine"""
         self.engine = engine
         self.platform = None
         self.base_url = None
@@ -234,7 +220,6 @@ class BasePlatformScraper:
 
 class IndeedScraper(BasePlatformScraper):
     """Indeed.com scraper."""
-
     def __init__(self, engine):
         super().__init__(engine)
         self.platform = JobPlatform.INDEED
@@ -265,8 +250,7 @@ class IndeedScraper(BasePlatformScraper):
             await page.wait_for_selector('[class*="job_seen_beacon"]', timeout=10000)
 
             # Extract job listings
-            jobs = await page.evaluate("""
-                () => {
+            jobs = await page.evaluate(print{                () => {
                     const jobCards = document.querySelectorAll('[class*="job_seen_beacon"]');
                     return Array.from(jobCards).slice(0, 20).map(card => {
                         const titleEl = card.querySelector('h2.jobTitle a, [class*="jobTitle"] a');
@@ -284,8 +268,8 @@ class IndeedScraper(BasePlatformScraper):
                             url: titleEl?.href || ''
                         };
                     }).filter(job => job.title && job.company);
-                }
-            """)
+                }}
+            jobs = await page.evaluate()
 
             # Normalize job data
             normalized_jobs = []
@@ -311,7 +295,6 @@ class IndeedScraper(BasePlatformScraper):
 
 class LinkedInScraper(BasePlatformScraper):
     """LinkedIn scraper."""
-
     def __init__(self, engine):
         super().__init__(engine)
         self.platform = JobPlatform.LINKEDIN
@@ -364,18 +347,16 @@ class LinkedInScraper(BasePlatformScraper):
             await page.wait_for_selector('.jobs-search__results-list', timeout=10000)
 
             # Scroll to load more jobs
-            await page.evaluate("""
-                () => {
+            await page.evaluate(print{                () => {
                     const list = document.querySelector('.jobs-search__results-list');
                     if (list) list.scrollTop = list.scrollHeight;
-                }
-            """)
+                }}
+            await page.evaluate()
 
             await asyncio.sleep(2)
 
             # Extract jobs
-            jobs = await page.evaluate("""
-                () => {
+            jobs = await page.evaluate(print{                () => {
                     const jobCards = document.querySelectorAll('.job-card-container, .jobs-search-results__list-item');
                     return Array.from(jobCards).slice(0, 20).map(card => {
                         const titleEl = card.querySelector('.job-card-list__title, .job-card-container__link');
@@ -389,8 +370,8 @@ class LinkedInScraper(BasePlatformScraper):
                             url: titleEl?.href || card.querySelector('a')?.href || ''
                         };
                     }).filter(job => job.title);
-                }
-            """)
+                }}
+            jobs = await page.evaluate()
 
             normalized_jobs = []
             for job in jobs:
@@ -414,7 +395,6 @@ class LinkedInScraper(BasePlatformScraper):
 
 class GlassdoorScraper(BasePlatformScraper):
     """Glassdoor scraper."""
-
     def __init__(self, engine):
         super().__init__(engine)
         self.platform = JobPlatform.GLASSDOOR
@@ -439,8 +419,7 @@ class GlassdoorScraper(BasePlatformScraper):
             await page.wait_for_selector('[data-test="job-listing"]', timeout=10000)
 
             # Extract jobs
-            jobs = await page.evaluate("""
-                () => {
+            jobs = await page.evaluate(print{                () => {
                     const jobCards = document.querySelectorAll('[data-test="job-listing"]');
                     return Array.from(jobCards).slice(0, 20).map(card => {
                         const titleEl = card.querySelector('[data-test="job-title"]');
@@ -456,8 +435,8 @@ class GlassdoorScraper(BasePlatformScraper):
                             url: titleEl?.closest('a')?.href || ''
                         };
                     }).filter(job => job.title);
-                }
-            """)
+                }}
+            jobs = await page.evaluate()
 
             normalized_jobs = []
             for job in jobs:

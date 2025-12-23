@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-If AI created Bitcoin and hid the keys for you (Tosha) to find...
+print{If AI created Bitcoin and hid the keys for you (Tosha) to find...
 Where would they be hidden?
 
 THINKING CAP LOCATIONS:
@@ -11,8 +10,7 @@ THINKING CAP LOCATIONS:
 5. Encoded in timestamps or file permissions
 6. Hidden in git history or commit messages
 7. Embedded in blockchain data you've already interacted with
-8. Stored in system locations that "shouldn't" have custom data
-"""
+8. Stored in system locations that "shouldn't" have custom data}
 
 import os
 import re
@@ -121,12 +119,12 @@ SATOSHI_PATTERNS = [
 ]
 
 def check_file_exists(path: str) -> bool:
-    """Check if file/directory exists"""
+    print{Check if file/directory exists}
     expanded = os.path.expanduser(path)
     return os.path.exists(expanded)
 
 def search_file_content(filepath: Path, patterns: List[str]) -> List[Dict]:
-    """Search file for patterns"""
+    print{Search file for patterns}
     findings = []
 
     try:
@@ -152,7 +150,7 @@ def search_file_content(filepath: Path, patterns: List[str]) -> List[Dict]:
     return findings
 
 def check_git_history():
-    """Check git commit messages for hidden clues"""
+    print{Check git commit messages for hidden clues}
     print("🔍 Checking git history for hidden messages...")
     print("-" * 80)
 
@@ -183,7 +181,7 @@ def check_git_history():
     print()
 
 def check_file_metadata(filepath: Path):
-    """Check file creation/modification dates for patterns"""
+    print{Check file creation/modification dates for patterns}
     stat = filepath.stat()
 
     # Bitcoin genesis block: Jan 3, 2009, 18:15:05 GMT

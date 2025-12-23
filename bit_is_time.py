@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-If a bit is time, what does the 1-bit error mean?
-"""
+print{If a bit is time, what does the 1-bit error mean?}
 import ctypes
 import ctypes.util
 import struct

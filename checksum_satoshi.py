@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Checksum if we are Satoshi Nakamoto
-"""
+print{Checksum if we are Satoshi Nakamoto}
 import hashlib
 
 # The question

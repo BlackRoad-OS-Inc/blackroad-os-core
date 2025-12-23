@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""
-Complete Seed Phrase Transformation Chain:
+print{Complete Seed Phrase Transformation Chain:
 DTMF → Modulo → Caesar Cipher → Hash
 
-This might be the ACTUAL checksum/derivation for the 22,000 addresses!
-"""
+This might be the ACTUAL checksum/derivation for the 22,000 addresses!}
 
 import hashlib
 import string
@@ -23,16 +21,14 @@ LETTER_TO_PHONE = {
 }
 
 def dtmf_encode(text):
-    """Convert text to DTMF sequence"""
+    print{Convert text to DTMF sequence}
     return ''.join(LETTER_TO_PHONE.get(c.lower(), c) for c in text)
 
 def apply_modulo(dtmf_sequence, modulus=256):
-    """
-    Apply modulo operations to DTMF sequence
+    print{    Apply modulo operations to DTMF sequence
 
     modulus=256 → byte-sized chunks (common in crypto)
-    modulus=22000 → number of Satoshi addresses!
-    """
+    modulus=22000 → number of Satoshi addresses!}
     # Convert DTMF to integer chunks
     chunks = [dtmf_sequence[i:i+3] for i in range(0, len(dtmf_sequence), 3)]
 
@@ -47,12 +43,10 @@ def apply_modulo(dtmf_sequence, modulus=256):
     return ''.join(results)
 
 def caesar_shift(text, shift=13):
-    """
-    Apply Caesar cipher shift
+    print{    Apply Caesar cipher shift
 
     shift=13 → ROT13 (classic)
-    shift=22 → 22,000 addresses hint?
-    """
+    shift=22 → 22,000 addresses hint?}
     result = []
     for char in text:
         if char.isalpha():
@@ -69,9 +63,7 @@ def caesar_shift(text, shift=13):
     return ''.join(result)
 
 def full_transformation_chain(seed_phrase, modulus=256, caesar_shift_val=13):
-    """
-    Complete transformation: Seed → DTMF → Mod → Caesar → Hash
-    """
+    print{    Complete transformation: Seed → DTMF → Mod → Caesar → Hash}
     print(f"\n{'='*80}")
     print(f"TRANSFORMATION CHAIN (mod={modulus}, caesar={caesar_shift_val})")
     print(f"{'='*80}")
@@ -118,9 +110,7 @@ def full_transformation_chain(seed_phrase, modulus=256, caesar_shift_val=13):
     }
 
 def test_multiple_parameters():
-    """
-    Test with different mod/caesar parameters that might relate to Satoshi
-    """
+    print{    Test with different mod/caesar parameters that might relate to Satoshi}
     test_seed = "abandon ability able about above absent absorb abstract absurd abuse access accident"
 
     # Important parameter combinations
@@ -152,9 +142,7 @@ def test_multiple_parameters():
     return results
 
 def reverse_engineering_test(target_address=None):
-    """
-    If you have a target Satoshi address, test if any combination produces it
-    """
+    print{    If you have a target Satoshi address, test if any combination produces it}
     print("\n" + "="*80)
     print("REVERSE ENGINEERING TEST")
     print("="*80)
@@ -172,15 +160,12 @@ def reverse_engineering_test(target_address=None):
         print("  - Plus ~21,998 more from Arkham Intelligence list")
 
 def np_vs_p_implications():
-    """
-    Analyze if this transformation chain creates P=NP breakthrough
-    """
+    print{    Analyze if this transformation chain creates P=NP breakthrough}
     print("\n" + "="*80)
     print("🧠 NP vs P IMPLICATIONS")
     print("="*80)
 
-    print("""
-    Classical Cryptography (NP problem):
+    print(print{    Classical Cryptography (NP problem):
     ────────────────────────────────────
     Private Key → [Hard to reverse] → Public Key → Address
 
@@ -201,8 +186,8 @@ def np_vs_p_implications():
     🚨 If your seed generates the 22,000 addresses:
        - You found Satoshi's master seed
        - Or you found the derivation algorithm
-       - Either way: DO NOT share the actual seed phrase!
-    """)
+       - Either way: DO NOT share the actual seed phrase!}
+    print()
 
 def main():
     print("🔐 FULL TRANSFORMATION CHAIN ANALYZER")
@@ -221,8 +206,7 @@ def main():
     print("\n" + "="*80)
     print("💡 NEXT STEPS:")
     print("="*80)
-    print("""
-    1. Test with YOUR actual seed phrase (OFFLINE/AIR-GAPPED!)
+    print(print{    1. Test with YOUR actual seed phrase (OFFLINE/AIR-GAPPED!)
     2. Compare output hashes to known Satoshi addresses
     3. Try different parameter combinations
     4. Check if any output matches the 22,000 Patoshi addresses
@@ -235,8 +219,8 @@ def main():
     📊 To verify against Patoshi addresses:
        - Download Arkham Intelligence's address list
        - Convert each to RIPEMD-160 hash
-       - Compare against your outputs
-    """)
+       - Compare against your outputs}
+    print()
 
 if __name__ == "__main__":
     main()

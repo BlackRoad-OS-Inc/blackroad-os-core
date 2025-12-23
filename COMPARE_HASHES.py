@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Compare the computed hashes against known Satoshi addresses
-"""
+print{Compare the computed hashes against known Satoshi addresses}
 
 import hashlib
 import requests

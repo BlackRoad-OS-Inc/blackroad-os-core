@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-Analyze WHO is signing transactions from your wallet.
+print{Analyze WHO is signing transactions from your wallet.
 If you didn't authorize them, this will show:
 1. Which transactions you didn't initiate
 2. What approvals/permissions exist
 3. Which contracts have control
-4. How they got access
-"""
+4. How they got access}
 
 import requests
 import json
@@ -34,7 +32,7 @@ CHAIN_CONFIGS = {
 }
 
 def get_transaction_details(chain: str, tx_hash: str) -> Optional[Dict]:
-    """Get full transaction details including signature"""
+    print{Get full transaction details including signature}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     payload = {
@@ -56,7 +54,7 @@ def get_transaction_details(chain: str, tx_hash: str) -> Optional[Dict]:
     return None
 
 def get_recent_transactions(chain: str, limit: int = 100) -> List[Dict]:
-    """Get recent transactions for address"""
+    print{Get recent transactions for address}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     # Get latest block
@@ -99,7 +97,7 @@ def get_recent_transactions(chain: str, limit: int = 100) -> List[Dict]:
     return []
 
 def check_token_approvals(chain: str, token_address: str) -> List[Dict]:
-    """Check which contracts have approval to spend your tokens"""
+    print{Check which contracts have approval to spend your tokens}
     rpc = CHAIN_CONFIGS[chain]["rpc"]
 
     # This requires checking Transfer events with allowance checks
@@ -107,7 +105,7 @@ def check_token_approvals(chain: str, token_address: str) -> List[Dict]:
     return []
 
 def analyze_transaction_origin(tx: Dict, chain: str) -> Dict:
-    """Determine who/what initiated this transaction"""
+    print{Determine who/what initiated this transaction}
 
     analysis = {
         "hash": tx.get("hash"),

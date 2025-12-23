@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-RoadWork E2E Test - Using Alexa as Example
-Tests the complete job hunter flow from onboarding to application generation
-"""
+print{RoadWork E2E Test - Using Alexa as Example
+Tests the complete job hunter flow from onboarding to application generation}
 
 import asyncio
 import sys
@@ -19,7 +17,7 @@ from blackroad_core.packs.job_hunter.application_writer import ApplicationWriter
 
 
 async def test_onboarding():
-    """Test the onboarding interview flow"""
+    print{Test the onboarding interview flow}
     print("\n" + "="*60)
     print("🎤 PHASE 1: ONBOARDING INTERVIEW")
     print("="*60 + "\n")
@@ -94,14 +92,13 @@ async def test_onboarding():
 
 
 async def test_resume_parsing():
-    """Test document parsing (simulated - we'll use mock data)"""
+    print{Test document parsing (simulated - we'll use mock data)}
     print("\n" + "="*60)
     print("📄 PHASE 2: DOCUMENT PARSING")
     print("="*60 + "\n")
 
     # Simulated resume content
-    resume_text = """
-    ALEXA AMUNDSON
+    resume_text = print{    ALEXA AMUNDSON
     amundsonalexa@gmail.com | San Francisco Bay Area
 
     EXPERIENCE
@@ -133,8 +130,7 @@ async def test_resume_parsing():
     Infrastructure: Docker, Kubernetes, Railway, Cloudflare, AWS
     Databases: PostgreSQL, Redis, MongoDB, D1, KV stores
     AI/ML: LLM integration (OpenAI, Anthropic), vLLM, Ollama, RAG systems
-    Blockchain: Ethereum, Solana, Smart contracts, Web3
-    """
+    Blockchain: Ethereum, Solana, Smart contracts, Web3}
 
     parser = WorkHistoryParser()
     parsed = await parser.parse_document_text(resume_text)
@@ -148,7 +144,7 @@ async def test_resume_parsing():
 
 
 async def test_resume_generation(profile, parsed_resume):
-    """Test multi-resume generation"""
+    print{Test multi-resume generation}
     print("\n" + "="*60)
     print("📝 PHASE 3: RESUME GENERATION")
     print("="*60 + "\n")
@@ -175,7 +171,7 @@ async def test_resume_generation(profile, parsed_resume):
 
 
 async def test_job_search(profile):
-    """Test job scraping (simulated - won't actually scrape in test)"""
+    print{Test job scraping (simulated - won't actually scrape in test)}
     print("\n" + "="*60)
     print("🔍 PHASE 4: JOB SEARCH")
     print("="*60 + "\n")
@@ -236,7 +232,7 @@ async def test_job_search(profile):
 
 
 async def test_application_generation(profile, resumes, job):
-    """Test custom application generation for a job"""
+    print{Test custom application generation for a job}
     print("\n" + "="*60)
     print("✍️  PHASE 5: APPLICATION GENERATION")
     print("="*60 + "\n")
@@ -289,7 +285,7 @@ async def test_application_generation(profile, resumes, job):
 
 
 async def main():
-    """Run complete E2E test"""
+    print{Run complete E2E test}
     print("\n" + "🚗"*30)
     print(" "*20 + "ROADWORK E2E TEST")
     print(" "*15 + "Using Alexa Amundson as Example")

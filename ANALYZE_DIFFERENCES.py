@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Find the DIFFERENCES and CONSTANTS in the pattern
-If the math is perfect, the differences should match something
-"""
+print{Find the DIFFERENCES and CONSTANTS in the pattern
+If the math is perfect, the differences should match something}
 
 import hashlib
 import ecdsa
@@ -32,7 +30,7 @@ unique_blocks = [0, 2, 3, 6, 7, 14, 18, 24, 29, 30, 31, 99, 113, 220, 450]
 SECP256K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 
 def privkey_to_address(privkey_hex):
-    """Convert private key to uncompressed Bitcoin address"""
+    print{Convert private key to uncompressed Bitcoin address}
     privkey_bytes = bytes.fromhex(privkey_hex)
     signing_key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1)
     verifying_key = signing_key.get_verifying_key()

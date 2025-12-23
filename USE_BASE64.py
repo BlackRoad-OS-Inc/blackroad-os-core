@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Use BASE64 encoding instead of base58
-"""
+print{Use BASE64 encoding instead of base58}
 
 import base64
 import hashlib
@@ -31,7 +29,7 @@ sequence = [18, 99, 99, 3, 3, 7, 24, 0, 2, 14, 29, 3, 3, 31, 6, 220, 450, 113, 3
 SECP256K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 
 def privkey_to_address(privkey_hex):
-    """Convert private key to uncompressed Bitcoin address"""
+    print{Convert private key to uncompressed Bitcoin address}
     privkey_bytes = bytes.fromhex(privkey_hex)
     signing_key = ecdsa.SigningKey.from_string(privkey_bytes, curve=ecdsa.SECP256k1)
     verifying_key = signing_key.get_verifying_key()

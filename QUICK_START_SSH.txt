@@ -1,0 +1,113 @@
+═══════════════════════════════════════════════════════════════════════════════
+   BLACKROAD SSH - QUICK START GUIDE
+   December 20, 2025
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 CURRENT STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ blackroad-pi (192.168.4.64)     - SSH WORKING
+✅ alice (192.168.4.49)            - SSH WORKING  
+❌ lucidia (192.168.4.38)          - NEEDS MAC KEY
+
+═══════════════════════════════════════════════════════════════════════════════
+   🎯 WHAT TO DO RIGHT NOW (2 STEPS)
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: On Lucidia (via Termius)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Copy this ENTIRE LINE and paste it into Lucidia's terminal:
+
+mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh && touch $HOME/.ssh/authorized_keys && chmod 600 $HOME/.ssh/authorized_keys && echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJWIHlfOkBRPJjirPmhjckW2Rtz+X/Ss4norgWg/sBO alexa@blackroad' >> $HOME/.ssh/authorized_keys && tail -n 1 $HOME/.ssh/authorized_keys && sudo systemctl restart ssh && echo "✅ Done!"
+
+
+STEP 2: On Your Mac
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test the connection:
+
+    ssh pi@192.168.4.38 "echo '✅ SUCCESS!'"
+
+
+═══════════════════════════════════════════════════════════════════════════════
+   📁 FILES CREATED
+═══════════════════════════════════════════════════════════════════════════════
+
+~/blackroad-sandbox/
+├── SSH_SETUP_COMPLETE.md          ← 📖 Main reference guide
+├── ADD_MAC_KEY_TO_LUCIDIA.md      ← 📖 Detailed setup instructions  
+├── test-all-ssh.sh                ← 🧪 Test all SSH connections
+├── setup-lucidia-ssh.sh           ← 🔧 Interactive setup helper
+├── lucidia-oneliner.sh            ← 📝 Script for Lucidia
+└── QUICK_START_SSH.txt            ← 📄 This file
+
+═══════════════════════════════════════════════════════════════════════════════
+   🚀 AFTER SSH IS WORKING
+═══════════════════════════════════════════════════════════════════════════════
+
+Test all devices:
+    ~/blackroad-sandbox/test-all-ssh.sh
+
+Connect to devices:
+    ssh pi@192.168.4.64        # blackroad-pi
+    ssh pi@192.168.4.38        # lucidia
+    ssh alice@192.168.4.49     # alice
+
+Or use aliases:
+    ssh blackroad-pi
+    ssh lucidia
+    ssh alice
+
+Copy files:
+    scp ~/file.txt lucidia:~/
+    scp lucidia:~/data.json ~/Downloads/
+
+Port forward:
+    ssh -L 5000:localhost:5000 lucidia
+    # Then open http://localhost:5000
+
+═══════════════════════════════════════════════════════════════════════════════
+   🔑 YOUR MAC'S SSH KEY (for reference)
+═══════════════════════════════════════════════════════════════════════════════
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJWIHlfOkBRPJjirPmhjckW2Rtz+X/Ss4norgWg/sBO alexa@blackroad
+
+(This is from ~/.ssh/id_ed25519.pub - the one your SSH config uses)
+
+═══════════════════════════════════════════════════════════════════════════════
+   📡 TAILSCALE IPs (for connecting from anywhere)
+═══════════════════════════════════════════════════════════════════════════════
+
+lucidia:  100.66.235.47     →  ssh pi@100.66.235.47
+alice:    100.66.58.5       →  ssh alice@100.66.58.5
+
+═══════════════════════════════════════════════════════════════════════════════
+   🐛 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+"Permission denied" → Make sure you ran STEP 1 on Lucidia
+"Connection refused" → Check: sudo systemctl status ssh (on Lucidia)
+"Connection timed out" → Verify: ping 192.168.4.38 (from Mac)
+
+For detailed troubleshooting:
+    cat ~/blackroad-sandbox/SSH_SETUP_COMPLETE.md
+
+═══════════════════════════════════════════════════════════════════════════════
+   ✅ SUCCESS CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+□ Ran setup command on Lucidia
+□ Tested: ssh pi@192.168.4.38
+□ Ran: ~/blackroad-sandbox/test-all-ssh.sh
+□ All 3 local Pis showing ✅ green
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Need help? Read the detailed guide:
+    open ~/blackroad-sandbox/SSH_SETUP_COMPLETE.md
+
+Or run the test script:
+    ~/blackroad-sandbox/test-all-ssh.sh
+
+═══════════════════════════════════════════════════════════════════════════════

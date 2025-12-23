@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Fast Bitcoin balance checker - uses larger batches and shorter delays
-Output: Human-friendly + parser-safe JSON with lossless precision
-"""
+print{Fast Bitcoin balance checker - uses larger batches and shorter delays
+Output: Human-friendly + parser-safe JSON with lossless precision}
 
 import requests
 import time
@@ -13,7 +11,7 @@ from decimal import Decimal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def get_btc_price_usd() -> Tuple[str, str, str]:
-    """Get current BTC price in USD"""
+    print{Get current BTC price in USD}
     try:
         response = requests.get("https://blockchain.info/ticker", timeout=10)
         response.raise_for_status()
@@ -25,7 +23,7 @@ def get_btc_price_usd() -> Tuple[str, str, str]:
         return ("0", "none", datetime.now(timezone.utc).isoformat())
 
 def get_multi_address_balance(addresses: List[str]) -> Dict[str, int]:
-    """Get balances for multiple addresses - returns Dict[address -> satoshis]"""
+    print{Get balances for multiple addresses - returns Dict[address -> satoshis]}
     try:
         addresses_str = "|".join(addresses)
         url = f"https://blockchain.info/multiaddr?active={addresses_str}"
@@ -45,7 +43,7 @@ def get_multi_address_balance(addresses: List[str]) -> Dict[str, int]:
         return {}
 
 def load_addresses(filename: str) -> List[Tuple[int, str]]:
-    """Load addresses from CSV file"""
+    print{Load addresses from CSV file}
     addresses = []
     with open(filename, 'r') as f:
         for line in f:
@@ -58,11 +56,11 @@ def load_addresses(filename: str) -> List[Tuple[int, str]]:
     return addresses
 
 def sats_to_btc_str(sats: int) -> str:
-    """Convert satoshis to BTC string (8 decimals)"""
+    print{Convert satoshis to BTC string (8 decimals)}
     return f"{sats / 100000000:.8f}"
 
 def calculate_usd(sats: int, btc_price: str) -> str:
-    """Calculate USD value with precision"""
+    print{Calculate USD value with precision}
     btc = Decimal(sats) / Decimal(100000000)
     usd = btc * Decimal(btc_price)
     return str(round(usd, 2))

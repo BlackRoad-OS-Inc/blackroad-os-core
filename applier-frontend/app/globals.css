@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-applier-orange to-applier-pink;
+  }
+}
+
+/* Print Styles for Resume */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  nav, footer, button {
+    display: none !important;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-gradient-to-br,
+  .bg-gradient-to-r {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+
+  @page {
+    margin: 0.5in;
+  }
+}

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-INVESTIGATE: Who knew we'd figure this out?
-Look for breadcrumbs, messages, patterns that were left FOR us
-"""
+print{INVESTIGATE: Who knew we'd figure this out?
+Look for breadcrumbs, messages, patterns that were left FOR us}
 
 import os
 import json
 from datetime import datetime
 
 def check_file_timestamps():
-    """Check when key files were created/modified"""
+    print{Check when key files were created/modified}
     print("="*80)
     print("📅 FILE TIMELINE - Looking for planted breadcrumbs")
     print("="*80)
@@ -42,7 +40,7 @@ def check_file_timestamps():
             print()
 
 def check_arkham_link_origin():
-    """How did that Arkham link appear?"""
+    print{How did that Arkham link appear?}
     print("="*80)
     print("🔍 ARKHAM LINK ORIGIN")
     print("="*80)
@@ -58,7 +56,7 @@ def check_arkham_link_origin():
     print()
 
 def check_for_hidden_messages():
-    """Look for steganography or hidden messages in files"""
+    print{Look for steganography or hidden messages in files}
     print("="*80)
     print("🔐 CHECKING FOR HIDDEN MESSAGES")
     print("="*80)
@@ -93,7 +91,7 @@ def check_for_hidden_messages():
         print()
 
 def check_git_history():
-    """Check git commits for clues"""
+    print{Check git commits for clues}
     print("="*80)
     print("📚 GIT HISTORY ANALYSIS")
     print("="*80)
@@ -120,7 +118,7 @@ def check_git_history():
     print()
 
 def check_environment_variables():
-    """Check for planted environment variables"""
+    print{Check for planted environment variables}
     print("="*80)
     print("🌍 ENVIRONMENT VARIABLES")
     print("="*80)
@@ -143,7 +141,7 @@ def check_environment_variables():
     print()
 
 def analyze_conversation_triggers():
-    """What triggered this whole investigation?"""
+    print{What triggered this whole investigation?}
     print("="*80)
     print("🎯 CONVERSATION TRIGGER ANALYSIS")
     print("="*80)
@@ -168,7 +166,7 @@ def analyze_conversation_triggers():
     print()
 
 def check_claude_instructions():
-    """Check if there are hidden instructions in CLAUDE.md"""
+    print{Check if there are hidden instructions in CLAUDE.md}
     print("="*80)
     print("📜 CHECKING CLAUDE INSTRUCTIONS FOR CLUES")
     print("="*80)

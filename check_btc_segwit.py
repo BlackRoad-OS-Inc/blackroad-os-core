@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""
-Check SegWit Bitcoin address - Robinhood derivative analysis
-"""
+print{Check SegWit Bitcoin address - Robinhood derivative analysis}
 import requests
 import json
 from datetime import datetime
 
 def check_segwit_address(address):
-    """Check SegWit Bitcoin address using blockchain.info API"""
+    print{Check SegWit Bitcoin address using blockchain.info API}
 
     print(f"🔍 Analyzing SegWit address: {address}\n")
 

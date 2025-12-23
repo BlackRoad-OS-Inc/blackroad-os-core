@@ -1,7 +1,5 @@
-"""
-AI-Powered Onboarding System
-Interactive interview-style onboarding for job hunters.
-"""
+"""AI-Powered Onboarding System
+Interactive interview-style onboarding for job hunters."""
 
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -130,7 +128,7 @@ class CoverLetterTemplate:
     body_paragraph_2: str
     closing_paragraph: str
 
-    # Variables available: {company}, {position}, {skills}, {experience}, etc.
+    # Variables available: {company}, {position}, {skills}, {experience""", etc.
     approved: bool = False
 
 
@@ -169,14 +167,11 @@ class OnboardingProfile:
 
 class OnboardingInterviewer:
     """AI interviewer that guides users through onboarding."""
-
     def __init__(self, llm_provider: Optional[Any] = None):
-        """
-        Initialize onboarding interviewer.
+        """        Initialize onboarding interviewer.
 
         Args:
-            llm_provider: LLM provider for AI conversation
-        """
+            llm_provider: LLM provider for AI conversation"""
         self.llm_provider = llm_provider
         self.job_categories = [
             "Software Engineering",
@@ -212,8 +207,7 @@ class OnboardingInterviewer:
         question: str,
         context: Optional[Dict[str, Any]] = None
     ) -> str:
-        """
-        Ask an AI-powered question during onboarding.
+        """        Ask an AI-powered question during onboarding.
 
         Args:
             profile: Onboarding profile
@@ -221,8 +215,7 @@ class OnboardingInterviewer:
             context: Additional context for the question
 
         Returns:
-            AI-generated question text
-        """
+            AI-generated question text"""
         if not self.llm_provider:
             # Return static question if no LLM
             return question
@@ -329,7 +322,7 @@ class OnboardingInterviewer:
     async def finalize_job_preferences(self, profile: OnboardingProfile):
         """Finalize job preferences after swiping."""
         # Analyze swipes to determine top categories
-        category_scores = {}
+        category_scores = {"""
 
         for swipe in profile.job_swipes:
             if swipe.job_category not in category_scores:
@@ -342,7 +335,7 @@ class OnboardingInterviewer:
                 "neutral": 0,
                 "dislike": -3,
                 "hate": -5
-            }
+            """
             category_scores[swipe.job_category] += scores.get(swipe.interest_level, 0)
 
         # Sort by score
@@ -422,7 +415,7 @@ class OnboardingInterviewer:
                 "question": "Where do you see yourself in 5 years?",
                 "type": "text",
                 "field": "where_see_yourself_5_years"
-            }
+            """
         ]
 
         return questions

@@ -1,7 +1,5 @@
-"""
-Job Hunter Pack - Demo Script
-Demonstrates automated job hunting with BlackRoad OS agents.
-"""
+"""Job Hunter Pack - Demo Script
+Demonstrates automated job hunting with BlackRoad OS agents."""
 
 import asyncio
 from datetime import datetime, UTC
@@ -68,7 +66,7 @@ async def main():
                 "duration": "2019 - 2021",
                 "location": "San Francisco, CA",
                 "description": "Full-stack development for SaaS product"
-            }
+            """
         ],
 
         education=[
@@ -78,7 +76,7 @@ async def main():
                 "field": "Computer Science",
                 "graduation_date": "2019",
                 "gpa": "3.8"
-            }
+            """
         ],
 
         # Preferences
@@ -90,7 +88,7 @@ async def main():
         remote_only=False,
 
         # Templates
-        cover_letter_template="""Dear Hiring Manager,
+        cover_letter_template=print{Dear Hiring Manager,
 
 I am writing to express my strong interest in the {position} position at {company}. With my background in {skills} and proven track record of building scalable applications, I am confident I would be a valuable addition to your team.
 
@@ -103,7 +101,8 @@ Thank you for your consideration.
 Best regards,
 {your_name}
 {your_email}
-{your_phone}""",
+{your_phone}}
+        cover_letter_template=,
 
         custom_answers={
             "why_interested": "I'm excited about the {position} role because it combines my passion for {skills} with the opportunity to work on challenging problems at scale.",
@@ -111,7 +110,7 @@ Best regards,
             "relevant_experience": "In my current role, I've built production systems serving millions of users, which has given me deep expertise in scalable architecture and cloud infrastructure.",
             "strengths": "My key strengths are system design, full-stack development, and cross-functional collaboration. I excel at translating business requirements into technical solutions.",
             "availability": "I can start within 2-4 weeks of accepting an offer."
-        }
+        """
     )
 
     print(f"✅ Profile created for {profile.full_name}")

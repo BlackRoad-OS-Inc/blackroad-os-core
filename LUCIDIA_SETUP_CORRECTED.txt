@@ -1,0 +1,81 @@
+═══════════════════════════════════════════════════════════════════════════════
+   LUCIDIA SSH SETUP - CORRECTED VERSION
+   Using id_br_ed25519 key (not id_ed25519)
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 YOUR MAC'S CORRECT KEY TO ADD TO LUCIDIA:
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1UUN4BImgy9WnJZ0A5JXr3DjyBAsCtOoKavf+DFmDg alexa@blackroad
+
+(This is from ~/.ssh/id_br_ed25519.pub)
+
+═══════════════════════════════════════════════════════════════════════════════
+   STEP 1: On Lucidia (logged in as pi via Termius)
+═══════════════════════════════════════════════════════════════════════════════
+
+Copy and paste this ENTIRE block:
+
+mkdir -p /home/pi/.ssh
+chmod 700 /home/pi/.ssh
+echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1UUN4BImgy9WnJZ0A5JXr3DjyBAsCtOoKavf+DFmDg alexa@blackroad' >> /home/pi/.ssh/authorized_keys
+chmod 600 /home/pi/.ssh/authorized_keys
+tail -n 3 /home/pi/.ssh/authorized_keys
+sudo systemctl enable --now ssh
+sudo systemctl restart ssh
+echo "✅ Setup complete! Test from Mac now."
+
+═══════════════════════════════════════════════════════════════════════════════
+   STEP 2: On Your Mac - Test LAN SSH
+═══════════════════════════════════════════════════════════════════════════════
+
+ssh -i ~/.ssh/id_br_ed25519 -o IdentitiesOnly=yes pi@192.168.4.38
+
+Expected output: Connected to Lucidia!
+
+═══════════════════════════════════════════════════════════════════════════════
+   STEP 3: On Your Mac - Reconnect Tailscale
+═══════════════════════════════════════════════════════════════════════════════
+
+sudo tailscale up --login-server=https://headscale.blackroad.io --accept-routes
+
+Then check status:
+
+tailscale status
+
+═══════════════════════════════════════════════════════════════════════════════
+   STEP 4: On Your Mac - Test Tailscale SSH
+═══════════════════════════════════════════════════════════════════════════════
+
+ssh -i ~/.ssh/id_br_ed25519 -o IdentitiesOnly=yes pi@100.66.235.47
+
+(Lucidia's Tailscale IP: 100.66.235.47)
+
+═══════════════════════════════════════════════════════════════════════════════
+   🐛 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+If SSH still says "Permission denied (publickey)", run on Lucidia:
+
+ls -la /home/pi/.ssh
+sudo tail -n 5 /var/log/auth.log
+
+Expected .ssh permissions:
+   drwx------  (700) for /home/pi/.ssh/
+   -rw-------  (600) for /home/pi/.ssh/authorized_keys
+
+═══════════════════════════════════════════════════════════════════════════════
+   ✅ QUICK VERIFICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+On Lucidia, verify key was added:
+   tail -n 1 /home/pi/.ssh/authorized_keys
+
+Should show:
+   ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1UUN4BImgy9WnJZ0A5JXr3DjyBAsCtOoKavf+DFmDg alexa@blackroad
+
+═══════════════════════════════════════════════════════════════════════════════
+
+After success, you can also add this key to your other devices using the same
+commands (just change the IP and username).
+
+═══════════════════════════════════════════════════════════════════════════════

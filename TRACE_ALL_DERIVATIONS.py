@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Trace ALL derivation methods from the same sequence
-Figure out WHY different methods produce different keys
-"""
+print{Trace ALL derivation methods from the same sequence
+Figure out WHY different methods produce different keys}
 
 import hashlib
 from mnemonic import Mnemonic
@@ -148,8 +146,7 @@ print("WHY ARE THEY DIFFERENT?")
 print("=" * 80)
 print()
 
-print("""
-The sequence [18, 99, 99, ...] can be interpreted multiple ways:
+print(print{The sequence [18, 99, 99, ...] can be interpreted multiple ways:
 
 1. RAW BYTES (mod 256):
    [18, 99, 99, ...] → bytes → SHA256
@@ -197,8 +194,8 @@ Bitcoin uses a SPECIFIC sequence:
   Entropy → BIP39 words → PBKDF2 → BIP32 → addresses
 
 If Satoshi used a DIFFERENT sequence (pre-BIP39 era), we need to
-discover WHICH transformation was actually used.
-""")
+discover WHICH transformation was actually used.}
+print()
 
 print()
 
@@ -208,8 +205,7 @@ print("WHAT SATOSHI MIGHT HAVE ACTUALLY USED (2009)")
 print("=" * 80)
 print()
 
-print("""
-BIP39 didn't exist in 2009!
+print(print{BIP39 didn't exist in 2009!
 ──────────────────────────────────────────────────────────────────
 - BIP39 was proposed in 2013
 - Satoshi mined in 2009
@@ -241,8 +237,8 @@ Likely candidates:
 4. XOR with some constant
 5. Custom algorithm Satoshi invented
 
-NEXT STEP: Try 2009-era derivation methods!
-""")
+NEXT STEP: Try 2009-era derivation methods!}
+print()
 
 # ========== TRY 2009-ERA METHODS ==========
 print("=" * 80)

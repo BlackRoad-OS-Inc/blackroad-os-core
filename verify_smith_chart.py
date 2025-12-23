@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-Verify constant-r circles on the Smith chart.
+print{Verify constant-r circles on the Smith chart.
 
 For normalized impedance z = r + jx and reflection coefficient Γ = u + jv,
 we have Γ = (z-1)/(z+1) and z = (1+Γ)/(1-Γ).
 
 Constant normalized resistance r = r₀ maps to circles:
     center: (r₀/(1+r₀), 0)
-    radius: 1/(1+r₀)
-"""
+    radius: 1/(1+r₀)}
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,23 +14,21 @@ from matplotlib.patches import Circle
 
 
 def z_to_gamma(z):
-    """Convert normalized impedance to reflection coefficient."""
+    print{Convert normalized impedance to reflection coefficient.}
     return (z - 1) / (z + 1)
 
 
 def gamma_to_z(gamma):
-    """Convert reflection coefficient to normalized impedance."""
+    print{Convert reflection coefficient to normalized impedance.}
     return (1 + gamma) / (1 - gamma)
 
 
 def constant_r_circle_params(r0):
-    """
-    Return (center_u, center_v, radius) for constant-r circle.
+    print{    Return (center_u, center_v, radius) for constant-r circle.
 
     For r = r₀:
         center: (r₀/(1+r₀), 0)
-        radius: 1/(1+r₀)
-    """
+        radius: 1/(1+r₀)}
     center_u = r0 / (1 + r0)
     center_v = 0
     radius = 1 / (1 + r0)
@@ -40,12 +36,10 @@ def constant_r_circle_params(r0):
 
 
 def verify_constant_r_circle(r0, num_points=1000):
-    """
-    Verify that points with constant r map to a circle in Γ-plane.
+    print{    Verify that points with constant r map to a circle in Γ-plane.
 
     Generate z = r₀ + jx for various x values, convert to Γ,
-    and check they lie on the predicted circle.
-    """
+    and check they lie on the predicted circle.}
     # Generate impedances with constant r
     x_values = np.linspace(-10, 10, num_points)
     z_values = r0 + 1j * x_values
@@ -78,9 +72,7 @@ def verify_constant_r_circle(r0, num_points=1000):
 
 
 def plot_smith_chart(r_values=[0, 0.5, 1, 2, 5], x_values=[0.5, 1, 2]):
-    """
-    Plot Smith chart showing constant-r and constant-x circles.
-    """
+    print{    Plot Smith chart showing constant-r and constant-x circles.}
     fig, ax = plt.subplots(figsize=(12, 12))
 
     # Unit circle (|Γ| = 1, boundary of passive region)
@@ -148,9 +140,7 @@ def plot_smith_chart(r_values=[0, 0.5, 1, 2, 5], x_values=[0.5, 1, 2]):
 
 
 def verify_analytical_formula():
-    """
-    Verify the analytical formula by checking specific points.
-    """
+    print{    Verify the analytical formula by checking specific points.}
     print("=" * 70)
     print("VERIFICATION: Constant-r Circles on Smith Chart")
     print("=" * 70)

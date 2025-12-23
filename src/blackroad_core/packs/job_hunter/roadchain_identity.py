@@ -1,7 +1,5 @@
-"""
-RoadChain Identity Verification for Job Applications
-Cryptographic proof of identity and achievements anchored to blockchain.
-"""
+"""RoadChain Identity Verification for Job Applications
+Cryptographic proof of identity and achievements anchored to blockchain."""
 
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
@@ -34,12 +32,10 @@ class VerificationStatus(Enum):
 
 @dataclass
 class VerifiableCredential:
-    """
-    W3C-style Verifiable Credential anchored to RoadChain.
+    """    W3C-style Verifiable Credential anchored to RoadChain.
 
     This is a cryptographically signed proof of an achievement
-    that can be verified by anyone with the blockchain state.
-    """
+    that can be verified by anyone with the blockchain state."""
     id: str
     type: ProofType
     issuer: str  # Who issued this credential (e.g., "github.com", "linkedin.com", "self")
@@ -68,10 +64,8 @@ class VerifiableCredential:
 
 @dataclass
 class IdentityProof:
-    """
-    Core identity proof anchored to RoadChain.
-    This is the root of trust for all other credentials.
-    """
+    """    Core identity proof anchored to RoadChain.
+    This is the root of trust for all other credentials."""
     roadchain_address: str  # User's RoadChain address
     ps_sha_chain: List[str]  # PS-SHA∞ identity chain
 
@@ -93,30 +87,24 @@ class IdentityProof:
 
 
 class RoadChainIdentityManager:
-    """
-    Manages identity verification and credential issuance via RoadChain.
-    """
+    """Manages identity verification and credential issuance via RoadChain."""
 
     def __init__(self, roadchain_api_url: str = "http://localhost:3000"):
-        """
-        Initialize identity manager.
+        """        Initialize identity manager.
 
         Args:
-            roadchain_api_url: RoadChain API endpoint
-        """
+            roadchain_api_url: RoadChain API endpoint"""
         self.api_url = roadchain_api_url
 
     def create_ps_sha_hash(self, data: str, previous_hash: str = "") -> str:
-        """
-        Create PS-SHA∞ cascade hash.
+        """        Create PS-SHA∞ cascade hash.
 
         Args:
             data: Data to hash
             previous_hash: Previous hash in chain
 
         Returns:
-            SHA-256 hash in hex
-        """
+            SHA-256 hash in hex"""
         combined = previous_hash + data
         return hashlib.sha256(combined.encode()).hexdigest()
 
@@ -127,8 +115,7 @@ class RoadChainIdentityManager:
         roadchain_address: str,
         public_profile_url: Optional[str] = None
     ) -> IdentityProof:
-        """
-        Create root identity proof.
+        """        Create root identity proof.
 
         This creates the foundational identity that all credentials
         will be attached to.
@@ -140,8 +127,7 @@ class RoadChainIdentityManager:
             public_profile_url: Optional public profile (LinkedIn, etc.)
 
         Returns:
-            IdentityProof anchored to RoadChain
-        """
+            IdentityProof anchored to RoadChain"""
         # Hash private data
         name_hash = hashlib.sha256(name.encode()).hexdigest()
         email_hash = hashlib.sha256(email.encode()).hexdigest()
@@ -161,7 +147,7 @@ class RoadChainIdentityManager:
             "email_hash": email_hash,
             "ps_sha_chain": ps_sha_chain,
             "timestamp": datetime.now(UTC).isoformat()
-        }
+        """
 
         # In production, this would submit to RoadChain
         # For now, simulate transaction
@@ -188,8 +174,7 @@ class RoadChainIdentityManager:
         issuer: str = "self",
         witnesses: List[str] = None
     ) -> VerifiableCredential:
-        """
-        Issue a verifiable credential for an achievement.
+        """        Issue a verifiable credential for an achievement.
 
         Args:
             identity: User's identity proof
@@ -199,8 +184,7 @@ class RoadChainIdentityManager:
             witnesses: Optional list of witness addresses
 
         Returns:
-            VerifiableCredential anchored to RoadChain
-        """
+            VerifiableCredential anchored to RoadChain"""
         # Create credential ID
         credential_id = f"vc-{proof_type.value}-{len(identity.credentials)}"
 
@@ -218,7 +202,7 @@ class RoadChainIdentityManager:
             "proofHash": proof_hash,
             "witnesses": witnesses or [],
             "psShaChain": identity.ps_sha_chain + [proof_hash]
-        }
+        """
 
         # Simulate RoadChain submission
         tx_hash = self.create_ps_sha_hash(
@@ -246,15 +230,13 @@ class RoadChainIdentityManager:
         return credential
 
     def verify_credential(self, credential: VerifiableCredential) -> bool:
-        """
-        Verify a credential against RoadChain.
+        """        Verify a credential against RoadChain.
 
         Args:
             credential: Credential to verify
 
         Returns:
-            True if valid, False otherwise
-        """
+            True if valid, False otherwise"""
         # In production, would:
         # 1. Query RoadChain for transaction
         # 2. Verify proof hash matches
@@ -275,8 +257,7 @@ class RoadChainIdentityManager:
         description: str = "",
         linkedin_url: Optional[str] = None
     ) -> VerifiableCredential:
-        """
-        Create verifiable employment credential.
+        """        Create verifiable employment credential.
 
         Args:
             identity: User's identity proof
@@ -288,8 +269,7 @@ class RoadChainIdentityManager:
             linkedin_url: LinkedIn profile URL for verification
 
         Returns:
-            VerifiableCredential for employment
-        """
+            VerifiableCredential for employment"""
         claim = {
             "company": company,
             "title": title,
@@ -297,7 +277,7 @@ class RoadChainIdentityManager:
             "end_date": end_date or "present",
             "description": description,
             "verification_source": linkedin_url or "self-attested"
-        }
+        """
 
         issuer = "linkedin.com" if linkedin_url else "self"
 
@@ -322,7 +302,7 @@ class RoadChainIdentityManager:
             "degree": degree,
             "field": field,
             "graduation_year": graduation_year
-        }
+        """
 
         return self.issue_credential(
             identity=identity,
@@ -345,7 +325,7 @@ class RoadChainIdentityManager:
             "proficiency": proficiency,  # "beginner", "intermediate", "expert"
             "years_experience": years_experience,
             "projects": projects or []
-        }
+        """
 
         return self.issue_credential(
             identity=identity,
@@ -375,8 +355,8 @@ class RoadChainIdentityManager:
             "metrics": {
                 "github_stars": github_stars,
                 "github_commits": github_commits
-            }
-        }
+            """
+        """
 
         issuer = "github.com" if github_url else "self"
 
@@ -403,7 +383,7 @@ class RoadChainIdentityManager:
             "status": status,
             "filed_date": filed_date,
             "uspto_url": uspto_url
-        }
+        """
 
         return self.issue_credential(
             identity=identity,
@@ -429,7 +409,7 @@ class RoadChainIdentityManager:
             "contributions_last_year": contributions_last_year,
             "top_languages": top_languages,
             "profile_url": f"https://github.com/{github_username}"
-        }
+        """
 
         return self.issue_credential(
             identity=identity,
@@ -443,8 +423,7 @@ class RoadChainIdentityManager:
         identity: IdentityProof,
         credential_types: List[ProofType] = None
     ) -> Dict[str, Any]:
-        """
-        Export verifiable presentation for job application.
+        """        Export verifiable presentation for job application.
 
         This creates a JSON-LD verifiable presentation that employers
         can independently verify against RoadChain.
@@ -454,8 +433,7 @@ class RoadChainIdentityManager:
             credential_types: Which credentials to include (None = all)
 
         Returns:
-            W3C Verifiable Presentation
-        """
+            W3C Verifiable Presentation"""
         # Filter credentials
         if credential_types:
             credentials = [
@@ -501,8 +479,8 @@ class RoadChainIdentityManager:
                         "roadchainTxHash": cred.roadchain_tx_hash,
                         "roadchainBlock": cred.roadchain_block_index,
                         "verificationMethod": f"{self.api_url}/verify/{cred.roadchain_tx_hash}"
-                    }
-                }
+                    """
+                """
                 for cred in credentials
             ],
 
@@ -512,8 +490,8 @@ class RoadChainIdentityManager:
                 "created": datetime.now(UTC).isoformat(),
                 "verificationMethod": f"{self.api_url}/identity/{identity.roadchain_address}",
                 "proofPurpose": "authentication"
-            }
-        }
+            """
+        """
 
         return presentation
 
@@ -524,7 +502,6 @@ class RoadChainIdentityManager:
 
 def format_credential_summary(credential: VerifiableCredential) -> str:
     """Format credential for display in job application."""
-
     if credential.type == ProofType.EMPLOYMENT:
         claim = credential.claim
         return f"{claim['title']} at {claim['company']} ({claim['start_date']} - {claim['end_date']})"
@@ -558,16 +535,14 @@ def create_verification_qr_code(
     presentation: Dict[str, Any],
     verification_url: str
 ) -> str:
-    """
-    Create QR code for employers to verify credentials.
+    """    Create QR code for employers to verify credentials.
 
     Args:
         presentation: Verifiable presentation
         verification_url: URL to verification page
 
     Returns:
-        URL that encodes the presentation for verification
-    """
+        URL that encodes the presentation for verification"""
     import base64
     import urllib.parse
 

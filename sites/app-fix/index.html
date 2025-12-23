@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackRoad OS - Console</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #00FF88;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .terminal {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border: 2px solid #00FF88;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .header {
+            color: #FF9D00;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0,255,136,0.1);
+            border-left: 3px solid #00FF88;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px;
+        }
+        .label {
+            color: #FF9D00;
+        }
+        .value {
+            color: #00FF88;
+            font-weight: bold;
+        }
+        .error {
+            background: rgba(255,0,102,0.1);
+            border-left: 3px solid #FF0066;
+            color: #FF0066;
+        }
+        a {
+            color: #0066FF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">⚡ BlackRoad OS Console</div>
+
+        <div class="status">
+            <div class="metric">
+                <span class="label">System Status:</span>
+                <span class="value">ONLINE</span>
+            </div>
+            <div class="metric">
+                <span class="label">Active Agents:</span>
+                <span class="value">0 / 30,000</span>
+            </div>
+            <div class="metric">
+                <span class="label">Models Available:</span>
+                <span class="value">27</span>
+            </div>
+            <div class="metric">
+                <span class="label">Breath Sync:</span>
+                <span class="value">φ = 1.618034</span>
+            </div>
+        </div>
+
+        <div class="status">
+            <div class="metric">
+                <span class="label">Quick Links:</span>
+            </div>
+            <div class="metric">
+                <span>→ <a href="https://blackroad.io">Main Website</a></span>
+            </div>
+            <div class="metric">
+                <span>→ <a href="https://docs.blackroad.io">Documentation</a></span>
+            </div>
+            <div class="metric">
+                <span>→ <a href="https://github.com/blackboxprogramming">GitHub</a></span>
+            </div>
+        </div>
+
+        <div class="status error">
+            <div class="metric">
+                <span>⚠️ Full console UI under development</span>
+            </div>
+            <div class="metric">
+                <span>For now, use the main website at blackroad.io</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

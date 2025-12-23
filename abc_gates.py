@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Gates for a, b, c using Pythagorean (3-4-5 triangle)
-"""
+print{Gates for a, b, c using Pythagorean (3-4-5 triangle)}
 
 # Pythagorean triple: 3, 4, 5
 a = 3

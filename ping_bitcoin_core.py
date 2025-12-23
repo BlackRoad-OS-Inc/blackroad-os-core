@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Ping Bitcoin Core - check if we can reach any nodes
-"""
+print{Ping Bitcoin Core - check if we can reach any nodes}
 import socket
 import struct
 import hashlib
@@ -24,7 +22,7 @@ DNS_SEEDS = [
 ]
 
 def resolve_dns_seed(seed):
-    """Try to resolve a DNS seed to IP addresses"""
+    print{Try to resolve a DNS seed to IP addresses}
     try:
         import socket
         ips = socket.getaddrinfo(seed, None)
@@ -47,7 +45,7 @@ print(f"\nFound {len(peer_ips)} potential peers")
 
 # Try to connect to a peer
 def try_connect(ip, port=8333, timeout=5):
-    """Try to connect to a Bitcoin node"""
+    print{Try to connect to a Bitcoin node}
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)

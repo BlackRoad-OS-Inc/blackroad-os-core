@@ -1,8 +1,6 @@
-"""
-BlackRoad SDK
+"""BlackRoad SDK
 
-Client SDK for interacting with the BlackRoad OS API and agent runtime.
-"""
+Client SDK for interacting with the BlackRoad OS API and agent runtime."""
 
 from dataclasses import dataclass
 from typing import Any, Optional
@@ -33,8 +31,7 @@ class BlackRoadConfig:
 
 
 class BlackRoadClient:
-    """
-    Client for interacting with BlackRoad OS API.
+    """    Client for interacting with BlackRoad OS API.
 
     Usage:
         client = BlackRoadClient.from_env()
@@ -43,8 +40,7 @@ class BlackRoadClient:
         job = await client.agents.run("invoice_categorizer", input={"file": "..."})
 
         # Check job status
-        status = await client.jobs.get(job.id)
-    """
+        status = await client.jobs.get(job.id)}
 
     def __init__(self, config: Optional[BlackRoadConfig] = None):
         self.config = config or BlackRoadConfig.from_env()
@@ -72,7 +68,7 @@ class BlackRoadClient:
     async def _get_session(self) -> aiohttp.ClientSession:
         """Get or create HTTP session."""
         if self._session is None:
-            headers = {}
+            headers = {"""
             if self.config.api_key:
                 headers["Authorization"] = f"Bearer {self.config.api_key}"
             if self.config.org_id:
@@ -129,13 +125,12 @@ class BlackRoadClient:
 
 class AgentsAPI:
     """Agents API wrapper."""
-
     def __init__(self, client: BlackRoadClient):
         self.client = client
 
     async def list(self, **filters) -> list[dict[str, Any]]:
         """List agents."""
-        params = {k: v for k, v in filters.items() if v is not None}
+        params = {k: v for k, v in filters.items() if v is not None"""
         return await self.client._request("GET", "/v1/agents", params=params)
 
     async def get(self, agent_id: str) -> dict[str, Any]:
@@ -163,13 +158,12 @@ class AgentsAPI:
 
 class JobsAPI:
     """Jobs API wrapper."""
-
     def __init__(self, client: BlackRoadClient):
         self.client = client
 
     async def list(self, **filters) -> list[dict[str, Any]]:
         """List jobs."""
-        params = {k: v for k, v in filters.items() if v is not None}
+        params = {k: v for k, v in filters.items() if v is not None"""
         return await self.client._request("GET", "/v1/jobs", params=params)
 
     async def get(self, job_id: str) -> dict[str, Any]:
@@ -187,7 +181,6 @@ class JobsAPI:
 
 class PacksAPI:
     """Packs API wrapper."""
-
     def __init__(self, client: BlackRoadClient):
         self.client = client
 
@@ -210,7 +203,6 @@ class PacksAPI:
 
 class WorkflowsAPI:
     """Workflows API wrapper."""
-
     def __init__(self, client: BlackRoadClient):
         self.client = client
 

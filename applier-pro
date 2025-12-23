@@ -1,0 +1,339 @@
+#!/usr/bin/env python3
+"""
+applier-pro - The Complete AI Job Application Suite
+
+All-in-one CLI for job hunting with AI superpowers:
+- AI cover letter generation
+- Batch applications (10-20+ jobs at once)
+- Interview prep & mock interviews
+- Salary negotiation coaching
+- Company research automation
+- Application tracking & analytics
+- Advanced platform scraping (50+ specialized boards)
+- AI-powered networking & referral acquisition
+- Personal brand building & content generation
+- Job market intelligence & career forecasting
+"""
+
+import sys
+import subprocess
+from pathlib import Path
+
+ORANGE = '\033[38;5;208m'
+PINK = '\033[38;5;205m'
+GREEN = '\033[92m'
+CYAN = '\033[96m'
+BOLD = '\033[1m'
+END = '\033[0m'
+
+
+def print_logo():
+    """Print applier-pro logo."""
+    logo = f"""{ORANGE}
+    ┌─────────────────────────────────────────────────────┐
+    │  {BOLD}{ORANGE}                                                   {END}{ORANGE}│
+    │  {BOLD}{ORANGE}     █████╗ ██████╗ ██████╗ ██╗     ██╗███████╗██████╗ {END}{ORANGE}    │
+    │  {BOLD}{PINK}    ██╔══██╗██╔══██╗██╔══██╗██║     ██║██╔════╝██╔══██╗{END}{ORANGE}   │
+    │  {BOLD}{PINK}    ███████║██████╔╝██████╔╝██║     ██║█████╗  ██████╔╝{END}{ORANGE}   │
+    │  {BOLD}{PINK}    ██╔══██║██╔═══╝ ██╔═══╝ ██║     ██║██╔══╝  ██╔══██╗{END}{ORANGE}   │
+    │  {BOLD}{PINK}    ██║  ██║██║     ██║     ███████╗██║███████╗██║  ██║{END}{ORANGE}   │
+    │  {BOLD}{PINK}    ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝╚══════╝╚═╝  ╚═╝{END}{ORANGE}   │
+    │  {BOLD}{PINK}                      PRO                          {END}{ORANGE}   │
+    │                                                     │
+    │  {CYAN}The Complete AI Job Application Suite{END}{ORANGE}              │
+    └─────────────────────────────────────────────────────┘{END}
+"""
+    print(logo)
+
+
+def print_help():
+    """Print help message."""
+    print_logo()
+
+    help_text = f"""
+{BOLD}{ORANGE}USAGE:{END}
+    applier-pro <command> [options]
+
+{BOLD}{ORANGE}COMMANDS:{END}
+
+{BOLD}{GREEN}📝 Cover Letter Generation{END}
+    {CYAN}cover{END}              Generate AI-powered cover letter
+                        • Analyzes job description + your resume
+                        • Multiple tones (professional, enthusiastic, technical)
+                        • A/B testing with variants
+                        • Claude Sonnet 4 powered
+
+    {BOLD}Example:{END}
+        applier-pro cover --job-title "Senior SWE" --company "Anthropic" \\
+                          --job-description job.txt --variants 3
+
+{BOLD}{GREEN}🚀 Batch Applications{END}
+    {CYAN}batch{END}              Apply to multiple jobs at once
+                        • Smart rate limiting (avoid getting blocked)
+                        • Auto-resume on failure
+                        • Progress tracking with ETA
+                        • Platform-specific strategies
+
+    {BOLD}Example:{END}
+        applier-pro batch --max 20 --min-score 75 --daily-goal 10
+
+{BOLD}{GREEN}🎤 Interview Preparation{END}
+    {CYAN}interview{END}          AI mock interview & question prediction
+                        • Predicts likely interview questions
+                        • Interactive mock interview with Claude
+                        • Real-time feedback on answers
+                        • STAR method coaching
+
+    {BOLD}Example:{END}
+        applier-pro interview --company "Google" --job-title "SWE" \\
+                              --job-description job.txt
+
+{BOLD}{GREEN}💰 Salary Negotiation{END}
+    {CYAN}salary{END}             Salary negotiation assistant
+                        • Market data analysis
+                        • Counter-offer script generation
+                        • Total comp calculator
+                        • Leverage analysis
+
+    {BOLD}Example:{END}
+        applier-pro salary --company "Meta" --base 180000 \\
+                           --equity 50000 --target 250000
+
+{BOLD}{GREEN}🔍 Company Research{END}
+    {CYAN}research{END}           Automated company research
+                        • Scrapes company website
+                        • Glassdoor insights
+                        • Culture analysis
+                        • Red flag detection
+
+    {BOLD}Example:{END}
+        applier-pro research "Anthropic" --website "anthropic.com"
+
+{BOLD}{GREEN}🌐 Advanced Platform Scraping{END}
+    {CYAN}platforms{END}          Scrape 50+ specialized job boards
+                        • Y Combinator, AngelList, Remote OK
+                        • Hacker News, Web3, AI/ML boards
+                        • Quality-scored (0-100) platforms
+                        • API integrations where available
+
+    {BOLD}Example:{END}
+        applier-pro platforms --query "senior engineer" --category tech_startup
+        applier-pro platforms --platform ycombinator --max-jobs 50
+
+{BOLD}{GREEN}🤝 AI-Powered Networking{END}
+    {CYAN}network{END}            Professional networking & referrals
+                        • AI-generated connection messages
+                        • Referral path finding
+                        • Cold outreach optimization
+                        • Network gap analysis
+
+    {BOLD}Example:{END}
+        applier-pro network --target "Anthropic" --goal "referral"
+
+{BOLD}{GREEN}✨ Personal Brand Builder{END}
+    {CYAN}brand{END}              Build your professional brand
+                        • LinkedIn profile optimization
+                        • GitHub README generation
+                        • Blog post creation (800-3000 words)
+                        • Twitter thread generation
+                        • Conference proposal writing
+
+    {BOLD}Example:{END}
+        applier-pro brand --profile linkedin --output optimized_profile.md
+        applier-pro brand --blog "Building AI Systems" --length medium
+
+{BOLD}{GREEN}📈 Market Intelligence{END}
+    {CYAN}market{END}             Job market trends & career forecasting
+                        • Skill demand analysis
+                        • Salary trend tracking
+                        • Market opportunity identification
+                        • Career trajectory forecasting
+
+    {BOLD}Example:{END}
+        applier-pro market --role "Senior AI Engineer" --region "Remote/US"
+        applier-pro market --forecast --years-exp 5
+
+{BOLD}{GREEN}🏢 Workday Automation{END}
+    {CYAN}workday{END}            Automated Workday application filling
+                        • Multi-step form automation
+                        • Resume auto-upload
+                        • EEO questionnaire handling
+                        • Session tracking
+
+    {BOLD}Example:{END}
+        applier-pro workday --job-url [URL] --company "Google" --job-title "SWE"
+
+{BOLD}{GREEN}📧 Gmail Integration{END}
+    {CYAN}gmail{END}              Job email management & tracking
+                        • Parse interview invitations
+                        • Extract application status
+                        • Auto-reply templates
+                        • Sentiment analysis
+
+    {BOLD}Example:{END}
+        applier-pro gmail --fetch --days 30
+
+{BOLD}{GREEN}💼 Offer Comparison{END}
+    {CYAN}offers{END}             Compare job offers side-by-side
+                        • Total compensation calculator
+                        • Equity valuation (RSUs, options)
+                        • Benefits comparison
+                        • AI-powered recommendation
+
+    {BOLD}Example:{END}
+        applier-pro offers --compare offer1.json offer2.json offer3.json
+
+{BOLD}{GREEN}✉️ Automated Follow-ups{END}
+    {CYAN}followup{END}           Automated follow-up system
+                        • Thank-you emails after interviews
+                        • Application status check-ins
+                        • AI-generated personalized messages
+                        • Response tracking
+
+    {BOLD}Example:{END}
+        applier-pro followup schedule --company "Google" --job-title "SWE" \\
+                                      --email recruiter@google.com --name "Jane" \\
+                                      --type interview_thank_you
+
+{BOLD}{GREEN}📅 Calendar Integration{END}
+    {CYAN}calendar{END}           Interview calendar management
+                        • Google Calendar integration
+                        • Auto-create interview events
+                        • Prep time blocking
+                        • Availability sharing
+
+    {BOLD}Example:{END}
+        applier-pro calendar create --company "Anthropic" --job-title "SWE" \\
+                                    --datetime "2025-12-25 14:00" --type technical_interview
+
+{BOLD}{GREEN}💼 LinkedIn Easy Apply{END}
+    {CYAN}linkedin{END}           Automated LinkedIn Easy Apply
+                        • Form automation (Playwright)
+                        • Multi-step navigation
+                        • Resume/cover letter upload
+                        • Question answering
+
+    {BOLD}Example:{END}
+        applier-pro linkedin --job-url [LinkedIn URL]
+
+{BOLD}{GREEN}📊 Analytics & Tracking{END}
+    {CYAN}stats{END}              View application statistics
+    {CYAN}list{END}               List all applications
+    {CYAN}search{END}             Search for jobs (original applier)
+
+{BOLD}{ORANGE}QUICK START:{END}
+
+    {BOLD}1. First time setup{END}
+        ./applier-real setup
+
+    {BOLD}2. Search for jobs{END}
+        ./applier-real search
+
+    {BOLD}3. Generate cover letters for top matches{END}
+        applier-pro cover --job-title "Your Role" --company "Target Co" \\
+                          --job-description <(curl [job_url])
+
+    {BOLD}4. Apply in batch{END}
+        applier-pro batch --max 10 --min-score 80
+
+    {BOLD}5. Prepare for interviews{END}
+        applier-pro interview --company "Company Name"
+
+{BOLD}{ORANGE}ENVIRONMENT:{END}
+    {CYAN}ANTHROPIC_API_KEY{END}  Required for AI features (cover letters, interviews, etc.)
+                        Get your key: https://console.anthropic.com/
+
+{BOLD}{ORANGE}FILES:{END}
+    {CYAN}~/.applier/{END}
+        ├── config.json              Your profile
+        ├── resume.txt               Your resume
+        ├── jobs.json                Search results
+        ├── cover_letters/           Generated cover letters
+        ├── interviews/              Interview sessions
+        ├── company_research/        Company profiles
+        ├── batch/                   Batch progress
+        ├── advanced_jobs/           Platform scraping results
+        ├── network/                 Networking campaigns
+        ├── brand/                   Brand content
+        ├── market_intel/            Market reports
+        ├── workday/                 Workday applications
+        ├── emails/                  Gmail job emails
+        ├── offers/                  Offer comparisons
+        ├── follow_ups/              Follow-up schedules
+        ├── calendar/                Interview events
+        └── linkedin/                LinkedIn Easy Apply sessions
+
+{BOLD}{ORANGE}MORE HELP:{END}
+    applier-pro <command> --help    Command-specific help
+
+{BOLD}{GREEN}✨ Powered by Claude Code • Built for getting you hired faster{END}
+"""
+    print(help_text)
+
+
+def run_command(script_name: str, args: list):
+    """Run a sub-command."""
+    script_path = Path(__file__).parent / f"{script_name}.py"
+
+    if not script_path.exists():
+        print(f"{ORANGE}❌ Error: {script_name}.py not found{END}")
+        return 1
+
+    cmd = ["python3", str(script_path)] + args
+    return subprocess.call(cmd)
+
+
+def main():
+    """Main CLI entry point."""
+    if len(sys.argv) < 2:
+        print_help()
+        return 0
+
+    command = sys.argv[1]
+    args = sys.argv[2:]
+
+    # Command routing
+    command_map = {
+        # Core features
+        "cover": "applier-cover-letter-ai",
+        "batch": "applier-batch",
+        "interview": "applier-interview-prep",
+        "salary": "applier-salary-negotiator",
+        "research": "applier-company-research",
+
+        # Advanced features
+        "platforms": "applier-advanced-platforms",
+        "network": "applier-network-ai",
+        "brand": "applier-brand-builder",
+        "market": "applier-market-intelligence",
+
+        # A-Z Complete System (NEW)
+        "workday": "applier-workday-automation",
+        "gmail": "applier-gmail-integration",
+        "offers": "applier-offer-comparison",
+
+        # Productivity & Organization
+        "followup": "applier-follow-up-automation",
+        "calendar": "applier-calendar-integration",
+        "linkedin": "applier-linkedin-easy-apply",
+
+        # Analytics & tracking
+        "stats": "applier-analytics",
+        "list": "applier-cli",
+        "search": "applier-cli",
+    }
+
+    if command in ["help", "--help", "-h"]:
+        print_help()
+        return 0
+
+    if command in command_map:
+        return run_command(command_map[command], args)
+    else:
+        print(f"{ORANGE}❌ Unknown command: {command}{END}\n")
+        print(f"Run '{BOLD}applier-pro help{END}' for usage information")
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

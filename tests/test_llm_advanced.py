@@ -1,13 +1,11 @@
-"""
-Advanced LLM Integration Tests
+"""Advanced LLM Integration Tests
 
 Tests advanced features of the LLM system including:
 - Multi-provider routing
 - Streaming responses
 - Context management
 - Token optimization
-- Error handling and retries
-"""
+- Error handling and retries"""
 
 import pytest
 import pytest_asyncio
@@ -126,11 +124,9 @@ class TestTokenOptimization:
 
     def test_prompt_compression(self):
         """Test compressing prompts to reduce tokens."""
-        verbose_prompt = """
-        Please analyze the following code and provide a detailed
+        verbose_prompt = """        Please analyze the following code and provide a detailed
         explanation of what it does, including all functions,
-        variables, and any potential issues you might find.
-        """
+        variables, and any potential issues you might find."""
 
         compressed = "Analyze code: functions, variables, issues."
 
@@ -138,7 +134,7 @@ class TestTokenOptimization:
 
     def test_response_caching(self):
         """Test caching responses for identical prompts."""
-        cache = {}
+        cache = {"""
         prompt = "What is 2+2?"
         response = "4"
 
@@ -164,7 +160,7 @@ class TestErrorHandling:
         rate_limit_error = {
             'error': 'rate_limit_exceeded',
             'retry_after': 60
-        }
+        """
 
         assert rate_limit_error['retry_after'] == 60
 
@@ -175,14 +171,14 @@ class TestErrorHandling:
             'connect_timeout': 10,
             'read_timeout': 30,
             'max_retries': 3
-        }
+        """
 
         assert timeout_config['max_retries'] == 3
 
     @pytest.mark.asyncio
     async def test_malformed_response_handling(self):
         """Test handling malformed responses."""
-        malformed = {"incomplete": "response without proper"}
+        malformed = {"incomplete": "response without proper""""
 
         # Should detect and handle malformed response
         is_valid = "error" not in malformed
@@ -198,7 +194,7 @@ class TestModelSelection:
             'code_generation': 'claude-sonnet',
             'simple_qa': 'claude-haiku',
             'complex_reasoning': 'claude-opus'
-        }
+        """
 
         assert tasks['code_generation'] == 'claude-sonnet'
         assert tasks['simple_qa'] == 'claude-haiku'
@@ -208,7 +204,7 @@ class TestModelSelection:
         models = [
             {'name': 'haiku', 'cost_per_token': 0.0001, 'quality': 0.7},
             {'name': 'sonnet', 'cost_per_token': 0.0003, 'quality': 0.9},
-            {'name': 'opus', 'cost_per_token': 0.0015, 'quality': 0.95}
+            {'name': 'opus', 'cost_per_token': 0.0015, 'quality': 0.95"""
         ]
 
         # For simple tasks, prefer cheaper model
@@ -223,7 +219,7 @@ class TestModelSelection:
         models = [
             {'name': 'haiku', 'latency_ms': 500},
             {'name': 'sonnet', 'latency_ms': 1500},
-            {'name': 'opus', 'latency_ms': 3000}
+            {'name': 'opus', 'latency_ms': 3000"""
         ]
 
         fastest = min(models, key=lambda m: m['latency_ms'])
@@ -246,21 +242,19 @@ class TestPromptEngineering:
         """Test adding few-shot examples."""
         examples = [
             {"input": "Hello", "output": "Hi there!"},
-            {"input": "Goodbye", "output": "See you later!"}
+            {"input": "Goodbye", "output": "See you later!""""
         ]
 
         assert len(examples) == 2
 
     def test_chain_of_thought(self):
         """Test chain-of-thought prompting."""
-        prompt = """
-        Question: What is 15 + 27?
+        prompt = """        Question: What is 15 + 27?
         Let's think step by step:
         1. 15 + 27
         2. 15 + 20 = 35
         3. 35 + 7 = 42
-        Answer: 42
-        """
+        Answer: 42"""
 
         assert "step by step" in prompt
 
@@ -274,9 +268,9 @@ class TestMultiModalSupport:
             "role": "user",
             "content": [
                 {"type": "text", "text": "What's in this image?"},
-                {"type": "image", "source": "base64..."}
+                {"type": "image", "source": "base64...""""
             ]
-        }
+        """
 
         assert len(message["content"]) == 2
 
@@ -285,8 +279,8 @@ class TestMultiModalSupport:
         models = {
             'claude-3-opus': {'vision': True},
             'claude-3-sonnet': {'vision': True},
-            'claude-3-haiku': {'vision': True}
-        }
+            'claude-3-haiku': {'vision': True"""
+        """
 
         vision_models = [k for k, v in models.items() if v['vision']]
         assert len(vision_models) == 3

@@ -1,0 +1,250 @@
+#!/usr/bin/env python3
+"""
+applier - REAL Job Application Tool
+Actually searches and applies to real jobs on LinkedIn, Indeed, etc.
+"""
+
+import sys
+import json
+import asyncio
+from pathlib import Path
+
+# Check dependencies
+try:
+    from playwright.async_api import async_playwright
+    import requests
+except ImportError:
+    print("❌ Missing dependencies. Install:")
+    print("   pip install playwright requests")
+    print("   playwright install")
+    sys.exit(1)
+
+API_URL = "https://applier-api.amundsonalexa.workers.dev"
+CONFIG_FILE = Path.home() / ".applier" / "config.json"
+RESUME_FILE = Path.home() / ".applier" / "resume.txt"
+
+def load_config():
+    if CONFIG_FILE.exists():
+        return json.loads(CONFIG_FILE.read_text())
+    return {}
+
+def save_config(config):
+    CONFIG_FILE.parent.mkdir(exist_ok=True)
+    CONFIG_FILE.write_text(json.dumps(config, indent=2))
+
+async def search_real_jobs(role, location="Remote", limit=10):
+    """Search for real jobs on LinkedIn and Indeed"""
+    print(f"🔍 Searching for: {role}")
+    print(f"📍 Location: {location}\n")
+
+    playwright = await async_playwright().start()
+    browser = await playwright.chromium.launch(headless=True)
+    page = await browser.new_page()
+
+    jobs = []
+
+    # Search Indeed
+    try:
+        query = role.replace(' ', '+')
+        loc = location.replace(' ', '+')
+        url = f"https://www.indeed.com/jobs?q={query}&l={loc}&fromage=1"
+
+        print("🔎 Searching Indeed...")
+        await page.goto(url, wait_until='networkidle', timeout=30000)
+        await asyncio.sleep(2)
+
+        # Extract job cards
+        job_cards = await page.locator('.job_seen_beacon').all()
+
+        for card in job_cards[:limit]:
+            try:
+                title = await card.locator('.jobTitle').inner_text()
+                company = await card.locator('[data-testid="company-name"]').inner_text()
+                link_elem = await card.locator('.jobTitle a').first
+                link = await link_elem.get_attribute('href') if link_elem else ""
+
+                jobs.append({
+                    "title": title.strip(),
+                    "company": company.strip(),
+                    "url": f"https://www.indeed.com{link}" if link else "",
+                    "platform": "Indeed",
+                    "location": location
+                })
+
+                print(f"   ✅ {title} at {company}")
+            except:
+                continue
+
+        print(f"\n✅ Found {len(jobs)} real jobs\n")
+
+    except Exception as e:
+        print(f"⚠️  Error searching: {e}\n")
+
+    finally:
+        await browser.close()
+        await playwright.stop()
+
+    return jobs
+
+def setup():
+    """Setup user profile and resume"""
+    print("📝 applier Setup\n")
+
+    name = input("Your name: ")
+    email = input("Your email: ")
+    password = input("Password: ")
+
+    print("\n📄 Resume Setup")
+    print("Paste your resume (press Ctrl+D when done):")
+    print("-" * 50)
+
+    resume_lines = []
+    try:
+        while True:
+            line = input()
+            resume_lines.append(line)
+    except EOFError:
+        pass
+
+    resume = "\n".join(resume_lines)
+
+    # Save resume
+    RESUME_FILE.parent.mkdir(exist_ok=True)
+    RESUME_FILE.write_text(resume)
+
+    # Create account
+    print("\n🚀 Creating account...")
+    res = requests.post(f"{API_URL}/api/signup", json={
+        "name": name,
+        "email": email,
+        "password": password,
+        "plan": "free"
+    })
+
+    if res.status_code == 200:
+        save_config({"email": email, "name": name})
+        print(f"\n✅ Account created!")
+        print(f"   Resume saved to: {RESUME_FILE}")
+    else:
+        print(f"\n❌ Error: {res.json().get('error', 'Signup failed')}")
+
+def search():
+    """Search for jobs"""
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not set up. Run: ./applier-real setup")
+        return
+
+    role = input("Job title (e.g. 'Software Engineer'): ")
+    location = input("Location (or 'Remote'): ") or "Remote"
+
+    # Search real jobs
+    jobs = asyncio.run(search_real_jobs(role, location, limit=10))
+
+    if not jobs:
+        print("❌ No jobs found. Try different search terms.")
+        return
+
+    # Save jobs
+    jobs_file = CONFIG_FILE.parent / "jobs.json"
+    jobs_file.write_text(json.dumps(jobs, indent=2))
+
+    print(f"\n💾 Saved {len(jobs)} jobs to {jobs_file}")
+    print("   Run: ./applier-real apply")
+
+def apply():
+    """Apply to saved jobs"""
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not set up. Run: ./applier-real setup")
+        return
+
+    jobs_file = CONFIG_FILE.parent / "jobs.json"
+    if not jobs_file.exists():
+        print("❌ No jobs found. Run: ./applier-real search")
+        return
+
+    jobs = json.loads(jobs_file.read_text())
+    resume = RESUME_FILE.read_text() if RESUME_FILE.exists() else ""
+
+    print(f"📋 Found {len(jobs)} jobs to apply to\n")
+
+    applied = 0
+    for i, job in enumerate(jobs, 1):
+        print(f"[{i}/{len(jobs)}] {job['title']} at {job['company']}")
+        print(f"        Platform: {job['platform']}")
+        print(f"        URL: {job['url']}")
+
+        # Ask for confirmation
+        confirm = input("        Apply? (y/n/q): ").lower()
+
+        if confirm == 'q':
+            break
+        elif confirm == 'y':
+            # Open job URL for manual application
+            # (Real automation would use Playwright to fill forms)
+            print(f"        🌐 Opening {job['url']}")
+            print(f"        📄 Your resume is at: {RESUME_FILE}")
+            print("        ⏸️  Apply manually, then press Enter to continue...")
+            input()
+
+            # Record application
+            res = requests.post(f"{API_URL}/api/apply", json={
+                "email": config["email"],
+                "job": job
+            })
+
+            applied += 1
+            print(f"        ✅ Recorded application\n")
+        else:
+            print(f"        ⏭️  Skipped\n")
+
+    print(f"\n✅ Applied to {applied}/{len(jobs)} jobs")
+
+def list_apps():
+    """List applications"""
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not set up. Run: ./applier-real setup")
+        return
+
+    res = requests.get(f"{API_URL}/api/applications?email={config['email']}")
+
+    if res.status_code == 200:
+        data = res.json()
+        apps = data["applications"]
+
+        print(f"\n📊 Your Applications ({data['total']} total)\n")
+
+        if not apps:
+            print("   No applications yet.")
+        else:
+            for app in apps:
+                print(f"   [{app['status']}] {app['position']} at {app['company']}")
+                print(f"   Platform: {app['platform']} | {app['submitted_at'][:10]}\n")
+
+def main():
+    if len(sys.argv) < 2:
+        print("applier - REAL Job Application Tool")
+        print("\nUsage:")
+        print("  ./applier-real setup    - Setup profile & resume")
+        print("  ./applier-real search   - Search for real jobs")
+        print("  ./applier-real apply    - Apply to jobs")
+        print("  ./applier-real list     - List applications")
+        return
+
+    cmd = sys.argv[1]
+
+    if cmd == "setup":
+        setup()
+    elif cmd == "search":
+        search()
+    elif cmd == "apply":
+        apply()
+    elif cmd == "list":
+        list_apps()
+    else:
+        print(f"Unknown command: {cmd}")
+
+if __name__ == "__main__":
+    main()

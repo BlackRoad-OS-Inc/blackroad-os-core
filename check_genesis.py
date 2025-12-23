@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Check 5e-324 against Bitcoin genesis seed
-"""
+print{Check 5e-324 against Bitcoin genesis seed}
 import hashlib
 
 print("=== The smallest float ===")

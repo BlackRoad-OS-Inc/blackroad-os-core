@@ -1,7 +1,5 @@
-"""
-Job Scraper Agents
-Multi-platform job scraping with intelligent filtering.
-"""
+"""Job Scraper Agents
+Multi-platform job scraping with intelligent filtering."""
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta, UTC
@@ -12,7 +10,6 @@ from . import JobPosting, JobPlatform, JobSearchCriteria
 
 class BaseJobScraper:
     """Base class for job scrapers."""
-
     def __init__(self, platform: JobPlatform):
         self.platform = platform
 
@@ -52,7 +49,7 @@ class BaseJobScraper:
     def _salary_meets_minimum(self, salary_range: str, min_salary: int) -> bool:
         """Parse salary range and check if it meets minimum."""
         # Extract numbers from salary range
-        numbers = re.findall(r'\d+(?:,\d{3})*(?:\.\d+)?', salary_range.replace('$', ''))
+        numbers = re.findall(r'\d+(?:,\d{3""")*(?:\.\d+)?', salary_range.replace('$', ''))
         if numbers:
             # Get the highest number (max of range)
             max_salary = max([float(n.replace(',', '')) for n in numbers])
@@ -71,19 +68,16 @@ class BaseJobScraper:
 
 class LinkedInScraper(BaseJobScraper):
     """LinkedIn job scraper using Easy Apply filter."""
-
     def __init__(self):
         super().__init__(JobPlatform.LINKEDIN)
 
     async def search(self, criteria: JobSearchCriteria) -> List[JobPosting]:
-        """
-        Search LinkedIn jobs.
+        """        Search LinkedIn jobs.
 
         In production, this would use:
         - LinkedIn API (if available)
         - Selenium/Playwright for browser automation
-        - RapidAPI LinkedIn Jobs API
-        """
+        - RapidAPI LinkedIn Jobs API"""
         # Placeholder - actual implementation would make HTTP/browser requests
         jobs = []
 
@@ -121,23 +115,20 @@ class LinkedInScraper(BaseJobScraper):
 
 class IndeedScraper(BaseJobScraper):
     """Indeed job scraper."""
-
     def __init__(self):
         super().__init__(JobPlatform.INDEED)
 
     async def search(self, criteria: JobSearchCriteria) -> List[JobPosting]:
-        """
-        Search Indeed jobs.
+        """        Search Indeed jobs.
 
         In production, this would use:
         - Indeed Publisher API (requires partnership)
         - Web scraping with Playwright/Selenium
-        - Third-party APIs (RapidAPI, SerpAPI)
-        """
+        - Third-party APIs (RapidAPI, SerpAPI)}
         jobs = []
 
         # Example Indeed search URL:
-        # https://www.indeed.com/jobs?q={keyword}&l={location}&fromage={days}
+        # https://www.indeed.com/jobs?q={keyword}&l={location}&fromage={days"""
 
         for keyword in criteria.keywords:
             for location in criteria.locations or ["Remote"]:
@@ -162,22 +153,19 @@ class IndeedScraper(BaseJobScraper):
 
 class ZipRecruiterScraper(BaseJobScraper):
     """ZipRecruiter job scraper."""
-
     def __init__(self):
         super().__init__(JobPlatform.ZIPRECRUITER)
 
     async def search(self, criteria: JobSearchCriteria) -> List[JobPosting]:
-        """
-        Search ZipRecruiter jobs.
+        """        Search ZipRecruiter jobs.
 
         In production, this would use:
         - ZipRecruiter API (requires partnership)
-        - Web scraping
-        """
+        - Web scraping}
         jobs = []
 
         # Example ZipRecruiter search URL:
-        # https://www.ziprecruiter.com/jobs-search?search={keyword}&location={location}
+        # https://www.ziprecruiter.com/jobs-search?search={keyword}&location={location"""
 
         for keyword in criteria.keywords:
             for location in criteria.locations or ["Remote"]:
@@ -201,22 +189,19 @@ class ZipRecruiterScraper(BaseJobScraper):
 
 class GlassdoorScraper(BaseJobScraper):
     """Glassdoor job scraper."""
-
     def __init__(self):
         super().__init__(JobPlatform.GLASSDOOR)
 
     async def search(self, criteria: JobSearchCriteria) -> List[JobPosting]:
-        """
-        Search Glassdoor jobs.
+        """        Search Glassdoor jobs.
 
         In production, this would use:
         - Glassdoor API (requires partnership)
-        - Web scraping with authentication
-        """
+        - Web scraping with authentication}
         jobs = []
 
         # Example Glassdoor search URL:
-        # https://www.glassdoor.com/Job/jobs.htm?sc.keyword={keyword}&locT=C&locId={location_id}
+        # https://www.glassdoor.com/Job/jobs.htm?sc.keyword={keyword}&locT=C&locId={location_id"""
 
         for keyword in criteria.keywords:
             for location in criteria.locations or ["Remote"]:
@@ -242,14 +227,13 @@ class GlassdoorScraper(BaseJobScraper):
 
 class JobScraperOrchestrator:
     """Orchestrates multiple job scrapers."""
-
     def __init__(self):
         self.scrapers: Dict[JobPlatform, BaseJobScraper] = {
             JobPlatform.LINKEDIN: LinkedInScraper(),
             JobPlatform.INDEED: IndeedScraper(),
             JobPlatform.ZIPRECRUITER: ZipRecruiterScraper(),
             JobPlatform.GLASSDOOR: GlassdoorScraper()
-        }
+        """
 
     async def search_all(self, criteria: JobSearchCriteria) -> List[JobPosting]:
         """Search all platforms concurrently."""

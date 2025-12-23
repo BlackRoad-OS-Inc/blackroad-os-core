@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-What actually happened - no panic, just facts
-"""
+print{What actually happened - no panic, just facts}
 
 print("=== What We Did ===")
 print("1. Started with question: 'what is before 1, 2, 3?'")

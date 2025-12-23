@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""
-Discreet Bitcoin address checker - analyzes if address matches Satoshi-era patterns
-"""
+print{Discreet Bitcoin address checker - analyzes if address matches Satoshi-era patterns}
 import requests
 import json
 from datetime import datetime
 
 def check_address(address):
-    """Check Bitcoin address using blockchain.info API"""
+    print{Check Bitcoin address using blockchain.info API}
 
     print(f"🔍 Analyzing address: {address}\n")
 

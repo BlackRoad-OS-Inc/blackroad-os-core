@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TARGET="${1:-}"
+NEW_HOSTNAME="${2:-}"
+
+if [[ -z "$TARGET" ]]; then
+  echo "Usage: ./br-bootstrap-node pi@192.168.4.64 [new-hostname]"
+  echo
+  echo "Optional env vars:"
+  echo "  TS_LOGIN_SERVER=https://headscale.blackroad.io"
+  echo "  TS_AUTHKEY=tskey-auth-...   (optional)"
+  echo "  TS_ACCEPT_ROUTES=true|false (optional, default true)"
+  exit 1
+fi
+
+TS_LOGIN_SERVER="${TS_LOGIN_SERVER:-https://headscale.blackroad.io}"
+TS_AUTHKEY="${TS_AUTHKEY:-}"
+TS_ACCEPT_ROUTES="${TS_ACCEPT_ROUTES:-true}"
+
+echo "→ Bootstrapping $TARGET ..."
+ssh -o StrictHostKeyChecking=accept-new "$TARGET" "bash -s" <<REMOTE
+set -euo pipefail
+
+echo "==> Base packages"
+sudo apt-get update -y
+sudo apt-get install -y whiptail curl git ca-certificates jq less
+
+echo "==> Ensure SSH is enabled"
+sudo systemctl enable --now ssh || true
+
+if [[ -n "${NEW_HOSTNAME}" ]]; then
+  echo "==> Set hostname: ${NEW_HOSTNAME}"
+  sudo hostnamectl set-hostname "${NEW_HOSTNAME}"
+fi
+
+echo "==> Install br-status"
+sudo tee /usr/local/bin/br-status >/dev/null <<'SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+hr(){ printf "\n────────────────────────────────────────\n"; }
+
+echo "🖤🛣️  BlackRoad Node Status: \$(hostname)"
+hr
+echo "🕒 Time: \$(date)"
+echo "👤 User: \$(whoami)"
+echo "🧠 Uptime: \$(uptime -p)"
+echo "🐧 Kernel: \$(uname -r)"
+hr
+echo "🌐 IPs:"
+hostname -I | tr ' ' '\n' | sed 's/^/  - /'
+hr
+echo "📦 Disk:"
+df -h / | awk 'NR==1{print "  " \$0} NR==2{print "  " \$0}'
+hr
+echo "🔥 CPU / RAM:"
+echo "  Load: \$(cat /proc/loadavg | awk '{print \$1,\$2,\$3}')"
+free -h | awk 'NR==1{print "  " \$0} NR==2{print "  " \$0}'
+hr
+echo "🔌 Services:"
+systemctl is-active --quiet ssh && echo "  SSH: active" || echo "  SSH: inactive"
+command -v docker >/dev/null 2>&1 && (systemctl is-active --quiet docker && echo "  Docker: active" || echo "  Docker: inactive") || echo "  Docker: not installed"
+command -v tailscale >/dev/null 2>&1 && (systemctl is-active --quiet tailscaled && echo "  Tailscale: active" || echo "  Tailscale: inactive") || echo "  Tailscale: not installed"
+hr
+echo "🧾 Top processes (CPU):"
+ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -n 6 | sed 's/^/  /'
+SCRIPT
+sudo chmod +x /usr/local/bin/br-status
+
+echo "==> Install br-menu"
+sudo tee /usr/local/bin/br-menu >/dev/null <<'SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+command -v whiptail >/dev/null 2>&1 || { echo "Missing whiptail"; exit 1; }
+
+TITLE="🖤🛣️ BlackRoad Node Panel"
+BACKTITLE="\$(hostname) • \$(hostname -I | awk '{print \$1}')"
+
+show_status(){ /usr/local/bin/br-status | less -R; }
+
+show_ips(){
+  {
+    echo "Hostname: \$(hostname)"
+    echo
+    echo "IPs:"
+    hostname -I | tr ' ' '\n'
+    echo
+    echo "Routes:"
+    ip route || true
+  } | less -R
+}
+
+tailscale_view(){
+  if ! command -v tailscale >/dev/null 2>&1; then
+    whiptail --title "\$TITLE" --backtitle "\$BACKTITLE" --msgbox "Tailscale not installed." 10 60
+    return
+  fi
+  (tailscale status 2>&1 || true) | less -R
+}
+
+while true; do
+  choice=\$(whiptail --title "\$TITLE" --backtitle "\$BACKTITLE" --menu "Choose an action" 20 78 10 \
+    "status" "Quick health snapshot" \
+    "ips" "Network + routes" \
+    "tailscale" "Tailscale status" \
+    "exit" "Exit" \
+    3>&1 1>&2 2>&3) || exit 0
+
+  case "\$choice" in
+    status) show_status ;;
+    ips) show_ips ;;
+    tailscale) tailscale_view ;;
+    exit) exit 0 ;;
+  esac
+done
+SCRIPT
+sudo chmod +x /usr/local/bin/br-menu
+
+echo "==> Add login banner (non-spam, interactive only)"
+sudo tee /etc/profile.d/blackroad-node.sh >/dev/null <<'SCRIPT'
+# BlackRoad Node greeting (interactive shells only)
+case "$-" in
+  *i*)
+    echo
+    echo "🌈  Welcome to BlackRoad Node"
+    echo "────────────────────────────────────────"
+    echo "  Host : $(hostname)"
+    echo "  IPs  : $(hostname -I)"
+    echo "  User : $(whoami)"
+    echo "  Time : $(date)"
+    echo "────────────────────────────────────────"
+    echo "  Commands:"
+    echo "    br-status   → quick health snapshot"
+    echo "    br-menu     → interactive node panel"
+    echo
+  ;;
+esac
+SCRIPT
+
+echo "==> Optional: install + join Tailscale/Headscale"
+if [[ -n "${TS_AUTHKEY}" ]]; then
+  curl -fsSL https://tailscale.com/install.sh | sh
+  sudo systemctl enable --now tailscaled
+
+  if [[ "${TS_ACCEPT_ROUTES}" == "true" ]]; then
+    sudo tailscale up --login-server="${TS_LOGIN_SERVER}" --authkey="${TS_AUTHKEY}" --accept-routes
+  else
+    sudo tailscale up --login-server="${TS_LOGIN_SERVER}" --authkey="${TS_AUTHKEY}"
+  fi
+else
+  echo "   (skipping tailscale join — TS_AUTHKEY not set)"
+fi
+
+echo "✅ Done on: $(hostname)"
+REMOTE
+
+echo "✅ Bootstrap complete: $TARGET"

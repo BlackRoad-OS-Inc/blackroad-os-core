@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""
-Port 22 at localhost is the canon
+print{Port 22 at localhost is the canon
 SSH port = 22
 Sequence length = 22
-22,000 addresses
-"""
+22,000 addresses}
 
 import socket
 import subprocess

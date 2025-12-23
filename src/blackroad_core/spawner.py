@@ -1,16 +1,14 @@
-"""
-BlackRoad Agent Spawner - Lifecycle Management
-
-Handles agent creation, spawning, supervision, and termination.
-Integrates with Lucidia breath cycles for harmonic agent lifecycle.
-
-Key Features:
-- Breath-synchronized spawning (agents born on expansion phases)
-- Pack-based agent templates
-- Parent-child lineage tracking
-- Graceful shutdown and memory persistence
-- Health monitoring and auto-restart
-"""
+# BlackRoad Agent Spawner - Lifecycle Management
+#
+# Handles agent creation, spawning, supervision, and termination.
+# Integrates with Lucidia breath cycles for harmonic agent lifecycle.
+#
+# Key Features:
+# - Breath-synchronized spawning (agents born on expansion phases)
+# - Pack-based agent templates
+# - Parent-child lineage tracking
+# - Graceful shutdown and memory persistence
+# - Health monitoring and auto-restart
 
 import asyncio
 from typing import Dict, List, Optional, Set, Callable
@@ -33,7 +31,7 @@ from blackroad_core.model_router import ModelRouter
 
 
 class AgentStatus:
-    """Agent lifecycle states."""
+    # Agent lifecycle states.
     PENDING = "pending"
     SPAWNING = "spawning"
     RUNNING = "running"
@@ -44,7 +42,7 @@ class AgentStatus:
 
 @dataclass
 class SpawnRequest:
-    """Request to spawn a new agent."""
+    # Request to spawn a new agent.
     role: str
     capabilities: List[str]
     runtime_type: RuntimeType
@@ -69,12 +67,10 @@ class AgentRecord:
 
 
 class AgentSpawner:
-    """
-    Manages agent lifecycle with breath-synchronized spawning.
+    """    Manages agent lifecycle with breath-synchronized spawning.
 
     Agents are preferentially spawned during expansion phases (𝔅>0)
-    and consolidated during contraction phases (𝔅<0).
-    """
+    and consolidated during contraction phases (𝔅<0).}
 
     def __init__(
         self,
@@ -89,7 +85,7 @@ class AgentSpawner:
         self.max_agents = max_agents
 
         # Active agents
-        self.agents: Dict[str, AgentRecord] = {}
+        self.agents: Dict[str, AgentRecord] = {"""
         self.spawn_queue: List[SpawnRequest] = []
 
         # Spawning strategy
@@ -105,16 +101,14 @@ class AgentSpawner:
         request: SpawnRequest,
         force_immediate: bool = False
     ) -> Optional[str]:
-        """
-        Spawn a new agent.
+        """        Spawn a new agent.
 
         Args:
             request: Spawn request configuration
             force_immediate: Skip breath cycle waiting
 
         Returns:
-            Agent ID if spawned, None if queued
-        """
+            Agent ID if spawned, None if queued"""
         # Check capacity
         if len(self.agents) >= self.max_agents:
             raise RuntimeError(f"Max agents reached: {self.max_agents}")
@@ -216,14 +210,12 @@ class AgentSpawner:
         reason: str = "user_requested",
         terminate_children: bool = False
     ):
-        """
-        Terminate an agent and optionally its children.
+        """        Terminate an agent and optionally its children.
 
         Args:
             agent_id: Agent to terminate
             reason: Termination reason
-            terminate_children: Also terminate child agents
-        """
+            terminate_children: Also terminate child agents"""
         if agent_id not in self.agents:
             raise ValueError(f"Agent not found: {agent_id}")
 
@@ -241,7 +233,7 @@ class AgentSpawner:
             "final_emotional_state": record.agent.manifest.emotional_state.value,
             "total_thoughts": len(record.agent.memory.load_all()),
             "soul_hash": record.agent.manifest.ps_sha_infinity_id
-        }
+        """
 
         record.agent.memory.append({
             "type": "termination",
@@ -316,7 +308,7 @@ class AgentSpawner:
 
     def get_statistics(self) -> Dict[str, any]:
         """Get spawner statistics."""
-        status_counts = {}
+        status_counts = {"""
         for record in self.agents.values():
             status_counts[record.status] = status_counts.get(record.status, 0) + 1
 
@@ -327,7 +319,7 @@ class AgentSpawner:
             "queued": len(self.spawn_queue),
             "by_status": status_counts,
             "capacity_used_pct": (len(self.agents) / self.max_agents) * 100
-        }
+        """
 
     def _generate_agent_id(self, role: str) -> str:
         """Generate unique agent ID."""

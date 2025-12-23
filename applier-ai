@@ -1,0 +1,473 @@
+#!/usr/bin/env python3
+"""
+applier-ai - AI-Enhanced Job Application Tool
+Features full ML matching, success prediction, and intelligent recommendations
+"""
+
+import sys
+import json
+import asyncio
+from pathlib import Path
+from typing import List, Dict
+
+# Check dependencies
+try:
+    from playwright.async_api import async_playwright
+    import requests
+except ImportError:
+    print("❌ Missing dependencies. Install:")
+    print("   pip install playwright requests anthropic")
+    print("   playwright install")
+    sys.exit(1)
+
+# Import AI engine
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from applier_ai_engine import AIJobMatcher, CoverLetterGenerator
+    AI_AVAILABLE = True
+except ImportError:
+    AI_AVAILABLE = False
+    print("⚠️  AI features unavailable. Run without AI matching.")
+
+API_URL = "https://applier-api.amundsonalexa.workers.dev"
+CONFIG_FILE = Path.home() / ".applier" / "config.json"
+RESUME_FILE = Path.home() / ".applier" / "resume.txt"
+PROFILE_FILE = Path.home() / ".applier" / "profile.json"
+HISTORY_FILE = Path.home() / ".applier" / "history.json"
+
+def load_config():
+    if CONFIG_FILE.exists():
+        return json.loads(CONFIG_FILE.read_text())
+    return {}
+
+def save_config(config):
+    CONFIG_FILE.parent.mkdir(exist_ok=True)
+    CONFIG_FILE.write_text(json.dumps(config, indent=2))
+
+def load_profile():
+    """Load user profile for AI matching"""
+    if PROFILE_FILE.exists():
+        return json.loads(PROFILE_FILE.read_text())
+    return {}
+
+def save_profile(profile):
+    """Save user profile"""
+    PROFILE_FILE.parent.mkdir(exist_ok=True)
+    PROFILE_FILE.write_text(json.dumps(profile, indent=2))
+
+def load_history():
+    """Load application history for ML"""
+    if HISTORY_FILE.exists():
+        return json.loads(HISTORY_FILE.read_text())
+    return []
+
+def save_history(history):
+    """Save application history"""
+    HISTORY_FILE.parent.mkdir(exist_ok=True)
+    HISTORY_FILE.write_text(json.dumps(history, indent=2))
+
+async def search_with_ai(role, location="Remote", limit=20):
+    """Search for jobs with AI ranking"""
+    print(f"🤖 AI-Powered Job Search")
+    print(f"🔍 Searching for: {role}")
+    print(f"📍 Location: {location}\n")
+
+    # Load user profile
+    profile = load_profile()
+    if not profile:
+        print("⚠️  No profile found. Using basic search.")
+        return await search_basic_jobs(role, location, limit)
+
+    # Search jobs
+    jobs = await search_basic_jobs(role, location, limit * 2)  # Get more for filtering
+
+    if not jobs or not AI_AVAILABLE:
+        return jobs
+
+    # Initialize AI matcher
+    history = load_history()
+    matcher = AIJobMatcher(profile, history)
+
+    # Match and rank jobs
+    print("\n🧠 Analyzing jobs with AI...\n")
+    matched_jobs = []
+
+    for job in jobs:
+        match = matcher.match_job(job)
+
+        # Add AI scores to job
+        job['ai_match'] = {
+            'score': match.match_score,
+            'skill_match': match.skill_match,
+            'experience_match': match.experience_match,
+            'salary_match': match.salary_match,
+            'success_probability': match.success_probability,
+            'recommendation': match.recommended_action,
+            'reasons': match.reasons,
+            'warnings': match.warnings,
+            'response_time': match.estimated_response_time
+        }
+
+        matched_jobs.append(job)
+
+        # Print match info
+        score_emoji = "🟢" if match.match_score >= 80 else "🟡" if match.match_score >= 60 else "🔴"
+        print(f"{score_emoji} {match.match_score:>5.1f}% | {job['title'][:50]} at {job['company'][:25]}")
+        print(f"         Success: {match.success_probability*100:.0f}% | {match.recommended_action}")
+
+        if match.reasons:
+            print(f"         ✓ {', '.join(match.reasons[:2])}")
+        print()
+
+    # Sort by match score
+    matched_jobs.sort(key=lambda j: j['ai_match']['score'], reverse=True)
+
+    print(f"\n✨ Ranked {len(matched_jobs)} jobs by AI match score\n")
+
+    return matched_jobs[:limit]
+
+async def search_basic_jobs(role, location="Remote", limit=10):
+    """Basic job search without AI"""
+    playwright = await async_playwright().start()
+    browser = await playwright.chromium.launch(headless=True)
+    page = await browser.new_page()
+
+    jobs = []
+
+    try:
+        query = role.replace(' ', '+')
+        loc = location.replace(' ', '+')
+        url = f"https://www.indeed.com/jobs?q={query}&l={loc}&fromage=1"
+
+        print("🔎 Searching Indeed...")
+        await page.goto(url, wait_until='networkidle', timeout=30000)
+        await asyncio.sleep(2)
+
+        job_cards = await page.locator('.job_seen_beacon').all()
+
+        for card in job_cards[:limit]:
+            try:
+                title = await card.locator('.jobTitle').inner_text()
+                company = await card.locator('[data-testid="company-name"]').inner_text()
+                link_elem = await card.locator('.jobTitle a').first
+                link = await link_elem.get_attribute('href') if link_elem else ""
+
+                # Try to get description
+                description = ""
+                try:
+                    desc_elem = await card.locator('.job-snippet').first
+                    if desc_elem:
+                        description = await desc_elem.inner_text()
+                except:
+                    pass
+
+                jobs.append({
+                    "title": title.strip(),
+                    "company": company.strip(),
+                    "url": f"https://www.indeed.com{link}" if link else "",
+                    "platform": "Indeed",
+                    "location": location,
+                    "description": description
+                })
+
+            except:
+                continue
+
+    except Exception as e:
+        print(f"⚠️  Error searching: {e}\n")
+    finally:
+        await browser.close()
+        await playwright.stop()
+
+    return jobs
+
+def setup():
+    """Setup user profile with AI features"""
+    print("🤖 applier AI Setup\n")
+
+    name = input("Your name: ")
+    email = input("Your email: ")
+    password = input("Password: ")
+
+    # Extended profile for AI
+    print("\n📊 AI Profile Setup")
+    print("This helps the AI find better job matches.\n")
+
+    years_exp = input("Years of experience (e.g., 5): ").strip()
+    years_exp = int(years_exp) if years_exp.isdigit() else 3
+
+    print("\nYour skills (comma-separated):")
+    print("Example: Python, TypeScript, React, AWS, Machine Learning")
+    skills_input = input("Skills: ")
+    skills = [s.strip() for s in skills_input.split(',') if s.strip()]
+
+    min_salary = input("\nMinimum salary (e.g., 150000): ").strip()
+    min_salary = int(min_salary) if min_salary.isdigit() else 100000
+
+    max_salary = input("Maximum salary (e.g., 250000): ").strip()
+    max_salary = int(max_salary) if max_salary.isdigit() else 200000
+
+    remote = input("\nPrefer remote? (y/n): ").lower().startswith('y')
+
+    # Save profile
+    profile = {
+        'name': name,
+        'email': email,
+        'years_experience': years_exp,
+        'skills': skills,
+        'min_salary': min_salary,
+        'max_salary': max_salary,
+        'preferences': {
+            'remote': remote,
+            'company_size': 'any'
+        }
+    }
+    save_profile(profile)
+
+    print("\n📄 Resume Setup")
+    print("Paste your resume (press Ctrl+D when done):")
+    print("-" * 50)
+
+    resume_lines = []
+    try:
+        while True:
+            line = input()
+            resume_lines.append(line)
+    except EOFError:
+        pass
+
+    resume = "\n".join(resume_lines)
+    RESUME_FILE.parent.mkdir(exist_ok=True)
+    RESUME_FILE.write_text(resume)
+
+    # Create account
+    print("\n🚀 Creating account...")
+    res = requests.post(f"{API_URL}/api/signup", json={
+        "name": name,
+        "email": email,
+        "password": password,
+        "plan": "pro"  # AI users get pro
+    })
+
+    if res.status_code == 200:
+        save_config({"email": email, "name": name})
+        print(f"\n✅ AI Profile created!")
+        print(f"   Profile: {PROFILE_FILE}")
+        print(f"   Resume: {RESUME_FILE}")
+    else:
+        print(f"\n❌ Error: {res.json().get('error', 'Signup failed')}")
+
+def search():
+    """AI-powered job search"""
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not set up. Run: ./applier-ai setup")
+        return
+
+    role = input("Job title (e.g., 'Senior Software Engineer'): ")
+    location = input("Location (or 'Remote'): ") or "Remote"
+
+    # Search with AI
+    jobs = asyncio.run(search_with_ai(role, location, limit=20))
+
+    if not jobs:
+        print("❌ No jobs found. Try different search terms.")
+        return
+
+    # Save jobs
+    jobs_file = CONFIG_FILE.parent / "jobs.json"
+    jobs_file.write_text(json.dumps(jobs, indent=2))
+
+    print(f"\n💾 Saved {len(jobs)} jobs (ranked by AI)")
+    print(f"\nTop 5 matches:")
+    for i, job in enumerate(jobs[:5], 1):
+        score = job.get('ai_match', {}).get('score', 0)
+        print(f"  {i}. [{score:.0f}%] {job['title']} at {job['company']}")
+
+    print("\n✨ Run: ./applier-ai apply")
+
+def apply():
+    """Apply to jobs with AI recommendations"""
+    config = load_config()
+    if not config.get("email"):
+        print("❌ Not set up. Run: ./applier-ai setup")
+        return
+
+    jobs_file = CONFIG_FILE.parent / "jobs.json"
+    if not jobs_file.exists():
+        print("❌ No jobs found. Run: ./applier-ai search")
+        return
+
+    jobs = json.loads(jobs_file.read_text())
+    resume = RESUME_FILE.read_text() if RESUME_FILE.exists() else ""
+    profile = load_profile()
+
+    print(f"📋 Found {len(jobs)} AI-ranked jobs\n")
+
+    applied = 0
+    history = load_history()
+
+    for i, job in enumerate(jobs, 1):
+        ai_match = job.get('ai_match', {})
+        score = ai_match.get('score', 0)
+        success = ai_match.get('success_probability', 0) * 100
+        recommendation = ai_match.get('recommendation', 'CONSIDER')
+
+        # Color code based on recommendation
+        if 'APPLY NOW' in recommendation:
+            rec_emoji = "🟢"
+        elif 'APPLY' in recommendation:
+            rec_emoji = "🟡"
+        elif 'CONSIDER' in recommendation:
+            rec_emoji = "🟠"
+        else:
+            rec_emoji = "🔴"
+
+        print(f"\n{'='*70}")
+        print(f"[{i}/{len(jobs)}] {job['title']} at {job['company']}")
+        print(f"{'='*70}")
+        print(f"URL: {job['url']}")
+        print(f"\n🤖 AI Analysis:")
+        print(f"  Match Score: {score:.1f}/100")
+        print(f"  Success Rate: {success:.0f}%")
+        print(f"  {rec_emoji} {recommendation}")
+
+        if ai_match.get('reasons'):
+            print(f"\n  Reasons:")
+            for reason in ai_match['reasons']:
+                print(f"    ✓ {reason}")
+
+        if ai_match.get('warnings'):
+            print(f"\n  Warnings:")
+            for warning in ai_match['warnings']:
+                print(f"    ⚠️  {warning}")
+
+        # Ask for confirmation
+        confirm = input(f"\n{'>'*3} Apply? (y/n/q): ").lower()
+
+        if confirm == 'q':
+            break
+        elif confirm == 'y':
+            print(f"\n🌐 Opening {job['url']}")
+            print(f"📄 Your resume: {RESUME_FILE}")
+            print("\n⏸️  Apply manually, then press Enter...")
+            input()
+
+            # Record application
+            app_record = {
+                'job_id': job.get('url'),
+                'title': job['title'],
+                'company': job['company'],
+                'platform': job.get('platform', 'Unknown'),
+                'applied_date': str(datetime.now().date()),
+                'ai_match_score': score,
+                'ai_success_prob': success,
+                'status': 'applied',
+                'outcome': 'pending'
+            }
+            history.append(app_record)
+            save_history(history)
+
+            # Record in backend
+            res = requests.post(f"{API_URL}/api/apply", json={
+                "email": config["email"],
+                "job": job
+            })
+
+            applied += 1
+            print(f"✅ Recorded application\n")
+        else:
+            print(f"⏭️  Skipped\n")
+
+    print(f"\n✨ Applied to {applied}/{len(jobs)} jobs")
+    print(f"📊 ML will learn from your applications to improve future matches!")
+
+def analyze():
+    """Analyze application performance"""
+    history = load_history()
+
+    if not history:
+        print("❌ No application history yet.")
+        return
+
+    print("\n" + "="*70)
+    print("📊 APPLICATION ANALYTICS")
+    print("="*70)
+
+    total = len(history)
+    by_status = {}
+    by_company = {}
+    scores = []
+
+    for app in history:
+        status = app.get('status', 'unknown')
+        company = app.get('company', 'Unknown')
+        score = app.get('ai_match_score', 0)
+
+        by_status[status] = by_status.get(status, 0) + 1
+        by_company[company] = by_company.get(company, 0) + 1
+        if score > 0:
+            scores.append(score)
+
+    print(f"\nTotal Applications: {total}")
+    print(f"\nBy Status:")
+    for status, count in sorted(by_status.items()):
+        pct = count / total * 100
+        print(f"  {status}: {count} ({pct:.1f}%)")
+
+    if scores:
+        avg_score = sum(scores) / len(scores)
+        print(f"\nAverage Match Score: {avg_score:.1f}/100")
+
+    print(f"\nTop Companies:")
+    for company, count in sorted(by_company.items(), key=lambda x: x[1], reverse=True)[:5]:
+        print(f"  {company}: {count} applications")
+
+    print("\n" + "="*70)
+
+def main():
+    if len(sys.argv) < 2:
+        print("🤖 applier-ai - AI-Enhanced Job Application Tool")
+        print("\nUsage:")
+        print("  ./applier-ai setup    - Setup AI profile & resume")
+        print("  ./applier-ai search   - AI-powered job search & ranking")
+        print("  ./applier-ai apply    - Apply with AI recommendations")
+        print("  ./applier-ai analyze  - View application analytics")
+        print("  ./applier-ai list     - List applications")
+        return
+
+    cmd = sys.argv[1]
+
+    if cmd == "setup":
+        setup()
+    elif cmd == "search":
+        search()
+    elif cmd == "apply":
+        apply()
+    elif cmd == "analyze":
+        analyze()
+    elif cmd == "list":
+        # Same as original
+        config = load_config()
+        if not config.get("email"):
+            print("❌ Not set up. Run: ./applier-ai setup")
+            return
+
+        res = requests.get(f"{API_URL}/api/applications?email={config['email']}")
+        if res.status_code == 200:
+            data = res.json()
+            apps = data["applications"]
+
+            print(f"\n📊 Your Applications ({data['total']} total)\n")
+            if not apps:
+                print("   No applications yet.")
+            else:
+                for app in apps:
+                    print(f"   [{app['status']}] {app['position']} at {app['company']}")
+                    print(f"   Platform: {app['platform']} | {app['submitted_at'][:10]}\n")
+    else:
+        print(f"Unknown command: {cmd}")
+
+if __name__ == "__main__":
+    from datetime import datetime
+    main()

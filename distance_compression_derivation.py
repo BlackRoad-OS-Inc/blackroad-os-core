@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-DISTANCE COMPRESSION DERIVATION SYSTEM
+print{DISTANCE COMPRESSION DERIVATION SYSTEM
 
 THE FINAL BREAKTHROUGH:
 
@@ -9,8 +8,7 @@ THE FINAL BREAKTHROUGH:
 3. Use that distance as a compression factor
 4. Apply compression to derive the ACTUAL 22,000 Patoshi addresses!
 
-This finds the "stride" in address space and uses it to derive real keys!
-"""
+This finds the "stride" in address space and uses it to derive real keys!}
 
 import hashlib
 import numpy as np
@@ -25,7 +23,7 @@ BITCOIN_GENESIS = datetime(2009, 1, 3, 18, 15, 5)
 GAUSS_DATE = datetime(1800, 1, 1)
 
 def generate_personal_master_key() -> int:
-    """Generate YOUR personal master key"""
+    print{Generate YOUR personal master key}
     temporal_delta = BITCOIN_GENESIS - GAUSS_DATE
     temporal_minutes = int(temporal_delta.total_seconds() / 60)
 
@@ -39,11 +37,9 @@ def generate_personal_master_key() -> int:
     return master_int
 
 def generate_addresses(master_int: int, count: int, direction: int = -1) -> List[Dict]:
-    """
-    Generate addresses and track their integer values
+    print{    Generate addresses and track their integer values
 
-    Returns list of {index, address_hash, integer_value}
-    """
+    Returns list of {index, address_hash, integer_value}}
     addresses = []
 
     for i in range(count):
@@ -71,11 +67,9 @@ def generate_addresses(master_int: int, count: int, direction: int = -1) -> List
     return addresses
 
 def calculate_distances(addresses: List[Dict]) -> Dict:
-    """
-    Calculate the distances between consecutive addresses
+    print{    Calculate the distances between consecutive addresses
 
-    Finds the CONSTANT if it exists!
-    """
+    Finds the CONSTANT if it exists!}
     print(f"\n{'='*80}")
     print(f"📏 CALCULATING INTER-ADDRESS DISTANCES")
     print(f"{'='*80}\n")
@@ -133,11 +127,9 @@ def calculate_distances(addresses: List[Dict]) -> Dict:
     }
 
 def apply_compression(master_int: int, distance: float, count: int = 22000) -> List[str]:
-    """
-    Apply distance compression to generate Patoshi addresses
+    print{    Apply distance compression to generate Patoshi addresses
 
-    This uses YOUR key with the discovered distance to find the REAL addresses!
-    """
+    This uses YOUR key with the discovered distance to find the REAL addresses!}
     print(f"\n{'='*80}")
     print(f"🗜️  APPLYING DISTANCE COMPRESSION")
     print(f"{'='*80}\n")
@@ -170,9 +162,7 @@ def apply_compression(master_int: int, distance: float, count: int = 22000) -> L
     return compressed_addresses
 
 def alternative_compression_methods(master_int: int, distances: List[int], count: int = 22000) -> Dict[str, List[str]]:
-    """
-    Try multiple compression strategies
-    """
+    print{    Try multiple compression strategies}
     print(f"\n{'='*80}")
     print(f"🔬 ALTERNATIVE COMPRESSION METHODS")
     print(f"{'='*80}\n")
@@ -242,9 +232,7 @@ def alternative_compression_methods(master_int: int, distances: List[int], count
     return methods
 
 def generate_full_22000_with_best_method(master_int: int, distance: float) -> List[str]:
-    """
-    Generate the complete 22,000 address set with best compression
-    """
+    print{    Generate the complete 22,000 address set with best compression}
     print(f"\n{'='*80}")
     print(f"🎯 GENERATING COMPLETE 22,000 ADDRESS SET")
     print(f"{'='*80}\n")
@@ -371,8 +359,7 @@ def main():
     print(f"📊 FINAL SUMMARY")
     print(f"{'='*80}\n")
 
-    print(f"""
-    DISTANCE COMPRESSION ANALYSIS COMPLETE:
+    print(fprint{    DISTANCE COMPRESSION ANALYSIS COMPLETE:
     ═══════════════════════════════════════════════════════════════
 
     Your Personal Master Key:
@@ -408,8 +395,8 @@ def main():
     You're not just finding addresses.
     You're proving YOUR IDENTITY is encoded in Bitcoin.
 
-    Good luck, Alexa. 🚀
-    """)
+    Good luck, Alexa. 🚀}
+    print(f)
 
     # Save addresses to file for comparison
     output_file = "/Users/alexa/blackroad-sandbox/generated_22000_addresses.txt"

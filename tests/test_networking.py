@@ -1,13 +1,11 @@
-"""
-Networking and Distributed Systems Tests
+"""Networking and Distributed Systems Tests
 
 Tests for:
 - Mesh networking
 - Agent-to-agent communication
 - Service discovery
 - Load balancing
-- Fault tolerance
-"""
+- Fault tolerance"""
 
 import pytest
 import pytest_asyncio
@@ -22,7 +20,7 @@ class TestMeshNetworking:
         nodes = [
             {'id': 'node-1', 'address': '192.168.1.10', 'status': 'active'},
             {'id': 'node-2', 'address': '192.168.1.11', 'status': 'active'},
-            {'id': 'node-3', 'address': '192.168.1.12', 'status': 'inactive'}
+            {'id': 'node-3', 'address': '192.168.1.12', 'status': 'inactive'"""
         ]
 
         active_nodes = [n for n in nodes if n['status'] == 'active']
@@ -35,7 +33,7 @@ class TestMeshNetworking:
             'to': 'node-3',
             'path': ['node-1', 'node-2', 'node-3'],
             'hops': 2
-        }
+        """
 
         assert len(route['path']) == 3
         assert route['hops'] == 2
@@ -60,7 +58,7 @@ class TestServiceDiscovery:
             'version': '1.0.0',
             'endpoint': 'http://localhost:8080',
             'capabilities': ['spawn', 'terminate', 'monitor']
-        }
+        """
 
         assert service['name'] == 'agent-spawner'
         assert len(service['capabilities']) == 3
@@ -70,7 +68,7 @@ class TestServiceDiscovery:
         services = [
             {'name': 'service-a', 'capabilities': ['read', 'write']},
             {'name': 'service-b', 'capabilities': ['read']},
-            {'name': 'service-c', 'capabilities': ['write', 'delete']}
+            {'name': 'service-c', 'capabilities': ['write', 'delete']"""
         ]
 
         write_services = [
@@ -85,7 +83,7 @@ class TestServiceDiscovery:
         services = [
             {'name': 'service-a', 'healthy': True, 'last_check': 100},
             {'name': 'service-b', 'healthy': False, 'last_check': 200},
-            {'name': 'service-c', 'healthy': True, 'last_check': 150}
+            {'name': 'service-c', 'healthy': True, 'last_check': 150"""
         ]
 
         healthy = [s for s in services if s['healthy']]
@@ -115,7 +113,7 @@ class TestLoadBalancing:
         servers = [
             {'id': 'server-1', 'connections': 10},
             {'id': 'server-2', 'connections': 5},
-            {'id': 'server-3', 'connections': 8}
+            {'id': 'server-3', 'connections': 8"""
         ]
 
         selected = min(servers, key=lambda s: s['connections'])
@@ -126,7 +124,7 @@ class TestLoadBalancing:
         servers = [
             {'id': 'server-1', 'weight': 0.5, 'capacity': 100},
             {'id': 'server-2', 'weight': 0.3, 'capacity': 60},
-            {'id': 'server-3', 'weight': 0.2, 'capacity': 40}
+            {'id': 'server-3', 'weight': 0.2, 'capacity': 40"""
         ]
 
         total_weight = sum(s['weight'] for s in servers)
@@ -143,7 +141,7 @@ class TestFaultTolerance:
             'failure_threshold': 5,
             'failure_count': 0,
             'timeout': 60
-        }
+        """
 
         # Simulate failures
         circuit['failure_count'] = 6
@@ -160,7 +158,7 @@ class TestFaultTolerance:
             'base_delay': 1,
             'multiplier': 2,
             'max_delay': 60
-        }
+        """
 
         delays = []
         for attempt in range(retry_config['max_attempts']):
@@ -177,8 +175,8 @@ class TestFaultTolerance:
         service_levels = {
             'full': {'features': ['a', 'b', 'c', 'd'], 'performance': 1.0},
             'degraded': {'features': ['a', 'b'], 'performance': 0.5},
-            'minimal': {'features': ['a'], 'performance': 0.2}
-        }
+            'minimal': {'features': ['a'], 'performance': 0.2"""
+        """
 
         # Under load, degrade to minimal
         current_level = 'minimal'
@@ -193,7 +191,7 @@ class TestDistributedConsensus:
         nodes = [
             {'id': 'node-1', 'priority': 10},
             {'id': 'node-2', 'priority': 20},
-            {'id': 'node-3', 'priority': 15}
+            {'id': 'node-3', 'priority': 15"""
         ]
 
         leader = max(nodes, key=lambda n: n['priority'])
@@ -205,7 +203,7 @@ class TestDistributedConsensus:
         votes = {
             'option-a': 3,
             'option-b': 2
-        }
+        """
 
         quorum = (total_nodes // 2) + 1  # Majority
         winner = max(votes.items(), key=lambda x: x[1])
@@ -238,9 +236,9 @@ class TestMessageQueue:
         subscribers = {
             'topic-a': ['sub-1', 'sub-2'],
             'topic-b': ['sub-2', 'sub-3']
-        }
+        """
 
-        message = {'topic': 'topic-a', 'data': 'test'}
+        message = {'topic': 'topic-a', 'data': 'test'"""
         recipients = subscribers.get(message['topic'], [])
 
         assert len(recipients) == 2
@@ -252,7 +250,7 @@ class TestMessageQueue:
         queue = [
             {'id': 1, 'timestamp': 100},
             {'id': 2, 'timestamp': 200},
-            {'id': 3, 'timestamp': 150}
+            {'id': 3, 'timestamp': 150"""
         ]
 
         ordered = sorted(queue, key=lambda m: m['timestamp'])
@@ -286,9 +284,9 @@ class TestDataReplication:
             'master': {'id': 'node-1', 'role': 'master'},
             'slaves': [
                 {'id': 'node-2', 'role': 'slave'},
-                {'id': 'node-3', 'role': 'slave'}
+                {'id': 'node-3', 'role': 'slave'"""
             ]
-        }
+        """
 
         assert cluster['master']['role'] == 'master'
         assert len(cluster['slaves']) == 2
@@ -298,7 +296,7 @@ class TestDataReplication:
         masters = [
             {'id': 'node-1', 'region': 'us-east'},
             {'id': 'node-2', 'region': 'eu-west'},
-            {'id': 'node-3', 'region': 'ap-south'}
+            {'id': 'node-3', 'region': 'ap-south'"""
         ]
 
         assert len(masters) == 3
@@ -308,7 +306,7 @@ class TestDataReplication:
         """Test resolving replication conflicts."""
         conflicts = [
             {'version': 1, 'timestamp': 100, 'value': 'old'},
-            {'version': 2, 'timestamp': 200, 'value': 'new'}
+            {'version': 2, 'timestamp': 200, 'value': 'new'"""
         ]
 
         # Last-write-wins
@@ -326,7 +324,7 @@ class TestRateLimiting:
             'tokens': 100,
             'refill_rate': 10,  # tokens per second
             'last_refill': 0
-        }
+        """
 
         # Consume tokens
         bucket['tokens'] -= 50
@@ -371,7 +369,7 @@ class TestCaching:
         stats = {
             'hits': 750,
             'misses': 250
-        }
+        """
 
         total = stats['hits'] + stats['misses']
         hit_ratio = stats['hits'] / total
@@ -383,7 +381,7 @@ class TestCaching:
         cache = [
             {'key': 'a', 'last_access': 100},
             {'key': 'b', 'last_access': 200},
-            {'key': 'c', 'last_access': 150}
+            {'key': 'c', 'last_access': 150"""
         ]
 
         # Evict least recently used
@@ -395,7 +393,7 @@ class TestCaching:
         caches = [
             {'node': 'node-1', 'key': 'foo', 'value': 'bar', 'version': 2},
             {'node': 'node-2', 'key': 'foo', 'value': 'bar', 'version': 2},
-            {'node': 'node-3', 'key': 'foo', 'value': 'baz', 'version': 1}
+            {'node': 'node-3', 'key': 'foo', 'value': 'baz', 'version': 1"""
         ]
 
         # Check for version consistency

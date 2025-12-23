@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Break down sqrt(a² + b²) into operations
-"""
+print{Break down sqrt(a² + b²) into operations}
 
 import math
 

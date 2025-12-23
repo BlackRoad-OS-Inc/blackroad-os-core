@@ -1,0 +1,20 @@
+name = "roadwork-hub"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "out"
+
+[[kv_namespaces]]
+binding = "JOBS"
+id = "roadwork_jobs_kv"
+
+[[kv_namespaces]]
+binding = "APPLICATIONS"
+id = "roadwork_applications_kv"
+
+[[kv_namespaces]]
+binding = "USERS"
+id = "roadwork_users_kv"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "roadwork-db"
+database_id = "roadwork_production_db"

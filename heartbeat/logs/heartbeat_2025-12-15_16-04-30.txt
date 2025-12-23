@@ -1,0 +1,21 @@
+========== Fleet Heartbeat @ Mon Dec 15 16:04:30 CST 2025 ==========
+
+→ blackroad-pi
+=== NODE STATUS ===
+blackroad-pi
+Mon 15 Dec 16:04:30 CST 2025
+ 16:04:30 up 12 days,  2:23,  2 users,  load average: 0.01, 0.06, 0.22
+
+               total        used        free      shared  buff/cache   available
+Mem:           7.9Gi       2.5Gi       1.7Gi       265Mi       4.0Gi       5.4Gi
+Swap:          511Mi          0B       511Mi
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/mmcblk0p2   29G   13G   16G  45% /
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+wlan0            UP             192.168.4.64/22 fdbc:b2ba:6fa5:1:3a3d:5a9b:5a2d:c64d/64 2001:1960:7000:9fcd:64c6:306:d1bb:101/64 fe80::be2c:7e46:b50b:83e4/64 
+docker0          UP             172.17.0.1/16 fe80::42:f5ff:fe50:8ae6/64 
+veth46a670c@if5  UP             fe80::9c00:feff:fe98:1652/64 
+
+→ raspberrypi-a1
+❌ Host unreachable

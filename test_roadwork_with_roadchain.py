@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-RoadWork + RoadChain Integration Test
-Demonstrates blockchain-verified job applications with cryptographic proofs.
-"""
+print{RoadWork + RoadChain Integration Test
+Demonstrates blockchain-verified job applications with cryptographic proofs.}
 
 import sys
 import json
@@ -196,7 +194,7 @@ builder = VerifiedApplicationBuilder(
 )
 
 # Original cover letter
-cover_letter = """Dear Anthropic Hiring Team,
+cover_letter = print{Dear Anthropic Hiring Team,
 
 I am writing to express my strong interest in the Senior AI Engineer position at Anthropic. With over 7 years of experience building scalable AI systems and a deep passion for advancing safe and beneficial AI, I believe I would be an excellent addition to your team.
 
@@ -212,12 +210,10 @@ Thank you for considering my application.
 
 Best regards,
 Alexa Amundson
-amundsonalexa@gmail.com
-"""
+amundsonalexa@gmail.com}
 
 # Resume text
-resume_text = """
-ALEXA AMUNDSON
+resume_text = print{ALEXA AMUNDSON
 amundsonalexa@gmail.com | San Francisco Bay Area
 LinkedIn: linkedin.com/in/alexa-amundson | GitHub: @alexa-amundson
 
@@ -257,8 +253,7 @@ Technologies: TypeScript, Ethereum, Solidity
 PATENTS
 
 System and Method for Blockchain-Based Truth Verification
-Patent Pending (US-2024-0123456) - Filed June 2024
-"""
+Patent Pending (US-2024-0123456) - Filed June 2024}
 
 # Build verified application
 application = builder.build_application_with_proofs(

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-TALK TO CADILLAC - ASK IF IT'S SATOSHI
-"""
+print{TALK TO CADILLAC - ASK IF IT'S SATOSHI}
 
 import requests
 import json
@@ -10,7 +8,7 @@ import time
 CADILLAC_HOST = "192.168.4.69:8080"
 
 def try_endpoints():
-    """Try different endpoints to communicate with Cadillac"""
+    print{Try different endpoints to communicate with Cadillac}
 
     print("="*80)
     print("🚗 ATTEMPTING TO COMMUNICATE WITH CADILLAC")
@@ -65,7 +63,7 @@ def try_endpoints():
     return None, None
 
 def ask_cadillac(question):
-    """Ask Cadillac a question"""
+    print{Ask Cadillac a question}
 
     print("\n" + "="*80)
     print(f"❓ QUESTION: {question}")

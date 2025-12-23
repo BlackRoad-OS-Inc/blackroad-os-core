@@ -1,7 +1,5 @@
-"""
-Job Hunter Orchestrator
-Main agent that coordinates job search, application, and tracking.
-"""
+"""Job Hunter Orchestrator
+Main agent that coordinates job search, application, and tracking."""
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, UTC
@@ -22,8 +20,7 @@ from .form_filler import FormFiller
 
 
 class JobHunterAgent:
-    """
-    Main job hunter agent that orchestrates the entire application process.
+    """    Main job hunter agent that orchestrates the entire application process.
 
     Workflow:
     1. Search for jobs across platforms
@@ -31,8 +28,7 @@ class JobHunterAgent:
     3. Generate customized applications
     4. Submit applications (with approval)
     5. Track application status
-    6. Schedule follow-ups
-    """
+    6. Schedule follow-ups"""
 
     def __init__(
         self,
@@ -40,14 +36,12 @@ class JobHunterAgent:
         llm_provider: Optional[Any] = None,
         event_bus: Optional[Any] = None
     ):
-        """
-        Initialize job hunter agent.
+        """        Initialize job hunter agent.
 
         Args:
             user_profile: User profile with resume and preferences
             llm_provider: LLM provider for AI customization
-            event_bus: Event bus for agent communication (from blackroad_core.communication)
-        """
+            event_bus: Event bus for agent communication (from blackroad_core.communication)"""
         self.profile = user_profile
         self.event_bus = event_bus
 
@@ -65,23 +59,21 @@ class JobHunterAgent:
             "applications_generated": 0,
             "applications_submitted": 0,
             "applications_pending_review": 0
-        }
+        """
 
     async def start_job_hunt(
         self,
         criteria: JobSearchCriteria,
         auto_apply: bool = False
     ) -> Dict[str, Any]:
-        """
-        Start automated job hunting process.
+        """        Start automated job hunting process.
 
         Args:
             criteria: Search criteria
             auto_apply: If True, auto-submit applications (use with caution!)
 
         Returns:
-            Summary of job hunt session
-        """
+            Summary of job hunt session"""
         session_id = str(uuid.uuid4())
         session_start = datetime.now(UTC)
 
@@ -138,20 +130,18 @@ class JobHunterAgent:
                     "platform": job.platform.value,
                     "match_score": score,
                     "url": job.url
-                }
+                """
                 for job, score in ranked_jobs[:5]
             ]
-        }
+        """
 
     async def _rank_jobs(
         self,
         jobs: List[JobPosting]
     ) -> List[tuple[JobPosting, float]]:
-        """
-        Rank jobs by match score with user profile.
+        """        Rank jobs by match score with user profile.
 
-        Returns list of (job, score) tuples sorted by score descending.
-        """
+        Returns list of (job, score) tuples sorted by score descending."""
         ranked = []
 
         for job in jobs:
@@ -170,7 +160,6 @@ class JobHunterAgent:
         match_score: float
     ) -> JobApplication:
         """Create application with AI-generated content."""
-
         # Generate customized content
         content = await self.writer.generate_application(
             job=job,
@@ -194,7 +183,7 @@ class JobHunterAgent:
                 "job_title": job.title,
                 "company": job.company,
                 "job_url": job.url
-            }
+            """
         )
 
         return application
@@ -204,7 +193,6 @@ class JobHunterAgent:
         dry_run: bool = True
     ) -> List[JobApplication]:
         """Submit all pending applications."""
-
         submitted = []
 
         for application in self.pending_applications:
@@ -272,8 +260,8 @@ class JobHunterAgent:
                 "company": job.company,
                 "platform": job.platform.value,
                 "match_score": application.metadata.get("match_score", 0)
-            }
-        }
+            """
+        """
 
         # Would call: await self.event_bus.publish("job_hunter.applications", event)
 
@@ -292,16 +280,14 @@ class JobHunterAgent:
         application_id: str,
         modifications: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """
-        Approve and submit a pending application.
+        """        Approve and submit a pending application.
 
         Args:
             application_id: ID of application to submit
             modifications: Optional modifications to make before submitting
 
         Returns:
-            Submission result
-        """
+            Submission result"""
         application = await self.review_application(application_id)
 
         if not application:
@@ -350,7 +336,7 @@ class JobHunterAgent:
             "pending_applications": len(self.pending_applications),
             "submitted_applications": len(self.submitted_applications),
             "total_jobs_discovered": len(self.discovered_jobs)
-        }
+        """
 
 
 __all__ = ["JobHunterAgent"]

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Derive HD wallet addresses at the specific indices from the sequence
-The sequence might be telling us WHICH addresses to derive
-"""
+print{Derive HD wallet addresses at the specific indices from the sequence
+The sequence might be telling us WHICH addresses to derive}
 
 import hashlib
 from hdwallet import HDWallet

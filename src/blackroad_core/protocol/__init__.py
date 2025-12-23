@@ -1,8 +1,6 @@
-"""
-BlackRoad Protocol Definitions
+"""BlackRoad Protocol Definitions
 
-Core protocol types, status enums, and event definitions for the BlackRoad OS.
-"""
+Core protocol types, status enums, and event definitions for the BlackRoad OS."""
 
 from enum import Enum
 from dataclasses import dataclass, field
@@ -141,29 +139,25 @@ class VersionInfo:
 
 # Queue naming conventions
 def get_queue_name(pack_key: str, priority: str = "default") -> str:
-    """
-    Get the Redis stream queue name for a pack.
+    """    Get the Redis stream queue name for a pack.
 
     Args:
         pack_key: The pack identifier (e.g., 'finance', 'education')
         priority: Priority level ('default', 'high', 'low')
 
     Returns:
-        Queue name string (e.g., 'jobs.finance.default')
-    """
+        Queue name string (e.g., 'jobs.finance.default')"""
     return f"jobs.{pack_key}.{priority}"
 
 
 def parse_queue_name(queue_name: str) -> tuple[str, str]:
-    """
-    Parse a queue name into pack and priority.
+    """    Parse a queue name into pack and priority.
 
     Args:
         queue_name: The queue name (e.g., 'jobs.finance.default')
 
     Returns:
-        Tuple of (pack_key, priority)
-    """
+        Tuple of (pack_key, priority)"""
     parts = queue_name.split(".")
     if len(parts) != 3 or parts[0] != "jobs":
         raise ValueError(f"Invalid queue name format: {queue_name}")

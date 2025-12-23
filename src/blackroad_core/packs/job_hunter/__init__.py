@@ -1,13 +1,11 @@
-"""
-Pack: Job Hunter
+"""Pack: Job Hunter
 Automated job application system with AI-powered customization.
 
 Agents:
 - job-scraper: Searches job platforms (LinkedIn, Indeed, ZipRecruiter, Glassdoor)
 - application-writer: AI-powered cover letter and response customization
 - form-filler: Automated form submission
-- tracker: Application status monitoring and follow-ups
-"""
+- tracker: Application status monitoring and follow-ups"""
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any

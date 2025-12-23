@@ -1,0 +1,2 @@
+[console_scripts]
+blackroad = blackroad_core.cli:main

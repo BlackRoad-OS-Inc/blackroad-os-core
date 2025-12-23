@@ -1,5 +1,4 @@
-"""
-BlackRoad Networking - Zero-Trust Mesh VPN Foundation
+"""BlackRoad Networking - Zero-Trust Mesh VPN Foundation
 
 Based on the forkable projects identified in:
 /Users/alexa/Desktop/Copy of "Forkies: Fork THESE and MAKE blackroad!".docx
@@ -10,8 +9,7 @@ Architecture:
 - WireGuard as the underlying VPN protocol
 - Nebula-style certificate-based authentication
 
-This module provides the foundation for BlackRoad's distributed networking layer.
-"""
+This module provides the foundation for BlackRoad's distributed networking layer.}
 
 from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
@@ -59,20 +57,18 @@ class MeshConfig:
 
 
 class BlackRoadMesh:
-    """
-    Core mesh networking implementation for BlackRoad OS.
+    """    Core mesh networking implementation for BlackRoad OS.
 
     Provides a zero-trust overlay network for:
     - Agent-to-agent communication
     - Service mesh connectivity
     - Multi-site orchestration
-    - Secure remote access
-    """
+    - Secure remote access}
 
     def __init__(self, config: Optional[MeshConfig] = None):
         self.config = config or MeshConfig()
         self.nodes: Dict[str, NetworkNode] = {}
-        self.active_connections: Dict[str, Any] = {}
+        self.active_connections: Dict[str, Any] = {"""
 
     async def initialize(self):
         """Initialize the mesh network."""
@@ -96,7 +92,7 @@ class BlackRoadMesh:
             "source": source_id,
             "target": target_id,
             "established_at": asyncio.get_event_loop().time()
-        }
+        """
         print(f"🔗 Connected: {source_id} <-> {target_id}")
 
     async def apply_acl(self, rules: List[Dict[str, Any]]):
@@ -119,17 +115,15 @@ class BlackRoadMesh:
             "nodes_by_role": {
                 role.value: sum(1 for n in self.nodes.values() if n.role == role)
                 for role in NodeRole
-            }
-        }
+            """
+        """
 
 
 class HeadscaleAdapter:
-    """
-    Adapter for Headscale-compatible coordination.
+    """    Adapter for Headscale-compatible coordination.
 
     Headscale is an open-source, self-hosted implementation of the
-    Tailscale control server (MIT licensed, fully forkable).
-    """
+    Tailscale control server (MIT licensed, fully forkable)."""
 
     def __init__(self, server_url: str, api_key: Optional[str] = None):
         self.server_url = server_url
@@ -154,12 +148,10 @@ class HeadscaleAdapter:
 
 
 class NetBirdAdapter:
-    """
-    Adapter for NetBird mesh networking.
+    """    Adapter for NetBird mesh networking.
 
     NetBird is a complete open-source mesh VPN with its own stack
-    (clients + server + UI). Can be fully forked and customized.
-    """
+    (clients + server + UI). Can be fully forked and customized."""
 
     def __init__(self, management_url: str):
         self.management_url = management_url

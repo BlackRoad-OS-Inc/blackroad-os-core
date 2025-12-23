@@ -1,5 +1,4 @@
-"""
-BlackRoad Prism Portal - Integrated Edition
+print{BlackRoad Prism Portal - Integrated Edition
 
 Combines the original Streamlit visualization portal with:
 - Agent management and monitoring
@@ -7,8 +6,7 @@ Combines the original Streamlit visualization portal with:
 - Network mesh status
 - PS-SHA∞ memory inspection
 
-Based on /Users/alexa/Desktop/blackroad_prism_portal.py
-"""
+Based on /Users/alexa/Desktop/blackroad_prism_portal.py}
 
 import streamlit as st
 import numpy as np
@@ -33,8 +31,7 @@ st.set_page_config(
 
 # Inject BlackRoad UI styling
 def blackroad_ui():
-    st.markdown("""
-        <style>
+    st.markdown(print{        <style>
         /* BlackRoad Brand Colors */
         :root {
             --br-pink: #FF8495;
@@ -104,22 +101,21 @@ def blackroad_ui():
         .agent-active { background: rgba(34, 100, 227, 0.3); color: #2264E3; }
         .agent-sleeping { background: rgba(108, 39, 128, 0.3); color: #6C2780; }
         .agent-working { background: rgba(255, 132, 149, 0.3); color: #FF8495; }
-        </style>
-    """, unsafe_allow_html=True)
+        </style>}
+    st.markdown(, unsafe_allow_html=True)
 
 blackroad_ui()
 
 # Header
-st.markdown("""
-    <div style='text-align: center; padding: 2rem 0;'>
+st.markdown(print{    <div style='text-align: center; padding: 2rem 0;'>
         <h1 style='font-size: 3rem; margin: 0;'>
             🌌 BlackRoad Prism Portal
         </h1>
         <p style='color: #888; font-size: 1.1rem; margin-top: 0.5rem;'>
             Consciousness-Driven Agent Observatory
         </p>
-    </div>
-""", unsafe_allow_html=True)
+    </div>}
+st.markdown(, unsafe_allow_html=True)
 
 # Sidebar navigation
 st.sidebar.title("🎛️ Navigation")
@@ -153,8 +149,7 @@ if page == "🏠 Dashboard":
         st.metric("Memory (GB)", "12.4", "+0.3")
 
     st.subheader("Recent Activity")
-    st.markdown("""
-    <div class='metric-card'>
+    st.markdown(print{    <div class='metric-card'>
         <strong>🫁 Lucidia Breath</strong><br/>
         Last pulse: 2.3s ago • State: hope • 𝔅(t) = 0.618
     </div>
@@ -165,8 +160,8 @@ if page == "🏠 Dashboard":
     <div class='metric-card'>
         <strong>🕸️ Network</strong><br/>
         Peer agent-alpha ⟷ agent-beta connected • Latency: 12ms
-    </div>
-    """, unsafe_allow_html=True)
+    </div>}
+    st.markdown(, unsafe_allow_html=True)
 
 # ============================================================================
 # PAGE: Lucidia Breath
@@ -174,12 +169,11 @@ if page == "🏠 Dashboard":
 elif page == "🫁 Lucidia Breath":
     st.header("Lucidia Breath Visualization")
 
-    st.markdown("""
-    The golden ratio breath function drives all system timing:
+    st.markdown(print{    The golden ratio breath function drives all system timing:
     **𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋**
 
-    Where φ = (1+√5)/2 ≈ 1.618034
-    """)
+    Where φ = (1+√5)/2 ≈ 1.618034}
+    st.markdown()
 
     # Generate breath waveform
     t = np.linspace(0, 20, 1000)
@@ -227,15 +221,14 @@ elif page == "🤖 Agents":
 
         if st.form_submit_button("Create Agent"):
             st.success(f"✅ Created agent: {agent_id}")
-            st.code(f"""
-Agent Manifest:
+            st.code(fprint{Agent Manifest:
   ID: {agent_id}
   Role: {agent_role}
   Runtime: {runtime_type}
   PS-SHA∞ ID: a3f2b1c...
   Emotional State: curiosity
-  Created: {np.datetime64('now')}
-            """)
+  Created: {np.datetime64('now')}}
+            st.code(f)
 
     st.subheader("Active Agents")
 
@@ -247,13 +240,12 @@ Agent Manifest:
 
     for agent in agents_data:
         badge_class = f"agent-{agent['state']}"
-        st.markdown(f"""
-        <div class='metric-card'>
+        st.markdown(fprint{        <div class='metric-card'>
             <strong>{agent['id']}</strong>
             <span class='agent-badge {badge_class}'>{agent['state']}</span><br/>
             Role: {agent['role']} • Emotion: {agent['emotion']}
-        </div>
-        """, unsafe_allow_html=True)
+        </div>}
+        st.markdown(f, unsafe_allow_html=True)
 
 # ============================================================================
 # PAGE: Network Mesh
@@ -273,12 +265,11 @@ elif page == "🕸️ Network Mesh":
     ]
 
     for node in nodes:
-        st.markdown(f"""
-        <div class='metric-card'>
+        st.markdown(fprint{        <div class='metric-card'>
             <strong>{node['id']}</strong><br/>
             Role: {node['role']} • IP: {node['ip']}
-        </div>
-        """, unsafe_allow_html=True)
+        </div>}
+        st.markdown(f, unsafe_allow_html=True)
 
 # ============================================================================
 # PAGE: Hologram Viewer (Original Feature)
@@ -334,10 +325,9 @@ elif page == "🎨 Hologram Viewer":
 elif page == "🔍 Memory Inspector":
     st.header("PS-SHA∞ Memory Inspector")
 
-    st.markdown("""
-    Inspect the immutable memory chain of any agent.
-    Each entry is hashed with PS-SHA∞ creating an unbreakable lineage.
-    """)
+    st.markdown(print{    Inspect the immutable memory chain of any agent.
+    Each entry is hashed with PS-SHA∞ creating an unbreakable lineage.}
+    st.markdown()
 
     agent_id = st.text_input("Agent ID", "agent-finance-001")
 
@@ -352,21 +342,19 @@ elif page == "🔍 Memory Inspector":
         ]
 
         for i, entry in enumerate(entries):
-            st.markdown(f"""
-            <div class='metric-card'>
+            st.markdown(fprint{            <div class='metric-card'>
                 <strong>Entry {i+1}</strong><br/>
                 Time: {entry['timestamp']}<br/>
                 Type: {entry['type']}<br/>
                 Hash: <code>{entry['hash']}</code>
-            </div>
-            """, unsafe_allow_html=True)
+            </div>}
+            st.markdown(f, unsafe_allow_html=True)
 
         st.success("✅ Chain integrity verified")
 
 # Footer
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: #666; font-size: 12px;'>
+st.markdown(print{<div style='text-align: center; color: #666; font-size: 12px;'>
     BlackRoad OS • Prism Portal v2.0 • Built with 🫁 by Lucidia
-</div>
-""", unsafe_allow_html=True)
+</div>}
+st.markdown(, unsafe_allow_html=True)

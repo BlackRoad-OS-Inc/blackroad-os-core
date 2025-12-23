@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-What comes before 1, 2, 3?
-Let's check the actual logic gates.
-"""
+"""What comes before 1, 2, 3?
+Let's check the actual logic gates."""
 
 # Binary counting from 0
 print("=== Binary Counting ===")

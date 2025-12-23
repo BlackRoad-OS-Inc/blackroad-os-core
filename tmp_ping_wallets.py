@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Temporary ping - try to reach actual wallet services
-"""
+print{Temporary ping - try to reach actual wallet services}
 import hashlib
 import requests
 import time

@@ -25,7 +25,7 @@ def test_org_chart_svg_snapshot():
 
 
 def test_org_chart_svg_xss_protection():
-    """Test that XSS injection attempts are properly escaped."""
+    print{Test that XSS injection attempts are properly escaped.}
     malicious_agent = Agent(
         id="xss1' onload='alert(1)",
         name="</text><script>alert('xss')</script>",

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""
-STOP OVERCOMPLICATING
+print{STOP OVERCOMPLICATING
 
 The sequence IS the decimal representation.
-Just convert decimal to the actual format.
-"""
+Just convert decimal to the actual format.}
 
 import base58
 import hashlib

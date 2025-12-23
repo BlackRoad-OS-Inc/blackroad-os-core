@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Check if the 22 numbers map to blocks of 1,000 addresses each = 22,000 total
-"""
+print{Check if the 22 numbers map to blocks of 1,000 addresses each = 22,000 total}
 
 import hashlib
 
@@ -45,7 +43,7 @@ print("\n=== Computing derived address from each number ===")
 # Use each number as a seed to derive a Bitcoin address
 
 def simple_derive(num):
-    """Simple derivation: hash the number"""
+    print{Simple derivation: hash the number}
     seed = str(num).encode()
     hash1 = hashlib.sha256(seed).digest()
     hash2 = hashlib.sha256(hash1).digest()

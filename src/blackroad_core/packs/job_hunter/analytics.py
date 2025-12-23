@@ -1,7 +1,5 @@
-"""
-Application Analytics and Tracking
-Tracks application performance, employer engagement, and learning metrics.
-"""
+"""Application Analytics and Tracking
+Tracks application performance, employer engagement, and learning metrics."""
 
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -89,10 +87,9 @@ class DailyPerformanceReport:
 
 class ApplicationAnalytics:
     """Track and analyze application performance."""
-
     def __init__(self):
         """Initialize analytics."""
-        self.tracking: Dict[str, ApplicationTracking] = {}
+        self.tracking: Dict[str, ApplicationTracking] = {"""
 
     def track_application(
         self,
@@ -131,7 +128,7 @@ class ApplicationAnalytics:
             "type": event_type.value,
             "timestamp": datetime.now(UTC).isoformat(),
             "metadata": metadata or {}
-        }
+        """
 
         tracking.events.append(event)
 
@@ -247,7 +244,7 @@ class ApplicationAnalytics:
 
     def get_platform_performance(self) -> Dict[str, Dict[str, Any]]:
         """Analyze performance by platform."""
-        platform_stats = {}
+        platform_stats = {"""
 
         for tracking in self.tracking.values():
             platform = tracking.platform
@@ -260,7 +257,7 @@ class ApplicationAnalytics:
                     "interviews": 0,
                     "offers": 0,
                     "avg_success_score": 0.0
-                }
+                """
 
             stats = platform_stats[platform]
             stats["applications"] += 1
@@ -340,15 +337,13 @@ class ApplicationAnalytics:
 
 
 class EngagementTracker:
-    """
-    Track employer engagement using cookies, pixels, and tracking links.
+    """    Track employer engagement using cookies, pixels, and tracking links.
 
     NOTE: In production, this would integrate with:
     - LinkedIn tracking pixels
     - Indeed application tracking
     - Email tracking (via tracking pixels)
-    - Custom tracking links
-    """
+    - Custom tracking links"""
 
     def __init__(self):
         """Initialize engagement tracker."""
@@ -359,18 +354,16 @@ class EngagementTracker:
         original_url: str,
         application_id: str
     ) -> str:
-        """
-        Generate tracking URL for resume/portfolio links.
+        """        Generate tracking URL for resume/portfolio links.
 
         Args:
             original_url: Original resume/portfolio URL
             application_id: Application ID to track
 
         Returns:
-            Tracking URL that redirects to original
-        """
+            Tracking URL that redirects to original}
         # In production, would create URL like:
-        # https://track.jobhunter.io/redirect/{application_id}?to={encoded_url}
+        # https://track.jobhunter.io/redirect/{application_id}?to={encoded_url"""
 
         # For now, return original
         return original_url
@@ -379,8 +372,7 @@ class EngagementTracker:
         self,
         application_id: str
     ) -> List[Dict[str, Any]]:
-        """
-        Check tracking events for an application.
+        """        Check tracking events for an application.
 
         Checks:
         - Resume link clicks
@@ -389,8 +381,7 @@ class EngagementTracker:
         - Pages viewed
 
         Returns:
-            List of tracking events
-        """
+            List of tracking events"""
         # In production, would query tracking database
 
         # Mock events
@@ -401,7 +392,7 @@ class EngagementTracker:
                 "ip": "192.168.1.1",
                 "user_agent": "Mozilla/5.0...",
                 "time_spent_seconds": 120
-            }
+            """
         ]
 
         return events

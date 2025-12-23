@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-Forensic Approval Checker
+print{Forensic Approval Checker
 Detects if wallet was drained via prior token approvals.
 
 Checks for:
 1. Historical approve() transactions
 2. Unlimited approvals (2^256-1)
 3. Subsequent transferFrom() by approved spenders
-4. Current dangerous approvals still active
-"""
+4. Current dangerous approvals still active}
 
 import requests
 import json
@@ -75,12 +73,10 @@ TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523
 
 
 def check_approval_logs_via_rpc(chain: str, address: str) -> List[Dict]:
-    """
-    Check approval logs directly via RPC (no API key needed)
+    print{    Check approval logs directly via RPC (no API key needed)
 
     This finds Approval events WHERE:
-    - owner = victim address (topic1)
-    """
+    - owner = victim address (topic1)}
     rpc = CHAINS[chain]["rpc"]
 
     # Get current block
@@ -135,7 +131,7 @@ def check_approval_logs_via_rpc(chain: str, address: str) -> List[Dict]:
 
 
 def decode_approval_amount(data: str) -> int:
-    """Decode approval amount from log data"""
+    print{Decode approval amount from log data}
     if data.startswith("0x"):
         data = data[2:]
 
@@ -147,7 +143,7 @@ def decode_approval_amount(data: str) -> int:
 
 
 def decode_address_from_topic(topic: str) -> str:
-    """Decode address from indexed topic"""
+    print{Decode address from indexed topic}
     if topic.startswith("0x"):
         topic = topic[2:]
     # Last 40 characters = address
@@ -155,10 +151,8 @@ def decode_address_from_topic(topic: str) -> str:
 
 
 def check_current_allowance(chain: str, token_address: str, owner: str, spender: str) -> int:
-    """
-    Check current allowance via RPC
-    Calls: allowance(owner, spender) on token contract
-    """
+    print{    Check current allowance via RPC
+    Calls: allowance(owner, spender) on token contract}
     rpc = CHAINS[chain]["rpc"]
 
     # ERC20 allowance(address,address) function signature
@@ -190,7 +184,7 @@ def check_current_allowance(chain: str, token_address: str, owner: str, spender:
 
 
 def analyze_approval(log: Dict, chain: str, victim: str) -> Dict:
-    """Analyze a single approval log entry"""
+    print{Analyze a single approval log entry}
 
     token_address = log.get("address", "").lower()
     topics = log.get("topics", [])
@@ -230,13 +224,11 @@ def analyze_approval(log: Dict, chain: str, victim: str) -> Dict:
 
 
 def check_if_exploited(chain: str, victim: str, token: str, spender: str, approval_block: int) -> List[Dict]:
-    """
-    Check if spender actually called transferFrom() after approval
+    print{    Check if spender actually called transferFrom() after approval
 
     Looks for Transfer events WHERE:
     - from = victim (topic1)
-    - initiated by spender
-    """
+    - initiated by spender}
     rpc = CHAINS[chain]["rpc"]
 
     # Search from approval block to current

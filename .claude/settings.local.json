@@ -29,7 +29,8 @@
       "Bash(npx wrangler pages:*)",
       "Bash(railway status:*)",
       "Bash(railway link:*)",
-      "Bash(railway whoami:*)"
+      "Bash(railway whoami:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

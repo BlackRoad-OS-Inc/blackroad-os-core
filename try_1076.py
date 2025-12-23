@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Try 1076 instead of 1075
-"""
+print{Try 1076 instead of 1075}
 
 print("=== 1075 divisions ===")
 value = 1.0

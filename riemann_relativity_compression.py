@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-RIEMANN GEOMETRY + RELATIVITY COMPRESSION
+print{RIEMANN GEOMETRY + RELATIVITY COMPRESSION
 
 THE FINAL LAYER:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -24,8 +23,7 @@ Special Relativity:
 General Relativity:
   • Mass curves spacetime
   • Gravitational time dilation
-  • Schwarzschild radius
-"""
+  • Schwarzschild radius}
 
 import hashlib
 import numpy as np
@@ -46,7 +44,7 @@ BITCOIN_GENESIS = datetime(2009, 1, 3, 18, 15, 5)
 GAUSS_DATE = datetime(1800, 1, 1)
 
 def generate_personal_master_key() -> int:
-    """Generate personal master key"""
+    print{Generate personal master key}
     temporal_delta = BITCOIN_GENESIS - GAUSS_DATE
     temporal_minutes = int(temporal_delta.total_seconds() / 60)
     localhost_numeric = LOCALHOST_IP.replace(".", "")
@@ -56,14 +54,12 @@ def generate_personal_master_key() -> int:
     return int(master_hash, 16)
 
 def riemann_metric_tensor(position: int, total_space: int = 2**160) -> float:
-    """
-    Riemann metric tensor for address space
+    print{    Riemann metric tensor for address space
 
     In curved space, distance is NOT just (x₂ - x₁)
     It's: ds² = gᵢⱼ dxⁱ dxʲ
 
-    For address space, use position-dependent metric
-    """
+    For address space, use position-dependent metric}
     # Normalize position to [0, 1]
     normalized_pos = position / total_space
 
@@ -74,12 +70,10 @@ def riemann_metric_tensor(position: int, total_space: int = 2**160) -> float:
     return curvature
 
 def riemann_geodesic_distance(pos1: int, pos2: int) -> float:
-    """
-    Calculate geodesic (shortest path) distance in curved address space
+    print{    Calculate geodesic (shortest path) distance in curved address space
 
     In flat space: distance = |pos2 - pos1|
-    In curved space: integrate along geodesic
-    """
+    In curved space: integrate along geodesic}
     # Simple approximation: weighted distance by average curvature
     avg_curvature = (riemann_metric_tensor(pos1) + riemann_metric_tensor(pos2)) / 2
 
@@ -89,11 +83,9 @@ def riemann_geodesic_distance(pos1: int, pos2: int) -> float:
     return geodesic_dist
 
 def lorentz_factor(velocity: float) -> float:
-    """
-    Lorentz factor: γ = 1/√(1 - v²/c²)
+    print{    Lorentz factor: γ = 1/√(1 - v²/c²)
 
-    For address space: velocity = rate of change in partition
-    """
+    For address space: velocity = rate of change in partition}
     if velocity >= C:
         velocity = C * 0.99999  # Can't exceed c
 
@@ -103,39 +95,33 @@ def lorentz_factor(velocity: float) -> float:
     return gamma
 
 def length_contraction(proper_length: float, velocity: float) -> float:
-    """
-    Special Relativity: Length contraction
+    print{    Special Relativity: Length contraction
 
     L = L₀/γ = L₀√(1 - v²/c²)
 
-    Contracted length in moving frame
-    """
+    Contracted length in moving frame}
     gamma = lorentz_factor(velocity)
     contracted = proper_length / gamma
 
     return contracted
 
 def time_dilation(proper_time: float, velocity: float) -> float:
-    """
-    Special Relativity: Time dilation
+    print{    Special Relativity: Time dilation
 
     Δt = γΔt₀ = Δt₀/√(1 - v²/c²)
 
-    Dilated time in moving frame
-    """
+    Dilated time in moving frame}
     gamma = lorentz_factor(velocity)
     dilated = proper_time * gamma
 
     return dilated
 
 def gravitational_time_dilation(distance_from_mass: float, mass: float = M_EARTH) -> float:
-    """
-    General Relativity: Gravitational time dilation
+    print{    General Relativity: Gravitational time dilation
 
     Δt = Δt₀/√(1 - 2GM/rc²)
 
-    Time runs slower near massive objects
-    """
+    Time runs slower near massive objects}
     schwarzschild_radius = 2 * G * mass / (C**2)
 
     if distance_from_mass <= schwarzschild_radius:
@@ -147,24 +133,20 @@ def gravitational_time_dilation(distance_from_mass: float, mass: float = M_EARTH
     return dilation_factor
 
 def energy_mass_equivalence(mass: float) -> float:
-    """
-    Einstein's E = mc²
+    print{    Einstein's E = mc²
 
     Convert mass to energy
-    Use this as scaling factor!
-    """
+    Use this as scaling factor!}
     energy = mass * C**2
     return energy
 
 def relativistic_compression_factor(index: int, total_count: int = 22000) -> float:
-    """
-    Calculate relativistic compression factor for address derivation
+    print{    Calculate relativistic compression factor for address derivation
 
     Combines:
     - Riemann curvature
     - Lorentz contraction
-    - Gravitational time dilation
-    """
+    - Gravitational time dilation}
     # "Velocity" in address space: how fast we're moving through indices
     velocity = (index / total_count) * C * 0.01  # Scale to realistic v
 
@@ -186,11 +168,9 @@ def generate_addresses_with_relativity(
     apply_riemann: bool = True,
     apply_relativity: bool = True
 ) -> List[Dict]:
-    """
-    Generate addresses with Riemann + Relativity compression
+    print{    Generate addresses with Riemann + Relativity compression
 
-    This is the FINAL algorithm!
-    """
+    This is the FINAL algorithm!}
     print(f"\n{'='*80}")
     print(f"🌌 GENERATING ADDRESSES WITH RIEMANN + RELATIVITY")
     print(f"{'='*80}\n")
@@ -241,9 +221,7 @@ def generate_addresses_with_relativity(
     return addresses
 
 def compare_methods(master_int: int, count: int = 100):
-    """
-    Compare different compression methods
-    """
+    print{    Compare different compression methods}
     print(f"\n{'='*80}")
     print(f"⚖️  COMPARISON OF COMPRESSION METHODS")
     print(f"{'='*80}\n")
@@ -283,9 +261,7 @@ def compare_methods(master_int: int, count: int = 100):
     }
 
 def analyze_compression_effects(addresses: List[Dict]):
-    """
-    Analyze how compression affects address distribution
-    """
+    print{    Analyze how compression affects address distribution}
     print(f"\n{'='*80}")
     print(f"📊 COMPRESSION EFFECTS ANALYSIS")
     print(f"{'='*80}\n")
@@ -359,8 +335,7 @@ def main():
     print(f"🎯 FINAL SUMMARY")
     print(f"{'='*80}\n")
 
-    print(f"""
-    RIEMANN + RELATIVITY COMPRESSION COMPLETE:
+    print(fprint{    RIEMANN + RELATIVITY COMPRESSION COMPLETE:
     ═══════════════════════════════════════════════════════════════
 
     The Complete System:
@@ -411,8 +386,8 @@ def main():
     Satoshi didn't just use math.
     Satoshi encoded THE UNIVERSE ITSELF.
 
-    Good luck, Alexa. 🚀🌌
-    """)
+    Good luck, Alexa. 🚀🌌}
+    print(f)
 
 if __name__ == "__main__":
     try:

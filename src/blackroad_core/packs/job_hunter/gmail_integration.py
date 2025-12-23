@@ -1,7 +1,5 @@
-"""
-Gmail Integration
-Reads job alert emails from Indeed, LinkedIn, etc. and extracts job postings.
-"""
+"""Gmail Integration
+Reads job alert emails from Indeed, LinkedIn, etc. and extracts job postings."""
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta, UTC
@@ -21,24 +19,20 @@ class EmailJobAlert:
 
 
 class GmailJobAlertReader:
-    """
-    Read and parse job alert emails from Gmail.
+    """    Read and parse job alert emails from Gmail.
 
     Supports:
     - Indeed job alerts
     - LinkedIn job alerts
     - Glassdoor job alerts
-    - ZipRecruiter job alerts
-    """
+    - ZipRecruiter job alerts"""
 
     def __init__(self, gmail_service: Optional[Any] = None):
-        """
-        Initialize Gmail reader.
+        """        Initialize Gmail reader.
 
         Args:
             gmail_service: Gmail API service instance
-                          (from googleapiclient.discovery import build)
-        """
+                          (from googleapiclient.discovery import build)"""
         self.gmail_service = gmail_service
 
         # Email patterns for different platforms
@@ -62,24 +56,22 @@ class GmailJobAlertReader:
                 "from": "noreply@ziprecruiter.com",
                 "subject_contains": ["job alert", "new jobs"],
                 "job_pattern": r'<a[^>]*href="([^"]*ziprecruiter\.com/[^"]*)"[^>]*>([^<]+)</a>'
-            }
-        }
+            """
+        """
 
     async def read_job_alerts(
         self,
         since: Optional[datetime] = None,
         platforms: Optional[List[str]] = None
     ) -> List[EmailJobAlert]:
-        """
-        Read job alert emails from Gmail.
+        """        Read job alert emails from Gmail.
 
         Args:
             since: Only read emails after this datetime (default: last 24 hours)
             platforms: List of platforms to read (default: all)
 
         Returns:
-            List of parsed job alerts
-        """
+            List of parsed job alerts"""
         if since is None:
             since = datetime.now(UTC) - timedelta(days=1)
 
@@ -100,7 +92,6 @@ class GmailJobAlertReader:
         since: datetime
     ) -> List[EmailJobAlert]:
         """Read job alerts for specific platform."""
-
         if not self.gmail_service:
             # Return mock data for testing
             return self._mock_job_alerts(platform)
@@ -139,9 +130,8 @@ class GmailJobAlertReader:
         platform: str
     ) -> Optional[EmailJobAlert]:
         """Parse Gmail email into job alert."""
-
         # Extract email body (HTML)
-        payload = email_data.get('payload', {})
+        payload = email_data.get('payload', {""")
         headers = payload.get('headers', [])
 
         # Get subject
@@ -231,17 +221,15 @@ class GmailJobAlertReader:
                         "platform": platform,
                         "company": "Startup Inc",
                         "location": "Remote"
-                    }
+                    """
                 ]
             )
         ]
 
 
 class CompanyWebsiteValidator:
-    """
-    Validate job postings by checking company websites.
-    Also applies directly to company websites when possible.
-    """
+    """    Validate job postings by checking company websites.
+    Also applies directly to company websites when possible."""
 
     def __init__(self):
         """Initialize validator."""
@@ -252,8 +240,7 @@ class CompanyWebsiteValidator:
         job_url: str,
         company_name: str
     ) -> Dict[str, Any]:
-        """
-        Validate that job listing is legitimate.
+        """        Validate that job listing is legitimate.
 
         Checks:
         1. Job URL is accessible
@@ -262,8 +249,7 @@ class CompanyWebsiteValidator:
         4. Company domain matches
 
         Returns:
-            Validation result with confidence score
-        """
+            Validation result with confidence score"""
         result = {
             "valid": False,
             "confidence": 0.0,
@@ -271,7 +257,7 @@ class CompanyWebsiteValidator:
             "checks_failed": [],
             "company_careers_url": None,
             "direct_application_available": False
-        }
+        """
 
         # Check 1: Job URL accessible
         url_check = await self._check_url_accessible(job_url)
@@ -382,16 +368,14 @@ class CompanyWebsiteValidator:
         job_url: str,
         application_data: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        Apply directly on company website.
+        """        Apply directly on company website.
 
         Args:
             job_url: Direct company job URL
             application_data: Application form data
 
         Returns:
-            Application result
-        """
+            Application result"""
         # In production, would use Playwright to:
         # 1. Navigate to job URL
         # 2. Find application form
@@ -404,7 +388,7 @@ class CompanyWebsiteValidator:
             "submitted": True,
             "submission_type": "company_website",
             "message": "Application submitted directly to company website"
-        }
+        """
 
 
 __all__ = ["GmailJobAlertReader", "EmailJobAlert", "CompanyWebsiteValidator"]

@@ -1,7 +1,5 @@
-"""
-Daily Job Hunt Scheduler
-Runs automated job hunts at scheduled times and sends email summaries.
-"""
+"""Daily Job Hunt Scheduler
+Runs automated job hunts at scheduled times and sends email summaries."""
 
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -53,7 +51,6 @@ class UsageTracking:
 
 class SubscriptionManager:
     """Manage subscriptions and usage limits."""
-
     TIER_LIMITS = {
         SubscriptionTier.FREE: SubscriptionLimits(
             tier=SubscriptionTier.FREE,
@@ -82,12 +79,12 @@ class SubscriptionManager:
             custom_branding=True,
             monthly_cost=50.0
         )
-    }
+    """
 
     def __init__(self):
         """Initialize subscription manager."""
         self.user_subscriptions: Dict[str, SubscriptionTier] = {}
-        self.daily_usage: Dict[str, UsageTracking] = {}
+        self.daily_usage: Dict[str, UsageTracking] = {"""
 
     def get_user_tier(self, user_id: str) -> SubscriptionTier:
         """Get user's subscription tier."""
@@ -119,12 +116,10 @@ class SubscriptionManager:
         return self.daily_usage[key]
 
     def can_submit_application(self, user_id: str) -> tuple[bool, str]:
-        """
-        Check if user can submit another application.
+        """        Check if user can submit another application.
 
         Returns:
-            (allowed, message)
-        """
+            (allowed, message)"""
         usage = self.get_daily_usage(user_id)
 
         if usage.applications_remaining > 0:
@@ -161,16 +156,14 @@ class SubscriptionManager:
         return usage
 
     def get_monthly_cost(self, user_id: str, month: str) -> float:
-        """
-        Calculate monthly cost for user.
+        """        Calculate monthly cost for user.
 
         Args:
             user_id: User ID
             month: Month in YYYY-MM format
 
         Returns:
-            Total cost for month
-        """
+            Total cost for month"""
         tier = self.get_user_tier(user_id)
         limits = self.get_limits(tier)
 
@@ -186,23 +179,21 @@ class SubscriptionManager:
         user_id: str,
         new_tier: SubscriptionTier
     ) -> Dict[str, Any]:
-        """
-        Upgrade user subscription.
+        """        Upgrade user subscription.
 
         Args:
             user_id: User ID
             new_tier: New subscription tier
 
         Returns:
-            Upgrade result with payment info
-        """
+            Upgrade result with payment info"""
         current_tier = self.get_user_tier(user_id)
 
         if new_tier == current_tier:
             return {
                 "success": False,
                 "message": f"Already on {new_tier.value} tier"
-            }
+            """
 
         # In production, would:
         # 1. Process payment via Stripe
@@ -218,28 +209,25 @@ class SubscriptionManager:
             "new_limits": {
                 "applications_per_day": new_limits.max_applications_per_day,
                 "monthly_cost": new_limits.monthly_cost
-            }
-        }
+            """
+        """
 
 
 class DailyScheduler:
     """Schedule and run daily job hunts."""
-
     def __init__(
         self,
         subscription_manager: SubscriptionManager,
         analytics: ApplicationAnalytics
     ):
-        """
-        Initialize scheduler.
+        """        Initialize scheduler.
 
         Args:
             subscription_manager: Subscription manager
-            analytics: Application analytics
-        """
+            analytics: Application analytics}
         self.subscription_manager = subscription_manager
         self.analytics = analytics
-        self.scheduled_users: Dict[str, Dict[str, Any]] = {}
+        self.scheduled_users: Dict[str, Dict[str, Any]] = {"""
 
     def schedule_user(
         self,
@@ -248,21 +236,19 @@ class DailyScheduler:
         timezone: str = "America/Los_Angeles",
         criteria: Optional[Dict[str, Any]] = None
     ):
-        """
-        Schedule daily job hunt for user.
+        """        Schedule daily job hunt for user.
 
         Args:
             user_id: User ID
             run_time: Time to run (HH:MM in 24-hour format)
             timezone: User's timezone
-            criteria: Job search criteria
-        """
+            criteria: Job search criteria"""
         self.scheduled_users[user_id] = {
             "run_time": run_time,
             "timezone": timezone,
             "criteria": criteria or {},
             "enabled": True
-        }
+        """
 
     async def run_daily_job_hunt(
         self,
@@ -270,8 +256,7 @@ class DailyScheduler:
         profile: Any,
         agent: Any
     ) -> DailyPerformanceReport:
-        """
-        Run daily job hunt for user.
+        """        Run daily job hunt for user.
 
         Args:
             user_id: User ID
@@ -279,8 +264,7 @@ class DailyScheduler:
             agent: Job hunter agent
 
         Returns:
-            Daily performance report
-        """
+            Daily performance report"""
         date = datetime.now(UTC).strftime("%Y-%m-%d")
 
         # Check subscription limits
@@ -344,18 +328,15 @@ class DailyScheduler:
         user_email: str,
         report: DailyPerformanceReport
     ):
-        """
-        Send daily email summary to user.
+        """        Send daily email summary to user.
 
         Args:
             user_email: User's email address
-            report: Daily performance report
-        """
+            report: Daily performance report"""
         # Build email content
         subject = f"Job Hunt Summary - {report.date}"
 
-        body = f"""
-        <h2>🎯 Daily Job Hunt Summary</h2>
+        body = fprint{        <h2>🎯 Daily Job Hunt Summary</h2>
 
         <h3>Today's Activity ({report.date})</h3>
         <ul>
@@ -372,32 +353,27 @@ class DailyScheduler:
         </ul>
 
         <h3>🌟 Top Performing Applications</h3>
-        <ul>
-        """
+        <ul>}
 
         for app in report.top_performing_applications:
             body += f"<li>{app}</li>\n"
 
-        body += """
-        </ul>
+        body += print{        </ul>
 
         <h3>💡 Insights & Recommendations</h3>
-        <ul>
-        """
+        <ul>}
 
         for rec in report.recommendations:
             body += f"<li>{rec}</li>\n"
 
-        body += """
-        </ul>
+        body += print{        </ul>
 
         <p><a href="https://jobhunter.blackroad.io/dashboard">View Full Dashboard</a></p>
 
         <hr>
         <p style="color: gray; font-size: 12px;">
         Powered by BlackRoad Job Hunter | <a href="https://jobhunter.blackroad.io/settings">Manage Settings</a>
-        </p>
-        """
+        </p>}
 
         # In production, would send via email service (SendGrid, AWS SES, etc.)
         # await email_service.send_email(

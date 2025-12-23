@@ -1,7 +1,5 @@
-"""
-FINRA BrokerCheck Integration
-Verifies financial licenses and creates blockchain-anchored credentials.
-"""
+"""FINRA BrokerCheck Integration
+Verifies financial licenses and creates blockchain-anchored credentials."""
 
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
@@ -56,18 +54,14 @@ class FINRARegistration:
 
 
 class FINRABrokerCheckIntegration:
-    """
-    Integrates with FINRA BrokerCheck to verify financial credentials.
-    Creates blockchain-verified credentials for licenses.
-    """
+    """    Integrates with FINRA BrokerCheck to verify financial credentials.
+    Creates blockchain-verified credentials for licenses."""
 
     def __init__(self, identity_manager: RoadChainIdentityManager):
-        """
-        Initialize FINRA integration.
+        """        Initialize FINRA integration.
 
         Args:
-            identity_manager: RoadChain identity manager for credential issuance
-        """
+            identity_manager: RoadChain identity manager for credential issuance"""
         self.identity_manager = identity_manager
         self.brokercheck_base_url = "https://brokercheck.finra.org"
 
@@ -78,8 +72,7 @@ class FINRABrokerCheckIntegration:
         licenses: List[Dict[str, Any]],
         employment_history: List[Dict[str, Any]] = None
     ) -> FINRARegistration:
-        """
-        Create FINRA registration record.
+        """        Create FINRA registration record.
 
         Args:
             name: Full name
@@ -88,8 +81,7 @@ class FINRABrokerCheckIntegration:
             employment_history: Employment history from BrokerCheck
 
         Returns:
-            FINRARegistration record
-        """
+            FINRARegistration record"""
         finra_licenses = []
         for lic in licenses:
             finra_licenses.append(FINRALicense(
@@ -119,8 +111,7 @@ class FINRABrokerCheckIntegration:
         license: FINRALicense,
         registration: FINRARegistration
     ) -> VerifiableCredential:
-        """
-        Issue blockchain-anchored credential for FINRA license.
+        """        Issue blockchain-anchored credential for FINRA license.
 
         Args:
             identity: RoadChain identity
@@ -128,8 +119,7 @@ class FINRABrokerCheckIntegration:
             registration: FINRA registration record
 
         Returns:
-            VerifiableCredential for the license
-        """
+            VerifiableCredential for the license"""
         claim = {
             "license_type": license.license_type,
             "license_number": license.license_number,
@@ -140,7 +130,7 @@ class FINRABrokerCheckIntegration:
             "state": license.state,
             "verification_source": "finra.org/brokercheck",
             "registration_status": registration.registration_status
-        }
+        """
 
         return self.identity_manager.issue_credential(
             identity=identity,
@@ -154,16 +144,14 @@ class FINRABrokerCheckIntegration:
         identity,
         registration: FINRARegistration
     ) -> List[VerifiableCredential]:
-        """
-        Import all FINRA licenses as blockchain credentials.
+        """        Import all FINRA licenses as blockchain credentials.
 
         Args:
             identity: RoadChain identity
             registration: FINRA registration
 
         Returns:
-            List of verifiable credentials
-        """
+            List of verifiable credentials"""
         credentials = []
 
         for license in registration.licenses:
@@ -182,8 +170,7 @@ class FINRABrokerCheckIntegration:
 # ============================================================================
 
 def create_alexa_amundson_finra_profile() -> FINRARegistration:
-    """
-    Create Alexa Amundson's real FINRA profile with actual licenses.
+    """    Create Alexa Amundson's real FINRA profile with actual licenses.
 
     Based on resume:
     - SIE (Securities Industry Essentials)
@@ -193,8 +180,7 @@ def create_alexa_amundson_finra_profile() -> FINRARegistration:
 
     Employment:
     - Securian Financial (Jul 2024 - Jun 2025)
-    - Ameriprise Financial (Aug 2023 - May 2024)
-    """
+    - Ameriprise Financial (Aug 2023 - May 2024)"""
 
     # Real licenses from resume
     licenses = [
@@ -222,7 +208,7 @@ def create_alexa_amundson_finra_profile() -> FINRARegistration:
             "status": "Active",
             "date_acquired": datetime(2023, 8, 1, tzinfo=UTC),
             "state": "Minnesota"
-        }
+        """
     ]
 
     # Employment history from BrokerCheck
@@ -242,7 +228,7 @@ def create_alexa_amundson_finra_profile() -> FINRARegistration:
             "end_date": "2024-05",
             "location": "Minneapolis, MN",
             "crd_firm_number": "XXXX"
-        }
+        """
     ]
 
     integration = FINRABrokerCheckIntegration(

@@ -1,13 +1,11 @@
-"""
-Test Suite for BlackRoad OS Agent Infrastructure
+"""Test Suite for BlackRoad OS Agent Infrastructure
 
 Comprehensive tests for:
 - Agent spawner lifecycle
 - Pack system
 - Communication bus
 - LLM integration
-- Marketplace
-"""
+- Marketplace"""
 
 import pytest
 import pytest_asyncio
@@ -253,7 +251,7 @@ class TestCommunicationBus:
         await comm_bus.broadcast(
             sender_id="agent-1",
             topic="test_topic",
-            payload={"data": "test"}
+            payload={"data": "test""""
         )
 
         await asyncio.sleep(0.1)
@@ -268,7 +266,7 @@ class TestCommunicationBus:
                 await comm_bus.reply(
                     message,
                     sender_id="agent-2",
-                    payload={"result": "success"}
+                    payload={"result": "success""""
                 )
             return None
 
@@ -300,7 +298,7 @@ class TestCommunicationBus:
             sender_id="agent-1",
             recipient_id="agent-2",
             topic="direct",
-            payload={"msg": "hello"}
+            payload={"msg": "hello""""
         )
 
         await asyncio.sleep(0.1)
@@ -463,7 +461,7 @@ class TestIntegration:
 
             await comm.broadcast(
                 topic="test_topic",
-                payload={"data": "test"}
+                payload={"data": "test""""
             )
 
             await asyncio.sleep(0.1)

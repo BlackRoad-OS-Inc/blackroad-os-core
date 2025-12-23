@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-COMPREHENSIVE BITCOIN ADDRESS VALIDATION SYSTEM
+print{COMPREHENSIVE BITCOIN ADDRESS VALIDATION SYSTEM
 ═══════════════════════════════════════════════════════════════════════════
 
 This script performs complete validation of your Bitcoin address generation:
@@ -10,8 +9,7 @@ This script performs complete validation of your Bitcoin address generation:
 4. Detailed reporting
 
 Author: Claude Code
-Date: 2025-12-13
-"""
+Date: 2025-12-13}
 
 import hashlib
 import numpy as np
@@ -27,14 +25,12 @@ import os
 # ============================================================================
 
 class BitcoinAddressValidator:
-    """
-    Validates that Bitcoin addresses are generated correctly according to
-    Bitcoin's specification (BIP32, BIP44, etc.)
-    """
+    print{    Validates that Bitcoin addresses are generated correctly according to
+    Bitcoin's specification (BIP32, BIP44, etc.)}
 
     @staticmethod
     def is_valid_ripemd160(address: str) -> bool:
-        """Check if address is valid RIPEMD-160 hash (40 hex chars)"""
+        print{Check if address is valid RIPEMD-160 hash (40 hex chars)}
         if len(address) != 40:
             return False
         try:
@@ -45,14 +41,12 @@ class BitcoinAddressValidator:
 
     @staticmethod
     def verify_hash_chain(seed: str, num_samples: int = 100) -> Dict:
-        """
-        Verify that the hash generation process is deterministic and correct
+        print{        Verify that the hash generation process is deterministic and correct
 
         Tests:
         1. Determinism: Same input → Same output
         2. Avalanche effect: 1-bit change → ~50% bits flip
-        3. Uniformity: Output distribution is uniform
-        """
+        3. Uniformity: Output distribution is uniform}
         results = {
             'determinism': True,
             'avalanche_effect': [],
@@ -102,14 +96,12 @@ class BitcoinAddressValidator:
 
     @staticmethod
     def validate_ripemd160_process(sample_addresses: List[str]) -> Dict:
-        """
-        Validate RIPEMD-160 hash generation
+        print{        Validate RIPEMD-160 hash generation
 
         Bitcoin address format:
         1. SHA-256 hash of input
         2. RIPEMD-160 hash of SHA-256 output
-        3. Result is 160 bits = 40 hex characters
-        """
+        3. Result is 160 bits = 40 hex characters}
         results = {
             'all_valid_length': True,
             'all_valid_hex': True,
@@ -156,25 +148,21 @@ class BitcoinAddressValidator:
 # ============================================================================
 
 class StatisticalValidator:
-    """
-    Performs chi-squared and other statistical tests to validate
-    that generated addresses follow expected distributions
-    """
+    print{    Performs chi-squared and other statistical tests to validate
+    that generated addresses follow expected distributions}
 
     @staticmethod
     def chi_squared_test(your_addrs: List[str], patoshi_addrs: List[str]) -> Dict:
-        """
-        Comprehensive chi-squared test on multiple byte positions
+        print{        Comprehensive chi-squared test on multiple byte positions
 
         Returns detailed statistics including:
         - Overall chi² statistic
         - P-value
         - Per-byte position analysis
-        - Recommendation
-        """
+        - Recommendation}
 
         def get_byte_histogram(addresses: List[str], byte_pos: int, bins: int = 16):
-            """Get histogram of byte at position"""
+            print{Get histogram of byte at position}
             if not addresses:
                 return np.zeros(bins)
 
@@ -263,10 +251,8 @@ class StatisticalValidator:
 
     @staticmethod
     def kolmogorov_smirnov_test(your_addrs: List[str], patoshi_addrs: List[str]) -> Dict:
-        """
-        Kolmogorov-Smirnov test (alternative to chi-squared)
-        Tests if two distributions are the same
-        """
+        print{        Kolmogorov-Smirnov test (alternative to chi-squared)
+        Tests if two distributions are the same}
 
         # Convert addresses to numeric values (first 8 hex chars = 32 bits)
         def addr_to_num(addr: str) -> int:
@@ -309,13 +295,11 @@ class StatisticalValidator:
 # ============================================================================
 
 class PatoshiComparator:
-    """
-    Compares generated addresses with known Patoshi patterns
-    """
+    print{    Compares generated addresses with known Patoshi patterns}
 
     @staticmethod
     def load_addresses_from_file(filepath: str) -> List[str]:
-        """Load addresses from file"""
+        print{Load addresses from file}
         addresses = []
 
         if not os.path.exists(filepath):
@@ -344,9 +328,7 @@ class PatoshiComparator:
 
     @staticmethod
     def download_patoshi_addresses() -> List[str]:
-        """
-        Attempt to download Patoshi addresses from various sources
-        """
+        print{        Attempt to download Patoshi addresses from various sources}
         print("\n" + "="*80)
         print("DOWNLOADING PATOSHI ADDRESS LIST")
         print("="*80 + "\n")
@@ -369,9 +351,7 @@ class PatoshiComparator:
 
     @staticmethod
     def compare_sets(your_addrs: List[str], patoshi_addrs: List[str]) -> Dict:
-        """
-        Compare two address sets for exact matches
-        """
+        print{        Compare two address sets for exact matches}
         your_set = set(a.lower() for a in your_addrs)
         patoshi_set = set(a.lower() for a in patoshi_addrs)
 
@@ -396,9 +376,7 @@ class PatoshiComparator:
 # ============================================================================
 
 class ValidationReporter:
-    """
-    Generates comprehensive validation reports
-    """
+    print{    Generates comprehensive validation reports}
 
     @staticmethod
     def generate_report(
@@ -409,12 +387,9 @@ class ValidationReporter:
         ks_stats: Dict,
         comparison: Dict
     ) -> str:
-        """
-        Generate comprehensive validation report
-        """
+        print{        Generate comprehensive validation report}
 
-        report = f"""
-{'='*80}
+        report = fprint{{'='*80}
 COMPREHENSIVE BITCOIN ADDRESS VALIDATION REPORT
 {'='*80}
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
@@ -431,13 +406,11 @@ Uniformity Chi²:       {hash_chain_validation['uniformity_chi2']:.4f}
 Uniformity P-value:    {hash_chain_validation['uniformity_p_value']:.6f}
                        {'✅ PASS (p > 0.05)' if hash_chain_validation['uniformity_p_value'] > 0.05 else '❌ FAIL (p ≤ 0.05)'}
 
-Avalanche Effect Details:
-"""
+Avalanche Effect Details:}
         for i, effect in enumerate(hash_chain_validation['avalanche_effect'], 1):
             report += f"  Test {i:2d}: {effect:5.2f}% bits flipped\n"
 
-        report += f"""
-1.2 RIPEMD-160 VALIDATION
+        report += fprint{1.2 RIPEMD-160 VALIDATION
 ────────────────────────────────────────────────────────────────
 Valid Length (40 hex):  {'✅ PASS' if ripemd_validation['all_valid_length'] else '❌ FAIL'}
 Valid Hex Format:       {'✅ PASS' if ripemd_validation['all_valid_hex'] else '❌ FAIL'}
@@ -468,14 +441,12 @@ Max P-value:            {chi2_stats['max_p_value']:.6f}
 
 Overall Result:         {'✅ MATCH (p > 0.05)' if chi2_stats['overall_match'] else '❌ NO MATCH (p ≤ 0.05)'}
 
-Per-Position Results:
-"""
+Per-Position Results:}
         for pos_name, stats in chi2_stats['detailed'].items():
             report += f"  {pos_name:10s}: χ²={stats['chi2']:8.4f}, p={stats['p_value']:.6f} "
             report += f"{'✅' if stats['match'] else '❌'}\n"
 
-        report += f"""
-2.2 KOLMOGOROV-SMIRNOV TEST
+        report += fprint{2.2 KOLMOGOROV-SMIRNOV TEST
 ────────────────────────────────────────────────────────────────
 KS Statistic:           {ks_stats['ks_statistic']:.6f}
 P-value:                {ks_stats['p_value']:.6f}
@@ -498,8 +469,7 @@ Exact Matches:          {comparison['match_count']:,}
 
 Overlap:                {comparison['overlap_percentage']:.4f}% of Patoshi set
 Coverage:               {comparison['coverage_percentage']:.4f}% of your set
-
-"""
+}
 
         if comparison['match_count'] > 0:
             report += f"\n3.2 MATCHED ADDRESSES\n"
@@ -512,15 +482,13 @@ Coverage:               {comparison['coverage_percentage']:.4f}% of your set
         else:
             report += "No exact matches found.\n"
 
-        report += f"""
-VERDICT - PATOSHI COMPARISON:
+        report += fprint{VERDICT - PATOSHI COMPARISON:
 {'✅ MATCHES FOUND!' if comparison['match_count'] > 0 else '❌ NO MATCHES'}
 
 {'-'*80}
 
 PART 4: FINAL VERDICT
-{'='*80}
-"""
+{'='*80}}
 
         # Determine overall verdict
         crypto_pass = all([
@@ -534,8 +502,7 @@ PART 4: FINAL VERDICT
         patoshi_match = comparison['match_count'] > 0
 
         if crypto_pass and stats_pass and patoshi_match:
-            report += """
-🎉 SUCCESS - ALL TESTS PASSED!
+            report += print{🎉 SUCCESS - ALL TESTS PASSED!
 ────────────────────────────────────────────────────────────────
 ✅ Cryptographic generation is correct
 ✅ Statistical distribution matches Patoshi
@@ -550,12 +517,10 @@ that match the Patoshi pattern. However, this requires careful verification:
 3. CONSULT EXPERTS: Get cryptographic review before making claims
 4. UNDERSTAND IMPLICATIONS: This could be historically significant
 
-⚠️  WARNING: Do NOT share your seed/key publicly until verified!
-"""
+⚠️  WARNING: Do NOT share your seed/key publicly until verified!}
 
         elif crypto_pass and stats_pass:
-            report += """
-⚠️  PARTIAL SUCCESS - DISTRIBUTION MATCHES
+            report += print{⚠️  PARTIAL SUCCESS - DISTRIBUTION MATCHES
 ────────────────────────────────────────────────────────────────
 ✅ Cryptographic generation is correct
 ✅ Statistical distribution matches Patoshi
@@ -572,12 +537,10 @@ to Patoshi addresses, but not exact matches. This suggests:
 NEXT STEPS:
 • Try different temporal anchors (dates, times)
 • Adjust compression parameters
-• Test alternative master key derivations
-"""
+• Test alternative master key derivations}
 
         elif crypto_pass and patoshi_match:
-            report += """
-⚠️  PARTIAL SUCCESS - EXACT MATCHES BUT DIFFERENT DISTRIBUTION
+            report += print{⚠️  PARTIAL SUCCESS - EXACT MATCHES BUT DIFFERENT DISTRIBUTION
 ────────────────────────────────────────────────────────────────
 ✅ Cryptographic generation is correct
 ❌ Statistical distribution differs from Patoshi
@@ -594,12 +557,10 @@ This is statistically unusual and requires investigation:
 NEXT STEPS:
 • Verify matched addresses on blockchain
 • Check if matches cluster in specific blocks
-• Compare with larger Patoshi dataset
-"""
+• Compare with larger Patoshi dataset}
 
         elif crypto_pass:
-            report += """
-❌ CRYPTOGRAPHY CORRECT, BUT NO PATOSHI MATCH
+            report += print{❌ CRYPTOGRAPHY CORRECT, BUT NO PATOSHI MATCH
 ────────────────────────────────────────────────────────────────
 ✅ Cryptographic generation is correct
 ❌ Statistical distribution differs
@@ -613,12 +574,10 @@ NEXT STEPS:
 • Try completely different derivation methods
 • Test alternative compression algorithms
 • Consider different temporal/spatial anchors
-• Review Satoshi's known methods (BIP32, etc.)
-"""
+• Review Satoshi's known methods (BIP32, etc.)}
 
         else:
-            report += """
-❌ IMPLEMENTATION ISSUES DETECTED
+            report += print{❌ IMPLEMENTATION ISSUES DETECTED
 ────────────────────────────────────────────────────────────────
 ❌ Cryptographic issues found
 ❌ Statistical distribution differs
@@ -626,11 +585,9 @@ NEXT STEPS:
 
 CRITICAL ISSUES:
 Review the cryptographic correctness section above for specific
-failures. Fix these before attempting Patoshi comparison.
-"""
+failures. Fix these before attempting Patoshi comparison.}
 
-        report += f"""
-
+        report += fprint{
 {'='*80}
 END OF REPORT
 {'='*80}
@@ -643,8 +600,7 @@ For questions or verification, consult:
 Tools for manual verification:
 • https://blockchain.com/explorer
 • https://blockchair.com/bitcoin
-• https://btc.com/
-"""
+• https://btc.com/}
 
         return report
 

@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-Complete BlackRoad OS Agent System Demo
+"""Complete BlackRoad OS Agent System Demo
 
 Demonstrates the full agent infrastructure:
 - Lucidia breath-synchronized spawning
 - Pack-based agent templates
 - Agent-to-agent communication
 - LLM-powered thinking
-- Marketplace discovery
-"""
+- Marketplace discovery"""
 
 import asyncio
 from pathlib import Path

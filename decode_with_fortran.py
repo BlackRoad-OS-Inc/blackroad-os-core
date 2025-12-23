@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""
-Use earliest computer programming concepts
+print{Use earliest computer programming concepts
 FORTRAN (1957) - Formula Translation
 Assembly language principles
-Machine code / Binary
-"""
+Machine code / Binary}
 
 sequence = [19, 100, 100, 4, 4, 8, 25, 1, 3, 15, 30, 4, 4, 32, 7, 221, 451, 114, 31, 114, 31, 1]
 

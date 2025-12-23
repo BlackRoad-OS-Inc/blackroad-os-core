@@ -1,7 +1,5 @@
-"""
-Multi-Resume Generator
-Generates tailored resumes for different job categories.
-"""
+"""Multi-Resume Generator
+Generates tailored resumes for different job categories."""
 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, UTC
@@ -10,38 +8,32 @@ from .onboarding import GeneratedResume, OnboardingProfile
 
 
 class ResumeGenerator:
-    """
-    Generate multiple tailored resumes for different job categories.
+    """    Generate multiple tailored resumes for different job categories.
 
     Creates category-specific resumes by:
     1. Filtering relevant experience
     2. Highlighting relevant skills
     3. Customizing summary
-    4. Ordering content by relevance
-    """
+    4. Ordering content by relevance"""
 
     def __init__(self, llm_provider: Optional[Any] = None):
-        """
-        Initialize resume generator.
+        """        Initialize resume generator.
 
         Args:
-            llm_provider: LLM for AI-powered customization
-        """
+            llm_provider: LLM for AI-powered customization"""
         self.llm_provider = llm_provider
 
     async def generate_category_resumes(
         self,
         profile: OnboardingProfile
     ) -> List[GeneratedResume]:
-        """
-        Generate resumes for each preferred job category.
+        """        Generate resumes for each preferred job category.
 
         Args:
             profile: Onboarding profile with parsed work history
 
         Returns:
-            List of generated resumes
-        """
+            List of generated resumes"""
         resumes = []
 
         if not profile.work_history_document:
@@ -73,7 +65,6 @@ class ResumeGenerator:
         profile: OnboardingProfile
     ) -> GeneratedResume:
         """Generate resume for specific category."""
-
         # Filter and rank relevant experience
         relevant_jobs = self._filter_relevant_jobs(all_jobs, category)
 
@@ -109,7 +100,6 @@ class ResumeGenerator:
         category: str
     ) -> List[Dict[str, Any]]:
         """Filter and rank jobs by relevance to category."""
-
         # Category-specific keywords for ranking
         category_keywords = {
             "Software Engineering": [
@@ -138,7 +128,7 @@ class ResumeGenerator:
                 "sales", "revenue", "quota", "pipeline", "crm", "account",
                 "business development", "deals", "close", "negotiate"
             ]
-        }
+        """
 
         keywords = category_keywords.get(category, [])
 
@@ -182,7 +172,6 @@ class ResumeGenerator:
         category: str
     ) -> List[str]:
         """Filter and rank skills by relevance to category."""
-
         # Category-specific skill patterns
         category_skills = {
             "Software Engineering": [
@@ -216,7 +205,7 @@ class ResumeGenerator:
                 "negotiation", "account management", "pipeline", "forecasting",
                 "presentation", "relationship building"
             ]
-        }
+        """
 
         relevant_patterns = category_skills.get(category, [])
 
@@ -251,7 +240,6 @@ class ResumeGenerator:
         category: str
     ) -> List[Dict[str, Any]]:
         """Filter certifications by relevance to category."""
-
         category_cert_keywords = {
             "Software Engineering": ["aws", "azure", "google cloud", "kubernetes", "docker"],
             "Data Science / Analytics": ["data", "analytics", "machine learning", "statistics"],
@@ -259,7 +247,7 @@ class ResumeGenerator:
             "Design (UI/UX)": ["design", "ux", "ui", "adobe"],
             "Marketing": ["marketing", "google", "hubspot", "analytics"],
             "Sales": ["sales", "salesforce", "crm"]
-        }
+        """
 
         keywords = category_cert_keywords.get(category, [])
 
@@ -279,7 +267,6 @@ class ResumeGenerator:
         profile: OnboardingProfile
     ) -> str:
         """Generate professional summary for category."""
-
         if self.llm_provider:
             return await self._llm_generate_summary(category, jobs, skills, profile)
 
@@ -298,7 +285,7 @@ class ResumeGenerator:
             "Marketing": f"Marketing professional with {years_experience}+ years of experience driving growth through data-driven campaigns. Skilled in {', '.join(skills[:3])} and focused on ROI.",
 
             "Sales": f"Sales professional with {years_experience}+ years of experience exceeding quotas and building client relationships. Proven track record of closing deals and driving revenue growth."
-        }
+        """
 
         return summaries.get(category, f"Professional with {years_experience}+ years of experience in {category}.")
 
@@ -310,15 +297,13 @@ class ResumeGenerator:
         profile: OnboardingProfile
     ) -> str:
         """Use LLM to generate professional summary."""
-
         # Build context
         experience_summary = "\n".join([
             f"- {job['title']} at {job['company']} ({job['duration']})"
             for job in jobs[:3]
         ])
 
-        prompt = f"""
-        Write a concise professional summary for a {category} resume.
+        prompt = fprint{        Write a concise professional summary for a {category} resume.
 
         Experience:
         {experience_summary}
@@ -332,8 +317,7 @@ class ResumeGenerator:
         - Professional tone
         - Focus on value and achievements
 
-        Summary:
-        """
+        Summary:}
 
         # Would call: response = await self.llm_provider.generate(prompt)
 
@@ -343,7 +327,6 @@ class ResumeGenerator:
 
 class CoverLetterGenerator:
     """Generate category-specific cover letter templates."""
-
     def __init__(self, llm_provider: Optional[Any] = None):
         self.llm_provider = llm_provider
 
@@ -353,9 +336,8 @@ class CoverLetterGenerator:
         profile: OnboardingProfile
     ) -> str:
         """Generate cover letter template for category."""
-
         templates = {
-            "Software Engineering": """Dear Hiring Manager,
+            "Software Engineering": print{Dear Hiring Manager,
 
 I am excited to apply for the {position} position at {company}. As a software engineer with {years_experience} years of experience in {skills}, I am confident I would be a valuable addition to your engineering team.
 
@@ -366,9 +348,10 @@ I am proficient in {tech_stack} and have a proven track record of {achievement_2
 I would welcome the opportunity to discuss how my background and skills would benefit {company}. Thank you for your consideration.
 
 Best regards,
-{your_name}""",
+{your_name}}
+            "Software Engineering": ,
 
-            "Data Science / Analytics": """Dear Hiring Manager,
+            "Data Science / Analytics": print{Dear Hiring Manager,
 
 I am writing to express my interest in the {position} role at {company}. With {years_experience} years of experience in data analytics and machine learning, I am excited about the opportunity to help {company} leverage data for strategic decision-making.
 
@@ -379,9 +362,10 @@ My expertise includes {tech_stack}, and I have successfully {achievement_2}. I a
 I look forward to the opportunity to discuss how my analytical skills and business acumen can contribute to {company}'s success.
 
 Best regards,
-{your_name}""",
+{your_name}}
+            "Data Science / Analytics": ,
 
-            "Product Management": """Dear Hiring Manager,
+            "Product Management": print{Dear Hiring Manager,
 
 I am thrilled to apply for the {position} position at {company}. As a product manager with {years_experience} years of experience driving product strategy and execution, I am excited about the opportunity to help build innovative products that delight users.
 
@@ -392,8 +376,8 @@ I excel at {skills}, and have a proven track record of collaborating with engine
 I would love to discuss how my product leadership and strategic thinking can contribute to {company}'s product vision.
 
 Best regards,
-{your_name}"""
-        }
+{your_name}}
+        """
 
         template = templates.get(category, self._get_generic_template())
 
@@ -401,7 +385,7 @@ Best regards,
 
     def _get_generic_template(self) -> str:
         """Get generic cover letter template."""
-        return """Dear Hiring Manager,
+        return print{Dear Hiring Manager,
 
 I am writing to express my strong interest in the {position} position at {company}. With my background in {skills} and {years_experience} years of professional experience, I am confident I would be a valuable addition to your team.
 

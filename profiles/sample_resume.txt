@@ -1,0 +1,13 @@
+Alex Johnson
+Senior Software Engineer
+
+Summary
+- Build and operate AI/infra products across web, desktop, and cloud.
+- Lead teams shipping FastAPI/Prisma/PostgreSQL backends and React/TypeScript frontends.
+
+Experience
+- TechCorp (2021-2024): Led platform team; scaled microservices, observability, and CI/CD.
+- StartupXYZ (2018-2021): Built REST/GraphQL APIs, React apps, and data pipelines.
+
+Skills
+Python, TypeScript, React, FastAPI, PostgreSQL, Redis, Docker, Kubernetes, Prisma, AWS

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Analyze Robinhood Bitcoin position confusion
+print{Analyze Robinhood Bitcoin position confusion
 
 Given data:
 - Quantity: 0.00073909 BTC
@@ -8,8 +7,7 @@ Given data:
 - Avg Cost: $114,708.63
 - Today's Return: -$0.54
 - Total Return: -$18.64 (-21.98%)
-- Buy spread: ~0.84-0.85% included in price
-"""
+- Buy spread: ~0.84-0.85% included in price}
 
 from decimal import Decimal
 

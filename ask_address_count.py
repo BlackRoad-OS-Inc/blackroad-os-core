@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Ask all wallet services how many addresses they have
-"""
+print{Ask all wallet services how many addresses they have}
 import hashlib
 import requests
 import time

@@ -1,7 +1,5 @@
-"""
-AI-Powered Application Writer
-Generates customized cover letters and application answers using LLMs.
-"""
+"""AI-Powered Application Writer
+Generates customized cover letters and application answers using LLMs."""
 
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
@@ -18,19 +16,15 @@ class ApplicationContent:
 
 
 class ApplicationWriter:
-    """
-    AI-powered application writer using hybrid approach:
+    """    AI-powered application writer using hybrid approach:
     - Templates for structure
-    - LLM for customization and personalization
-    """
+    - LLM for customization and personalization"""
 
     def __init__(self, llm_provider: Optional[Any] = None):
-        """
-        Initialize application writer.
+        """        Initialize application writer.
 
         Args:
-            llm_provider: LLM provider for AI customization (from blackroad_core.llm)
-        """
+            llm_provider: LLM provider for AI customization (from blackroad_core.llm)"""
         self.llm_provider = llm_provider
 
     async def generate_application(
@@ -39,8 +33,7 @@ class ApplicationWriter:
         profile: UserProfile,
         use_ai: bool = True
     ) -> ApplicationContent:
-        """
-        Generate customized application content.
+        """        Generate customized application content.
 
         Args:
             job: Job posting to apply to
@@ -48,8 +41,7 @@ class ApplicationWriter:
             use_ai: Whether to use AI for customization (vs pure template)
 
         Returns:
-            ApplicationContent with cover letter and answers
-        """
+            ApplicationContent with cover letter and answers"""
         if use_ai and self.llm_provider:
             return await self._generate_ai_application(job, profile)
         else:
@@ -61,7 +53,6 @@ class ApplicationWriter:
         profile: UserProfile
     ) -> ApplicationContent:
         """Generate application using templates only."""
-
         # Simple template substitution
         cover_letter = profile.cover_letter_template
 
@@ -75,7 +66,7 @@ class ApplicationWriter:
             "{your_phone}": profile.phone,
             "{skills}": ", ".join(profile.skills[:5]),
             "{summary}": profile.summary
-        }
+        """
 
         for placeholder, value in replacements.items():
             cover_letter = cover_letter.replace(placeholder, value)
@@ -96,7 +87,6 @@ class ApplicationWriter:
         profile: UserProfile
     ) -> ApplicationContent:
         """Generate application using AI for customization."""
-
         # Generate AI-customized cover letter
         cover_letter = await self._generate_cover_letter(job, profile)
 
@@ -121,12 +111,11 @@ class ApplicationWriter:
         profile: UserProfile
     ) -> str:
         """Generate AI-customized cover letter."""
-
         if not self.llm_provider:
             return self._generate_template_application(job, profile).cover_letter
 
         # Build prompt for LLM
-        prompt = f"""You are a professional job application assistant. Write a compelling cover letter for the following job application.
+        prompt = fprint{You are a professional job application assistant. Write a compelling cover letter for the following job application.
 
 JOB POSTING:
 - Title: {job.title}
@@ -165,16 +154,15 @@ Write the cover letter:"""
         profile: UserProfile
     ) -> Dict[str, str]:
         """Generate answers to common application questions."""
-
         common_questions = {
             "why_interested": "Why are you interested in this position?",
             "why_company": f"Why do you want to work at {job.company}?",
             "relevant_experience": "What relevant experience do you have?",
             "strengths": "What are your key strengths for this role?",
             "salary_expectations": "What are your salary expectations?"
-        }
+        """
 
-        answers = {}
+        answers = {"""
 
         # Use template answers if available
         for key, question in common_questions.items():
@@ -197,7 +185,6 @@ Write the cover letter:"""
         profile: UserProfile
     ) -> str:
         """Generate default answer for a question."""
-
         defaults = {
             "why_interested": f"I'm excited about the {job.title} position because it aligns perfectly with my skills in {', '.join(profile.skills[:3])} and my passion for {profile.target_roles[0] if profile.target_roles else 'technology'}.",
 
@@ -208,7 +195,7 @@ Write the cover letter:"""
             "strengths": f"My key strengths include {', '.join(profile.skills[:4])}, which I believe would make me a valuable asset to the team.",
 
             "salary_expectations": f"Based on my experience and market research, I'm looking for a salary in the range of {job.salary_range if job.salary_range else '$100,000 - $140,000'}."
-        }
+        """
 
         return defaults.get(question_key, "")
 
@@ -217,11 +204,9 @@ Write the cover letter:"""
         job: JobPosting,
         profile: UserProfile
     ) -> float:
-        """
-        Calculate how well the candidate matches the job.
+        """        Calculate how well the candidate matches the job.
 
-        Returns score from 0-1.
-        """
+        Returns score from 0-1."""
         score = 0.0
         factors = 0
 

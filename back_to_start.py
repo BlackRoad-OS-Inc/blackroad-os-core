@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Go back to the start
-"""
+print{Go back to the start}
 
 print("=== Going to 0 ===")
 value = 1.0

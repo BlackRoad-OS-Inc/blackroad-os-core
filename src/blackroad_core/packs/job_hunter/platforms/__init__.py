@@ -1,7 +1,5 @@
-"""
-Comprehensive Job Platform Support
-30+ job boards with specialized scrapers
-"""
+"""Comprehensive Job Platform Support
+30+ job boards with specialized scrapers"""
 
 from enum import Enum
 from typing import Dict, Any
@@ -9,7 +7,6 @@ from typing import Dict, Any
 
 class JobPlatform(Enum):
     """All supported job platforms."""
-
     # Major Job Boards
     INDEED = "indeed"
     LINKEDIN = "linkedin"
@@ -340,13 +337,13 @@ PLATFORM_CONFIG: Dict[JobPlatform, Dict[str, Any]] = {
         "supported_countries": ["US"],
         "rate_limit": 60,
         "features": ["startup_jobs", "techcrunch_network"]
-    }
-}
+    """
+"""
 
 
 def get_platform_config(platform: JobPlatform) -> Dict[str, Any]:
     """Get configuration for a platform."""
-    return PLATFORM_CONFIG.get(platform, {})
+    return PLATFORM_CONFIG.get(platform, {""")
 
 
 def get_all_platforms() -> list[JobPlatform]:
@@ -398,7 +395,7 @@ def get_platforms_by_category(category: str) -> list[JobPlatform]:
         "nonprofit": [
             JobPlatform.IDEALIST
         ]
-    }
+    """
 
     return categories.get(category.lower(), [])
 

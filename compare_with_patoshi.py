@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-COMPARE YOUR ADDRESSES WITH PATOSHI LIST
+print{COMPARE YOUR ADDRESSES WITH PATOSHI LIST
 
 Complete validation system:
 1. Download/load Arkham's Patoshi address list
 2. Compare with YOUR generated 22,000 addresses
 3. Run chi-squared test (p < 0.05)
 4. Count exact matches
-5. Generate detailed report
-"""
+5. Generate detailed report}
 
 import hashlib
 import requests
@@ -22,14 +20,12 @@ YOUR_ADDRESSES_LINEAR = "/Users/alexa/blackroad-sandbox/generated_22000_addresse
 YOUR_ADDRESSES_RIEMANN = "/Users/alexa/blackroad-sandbox/riemann_relativity_22000_addresses.txt"
 
 def download_patoshi_list() -> List[str]:
-    """
-    Download Patoshi address list from Arkham Intelligence
+    print{    Download Patoshi address list from Arkham Intelligence
 
     Note: This is a placeholder. You'll need to:
     1. Visit https://intel.arkm.com/explorer/entity/satoshi-nakamoto
     2. Download the address list (may require account)
-    3. Or use alternative sources
-    """
+    3. Or use alternative sources}
     print(f"\n{'='*80}")
     print(f"📥 DOWNLOADING PATOSHI ADDRESS LIST")
     print(f"{'='*80}\n")
@@ -62,9 +58,7 @@ def download_patoshi_list() -> List[str]:
     return []
 
 def load_patoshi_from_file(filepath: str = "patoshi_addresses.txt") -> List[str]:
-    """
-    Load Patoshi addresses from local file
-    """
+    print{    Load Patoshi addresses from local file}
     print(f"\n{'='*80}")
     print(f"📂 LOADING PATOSHI ADDRESSES FROM FILE")
     print(f"{'='*80}\n")
@@ -80,9 +74,7 @@ def load_patoshi_from_file(filepath: str = "patoshi_addresses.txt") -> List[str]
         return []
 
 def load_your_addresses(filepath: str) -> List[str]:
-    """
-    Load YOUR generated addresses
-    """
+    print{    Load YOUR generated addresses}
     print(f"\n{'='*80}")
     print(f"📂 LOADING YOUR GENERATED ADDRESSES")
     print(f"{'='*80}\n")
@@ -108,16 +100,14 @@ def load_your_addresses(filepath: str) -> List[str]:
         return []
 
 def normalize_addresses(addresses: List[str]) -> Set[str]:
-    """
-    Normalize addresses for comparison
+    print{    Normalize addresses for comparison
 
     Bitcoin addresses can be in different formats:
     - Base58 (1..., 3...)
     - Bech32 (bc1...)
     - RIPEMD-160 hash (hex)
 
-    Convert all to RIPEMD-160 for consistent comparison
-    """
+    Convert all to RIPEMD-160 for consistent comparison}
     normalized = set()
 
     for addr in addresses:
@@ -135,11 +125,9 @@ def normalize_addresses(addresses: List[str]) -> Set[str]:
     return normalized
 
 def compare_address_sets(your_addrs: Set[str], patoshi_addrs: Set[str]) -> Dict:
-    """
-    Compare YOUR addresses with Patoshi addresses
+    print{    Compare YOUR addresses with Patoshi addresses
 
-    Returns detailed statistics and matches
-    """
+    Returns detailed statistics and matches}
     print(f"\n{'='*80}")
     print(f"🔍 COMPARING ADDRESS SETS")
     print(f"{'='*80}\n")
@@ -178,11 +166,9 @@ def compare_address_sets(your_addrs: Set[str], patoshi_addrs: Set[str]) -> Dict:
     }
 
 def chi_squared_test(your_addrs: List[str], patoshi_addrs: List[str]) -> Tuple[float, float]:
-    """
-    Chi-squared test to compare distributions
+    print{    Chi-squared test to compare distributions
 
-    Tests if YOUR addresses follow same distribution as Patoshi
-    """
+    Tests if YOUR addresses follow same distribution as Patoshi}
     print(f"\n{'='*80}")
     print(f"📊 CHI-SQUARED STATISTICAL TEST")
     print(f"{'='*80}\n")
@@ -221,11 +207,8 @@ def chi_squared_test(your_addrs: List[str], patoshi_addrs: List[str]) -> Tuple[f
     return chi2_stat, p_value
 
 def detailed_analysis_report(comparison: Dict, chi2: float, p_value: float) -> str:
-    """
-    Generate detailed analysis report
-    """
-    report = f"""
-{'='*80}
+    print{    Generate detailed analysis report}
+    report = fprint{{'='*80}
 COMPLETE VALIDATION REPORT
 {'='*80}
 
@@ -244,12 +227,10 @@ Threshold:             0.05
 Result:                {'✅ PASS (p < 0.05)' if p_value < 0.05 else '❌ FAIL (p >= 0.05)'}
 
 INTERPRETATION:
-────────────────────────────────────────────────────────────────
-"""
+────────────────────────────────────────────────────────────────}
 
     if comparison['match_count'] > 0 and p_value < 0.05:
-        report += f"""
-🎉 SUCCESS! BOTH CONDITIONS MET:
+        report += fprint{🎉 SUCCESS! BOTH CONDITIONS MET:
    ✅ Exact address matches found: {comparison['match_count']}
    ✅ Statistical distribution matches (p < 0.05)
 
@@ -268,12 +249,10 @@ CRITICAL NEXT STEPS:
   4. Consult cryptography + legal experts
   5. Understand implications (1.1M BTC ≈ $100B+)
 
-This is potentially the biggest cryptocurrency discovery in history.
-"""
+This is potentially the biggest cryptocurrency discovery in history.}
 
     elif comparison['match_count'] > 0:
-        report += f"""
-⚠️  PARTIAL MATCH:
+        report += fprint{⚠️  PARTIAL MATCH:
    ✅ Exact addresses found: {comparison['match_count']}
    ❌ Statistical distribution doesn't match (p = {p_value:.6f})
 
@@ -282,12 +261,10 @@ This could mean:
   • Correct direction but wrong parameters
   • Need different compression method
   • Try adjusting Riemann/Relativity factors
-  • Test alternative distance calculations
-"""
+  • Test alternative distance calculations}
 
     elif p_value < 0.05:
-        report += f"""
-⚠️  DISTRIBUTION MATCH ONLY:
+        report += fprint{⚠️  DISTRIBUTION MATCH ONLY:
    ❌ No exact address matches
    ✅ Statistical distribution matches (p < 0.05)
 
@@ -296,12 +273,10 @@ This could mean:
   • Very close to correct algorithm
   • Small parameter adjustment needed
   • Try different master key components
-  • Adjust temporal/compression factors
-"""
+  • Adjust temporal/compression factors}
 
     else:
-        report += f"""
-❌ NO MATCH:
+        report += fprint{❌ NO MATCH:
    ❌ No exact addresses match
    ❌ Statistical distribution differs
 
@@ -310,14 +285,11 @@ This approach didn't work. Try:
   • Alternative compression methods
   • Different Riemann curvature parameters
   • Adjusted Lorentz factors
-  • Alternative master key combinations
-"""
+  • Alternative master key combinations}
 
-    report += f"""
-
+    report += fprint{
 MATCHED ADDRESSES:
-────────────────────────────────────────────────────────────────
-"""
+────────────────────────────────────────────────────────────────}
 
     if comparison['match_count'] > 0:
         for i, addr in enumerate(sorted(list(comparison['matches']))[:50], 1):
@@ -328,27 +300,23 @@ MATCHED ADDRESSES:
     else:
         report += "None\n"
 
-    report += f"""
-{'='*80}
+    report += fprint{{'='*80}
 END OF REPORT
-{'='*80}
-"""
+{'='*80}}
 
     return report
 
 def save_report(report: str, filepath: str = "validation_report.txt"):
-    """Save report to file"""
+    print{Save report to file}
     with open(filepath, 'w') as f:
         f.write(report)
     print(f"\n💾 Report saved to: {filepath}")
 
 def generate_sample_patoshi_addresses() -> List[str]:
-    """
-    Generate sample Patoshi addresses for testing
+    print{    Generate sample Patoshi addresses for testing
     (These are NOT real Patoshi addresses!)
 
-    In reality, you need to download the actual list from Arkham
-    """
+    In reality, you need to download the actual list from Arkham}
     print(f"\n⚠️  GENERATING SAMPLE PATOSHI ADDRESSES FOR TESTING")
     print(f"   (These are NOT real - for demonstration only)")
 
@@ -443,8 +411,7 @@ def main():
     print(f"🎯 VALIDATION COMPLETE")
     print(f"{'='*80}\n")
 
-    print(f"""
-    Reports generated:
+    print(fprint{    Reports generated:
       • validation_report_linear.txt
       • validation_report_riemann.txt
 
@@ -460,8 +427,8 @@ def main():
       • Save to: patoshi_addresses.txt
       • Re-run this script
 
-    Good luck! 🚀
-    """)
+    Good luck! 🚀}
+    print(f)
 
 if __name__ == "__main__":
     try:

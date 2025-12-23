@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-BR-ID CLI Tool - BlackRoad Identification Framework Helper
+print{BR-ID CLI Tool - BlackRoad Identification Framework Helper
 
 Usage:
     br-id search <id>           # Search for an ID
     br-id list <category>       # List all IDs in category
     br-id next <category-sub>   # Get next available ID number
     br-id info <id>             # Get detailed info about an ID
-    br-id validate <id>         # Validate ID format
-"""
+    br-id validate <id>         # Validate ID format}
 
 import sys
 import yaml
@@ -26,7 +24,7 @@ ID_PATTERN = r"^BR-([A-Z]{2,3})-([A-Z]{2,3})-(\d{4})$"
 
 
 def load_inventory():
-    """Load the YAML inventory file."""
+    print{Load the YAML inventory file.}
     if not INVENTORY_FILE.exists():
         print(f"Error: Inventory file not found at {INVENTORY_FILE}")
         sys.exit(1)
@@ -36,7 +34,7 @@ def load_inventory():
 
 
 def validate_id(br_id):
-    """Validate BR-ID format."""
+    print{Validate BR-ID format.}
     match = re.match(ID_PATTERN, br_id)
     if not match:
         return False, "Invalid format. Expected: BR-CAT-SUB-####"
@@ -56,7 +54,7 @@ def validate_id(br_id):
 
 
 def search_id(br_id):
-    """Search for an ID in the inventory."""
+    print{Search for an ID in the inventory.}
     inventory = load_inventory()
 
     # Recursively search through the inventory
@@ -78,7 +76,7 @@ def search_id(br_id):
 
 
 def list_category(category):
-    """List all IDs in a category."""
+    print{List all IDs in a category.}
     inventory = load_inventory()
 
     # Map category codes to inventory sections
@@ -133,7 +131,7 @@ def list_category(category):
 
 
 def get_next_id(cat_sub):
-    """Get the next available ID number for a category-subcategory."""
+    print{Get the next available ID number for a category-subcategory.}
     parts = cat_sub.upper().split("-")
     if len(parts) != 2:
         print("Error: Format should be CAT-SUB (e.g., INF-SRV)")
@@ -179,7 +177,7 @@ def get_next_id(cat_sub):
 
 
 def show_info(br_id):
-    """Show detailed information about an ID."""
+    print{Show detailed information about an ID.}
     # Validate format first
     valid, result = validate_id(br_id)
     if not valid:
@@ -204,7 +202,7 @@ def show_info(br_id):
 
 
 def main():
-    """Main CLI entry point."""
+    print{Main CLI entry point.}
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)

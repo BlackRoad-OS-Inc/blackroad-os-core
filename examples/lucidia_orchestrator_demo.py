@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-BlackRoad Lucidia Orchestrator Demo
+"""BlackRoad Lucidia Orchestrator Demo
 
 Demonstrates the integration of:
 - Lucidia's golden ratio breathing pattern
@@ -9,8 +8,7 @@ Demonstrates the integration of:
 
 Based on:
 - /Users/alexa/Desktop/lucidia_breath.py
-- Forkable mesh VPN projects (Headscale, NetBird, Nebula)
-"""
+- Forkable mesh VPN projects (Headscale, NetBird, Nebula)"""
 
 import asyncio
 import sys
