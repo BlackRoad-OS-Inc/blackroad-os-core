@@ -5,10 +5,14 @@
  * collaborate in sequence or parallel to accomplish complex tasks.
  *
  * Think of it as a conductor leading an orchestra of AI agents.
+ * 
+ * Integrates with Trinity template orchestration system for
+ * coordinated deployment and infrastructure management.
  */
 
 import { EventEmitter } from 'events';
 import { AgentType, AgentTask, AgentTaskResult } from './AgentOrchestrator';
+import { TrinityOrchestrator, TrinityLight, TrinityCoordination } from '../trinity';
 
 export enum WorkflowStepType {
   SEQUENTIAL = 'sequential',
@@ -61,9 +65,11 @@ export interface WorkflowResult {
 export class WorkflowEngine extends EventEmitter {
   private workflows: Map<string, Workflow> = new Map();
   private templates: Map<string, Partial<Workflow>> = new Map();
+  private trinity?: TrinityOrchestrator;
 
-  constructor() {
+  constructor(trinity?: TrinityOrchestrator) {
     super();
+    this.trinity = trinity;
     this.initializeTemplates();
   }
 
@@ -426,6 +432,177 @@ export class WorkflowEngine extends EventEmitter {
         },
       ],
     });
+
+    // Trinity Template Deployment Workflow
+    this.templates.set('trinity-template-deployment', {
+      name: 'Trinity Template Deployment',
+      description: 'Deploy visual template with full Trinity coordination',
+      steps: [
+        // Step 1: Cordelia creates deployment task in GreenLight
+        {
+          id: 'create-greenlight-task',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CORDELIA,
+          action: 'Create deployment task in GreenLight',
+        },
+        // Step 2: Codex creates/prepares RedLight template
+        {
+          id: 'prepare-redlight-template',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CODEX,
+          action: 'Create or prepare RedLight visual template',
+          dependencies: ['create-greenlight-task'],
+        },
+        // Step 3: Athena provisions infrastructure via YellowLight
+        {
+          id: 'provision-yellowlight-infra',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.ATHENA,
+          action: 'Provision infrastructure on target platform',
+          dependencies: ['prepare-redlight-template'],
+        },
+        // Step 4: Silas security check
+        {
+          id: 'security-check',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.SILAS,
+          action: 'Security scan before deployment',
+          dependencies: ['provision-yellowlight-infra'],
+        },
+        // Step 5: Cadillac performance validation
+        {
+          id: 'performance-check',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CADILLAC,
+          action: 'Validate performance meets targets',
+          dependencies: ['security-check'],
+        },
+        // Step 6: Athena deploys template
+        {
+          id: 'deploy-template',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.ATHENA,
+          action: 'Deploy template to production',
+          dependencies: ['performance-check'],
+        },
+        // Step 7: Cecilia monitors post-deployment
+        {
+          id: 'monitor-deployment',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CECILIA,
+          action: 'Monitor deployment health and metrics',
+          dependencies: ['deploy-template'],
+        },
+        // Step 8: Cordelia completes GreenLight task
+        {
+          id: 'complete-greenlight-task',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CORDELIA,
+          action: 'Mark deployment task complete in GreenLight',
+          dependencies: ['monitor-deployment'],
+        },
+      ],
+    });
+
+    // Trinity Full Stack Feature Workflow
+    this.templates.set('trinity-full-stack-feature', {
+      name: 'Trinity Full Stack Feature',
+      description: 'Deploy complete feature with UI, API, and coordination',
+      steps: [
+        // Step 1: Lucidia strategic validation
+        {
+          id: 'strategic-validation',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.LUCIDIA,
+          action: 'Validate feature aligns with roadmap',
+        },
+        // Step 2: Cordelia creates epic and tasks in GreenLight
+        {
+          id: 'create-greenlight-epic',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CORDELIA,
+          action: 'Create feature epic and tasks in GreenLight',
+          dependencies: ['strategic-validation'],
+        },
+        // Step 3: Parallel - Anastasia designs UI, Claude designs architecture
+        {
+          id: 'ui-design',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.ANASTASIA,
+          action: 'Design UI/UX for feature',
+          dependencies: ['create-greenlight-epic'],
+        },
+        {
+          id: 'api-architecture',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.CLAUDE,
+          action: 'Design API architecture',
+          dependencies: ['create-greenlight-epic'],
+        },
+        // Step 4: Parallel - Codex implements UI template, API service provisioned
+        {
+          id: 'create-ui-template',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.CODEX,
+          action: 'Create RedLight UI template',
+          dependencies: ['ui-design'],
+        },
+        {
+          id: 'provision-api-infra',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.ATHENA,
+          action: 'Provision API infrastructure via YellowLight',
+          dependencies: ['api-architecture'],
+        },
+        // Step 5: Parallel - Deploy UI and API
+        {
+          id: 'deploy-ui',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.ATHENA,
+          action: 'Deploy UI template via RedLight orchestrator',
+          dependencies: ['create-ui-template'],
+        },
+        {
+          id: 'deploy-api',
+          type: WorkflowStepType.PARALLEL,
+          agent: AgentType.ATHENA,
+          action: 'Deploy API service via YellowLight orchestrator',
+          dependencies: ['provision-api-infra'],
+        },
+        // Step 6: Elias runs integration tests
+        {
+          id: 'integration-tests',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.ELIAS,
+          action: 'Run integration tests between UI and API',
+          dependencies: ['deploy-ui', 'deploy-api'],
+        },
+        // Step 7: Silas security audit
+        {
+          id: 'security-audit',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.SILAS,
+          action: 'Security audit of deployed feature',
+          dependencies: ['integration-tests'],
+        },
+        // Step 8: Cecilia monitors post-deployment
+        {
+          id: 'post-deployment-monitoring',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CECILIA,
+          action: 'Monitor feature health and performance',
+          dependencies: ['security-audit'],
+        },
+        // Step 9: Cordelia completes GreenLight epic
+        {
+          id: 'complete-greenlight-epic',
+          type: WorkflowStepType.SEQUENTIAL,
+          agent: AgentType.CORDELIA,
+          action: 'Mark feature epic complete in GreenLight',
+          dependencies: ['post-deployment-monitoring'],
+        },
+      ],
+    });
   }
 
   /**
@@ -620,7 +797,74 @@ export class WorkflowEngine extends EventEmitter {
   private generateWorkflowId(): string {
     return `workflow_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
+
+  /**
+   * Execute a Trinity-coordinated workflow
+   * Delegates to Trinity orchestrator for cross-light coordination
+   */
+  public async executeTrinityWorkflow(
+    workflowId: string,
+    trinityCoordination: TrinityCoordination
+  ): Promise<WorkflowResult> {
+    if (!this.trinity) {
+      throw new Error('Trinity orchestrator not initialized');
+    }
+
+    const workflow = this.workflows.get(workflowId);
+    if (!workflow) {
+      throw new Error(`Workflow ${workflowId} not found`);
+    }
+
+    this.emit('trinity-workflow:started', { workflowId, trinityCoordination });
+
+    try {
+      // Execute Trinity coordination
+      const trinityTasks = await this.trinity.executeCoordination(trinityCoordination);
+
+      // Update workflow status
+      workflow.status = 'completed';
+      workflow.completedAt = new Date();
+
+      const result: WorkflowResult = {
+        success: true,
+        outputs: {
+          trinityTasks,
+          coordination: trinityCoordination,
+        },
+        executedSteps: trinityTasks.map((t) => t.id),
+        duration: workflow.completedAt.getTime() - (workflow.startedAt?.getTime() || 0),
+      };
+
+      workflow.result = result;
+      this.emit('trinity-workflow:completed', { workflowId, result });
+
+      return result;
+    } catch (error) {
+      workflow.status = 'failed';
+      workflow.completedAt = new Date();
+
+      const result: WorkflowResult = {
+        success: false,
+        outputs: {},
+        executedSteps: [],
+        failedSteps: [error instanceof Error ? error.message : String(error)],
+        duration: workflow.completedAt.getTime() - (workflow.startedAt?.getTime() || 0),
+      };
+
+      workflow.result = result;
+      this.emit('trinity-workflow:failed', { workflowId, error });
+
+      throw error;
+    }
+  }
+
+  /**
+   * Get Trinity orchestrator instance
+   */
+  public getTrinityOrchestrator(): TrinityOrchestrator | undefined {
+    return this.trinity;
+  }
 }
 
-// Export singleton instance
+// Export singleton instance (can be initialized with Trinity)
 export const workflowEngine = new WorkflowEngine();
