@@ -1,3 +1,9 @@
+# blackroad-os-core
+
+[![GitHub](https://img.shields.io/badge/GitHub-BlackRoad-OS-purple?style=for-the-badge&logo=github)](https://github.com/BlackRoad-OS/blackroad-os-core)
+[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://github.com/BlackRoad-OS/blackroad-os-core)
+[![BlackRoad](https://img.shields.io/badge/BlackRoad-OS-black?style=for-the-badge)](https://blackroad.io)
+
 # BlackRoad Network Documentation
 
 **Last Updated:** December 20, 2025
