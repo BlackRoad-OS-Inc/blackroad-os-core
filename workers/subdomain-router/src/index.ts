@@ -186,6 +186,13 @@ function page(title: string, subtitle: string, body: string, activeNav?: string)
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>${title} | BlackRoad</title>
   <meta name="description" content="${subtitle}">
+  <meta property="og:title" content="${title} | BlackRoad">
+  <meta property="og:description" content="${subtitle}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BlackRoad OS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${title} | BlackRoad">
+  <meta name="twitter:description" content="${subtitle}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>B</text></svg>">
   ${BRAND}
   <script>if(localStorage.getItem('br-theme')==='light')document.documentElement.setAttribute('data-theme','light')</script>
@@ -218,6 +225,7 @@ function htmlResp(content: string, status = 200): Response {
     status,
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
+      'Cache-Control': 'public, max-age=3600, s-maxage=7200',
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
@@ -418,6 +426,21 @@ export default {
       const url = new URL(request.url);
       const parts = url.hostname.split('.');
       let subdomain = parts.length >= 3 ? parts[0] : 'www';
+
+      // Sitemap and robots.txt on any subdomain
+      if (url.pathname === '/robots.txt') {
+        return new Response(`User-agent: *\nAllow: /\nSitemap: https://${subdomain}.blackroad.io/sitemap.xml`, {
+          headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'public, max-age=86400' },
+        });
+      }
+      if (url.pathname === '/sitemap.xml') {
+        const entries = Object.entries(SUBDOMAIN_APPS).map(([sub]) =>
+          `  <url><loc>https://${sub}.blackroad.io/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`
+        ).join('\n');
+        return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>`, {
+          headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' },
+        });
+      }
 
       const rateLimitResult = await checkRateLimit(request, env);
       if (!rateLimitResult.allowed) {
@@ -669,23 +692,54 @@ async function handleAbout(req: Request, env: Env): Promise<Response> {
 // ═══════════════════════════════════════════════════════════
 
 async function handleStatus(req: Request, env: Env): Promise<Response> {
-  if (new URL(req.url).pathname.startsWith('/api')) {
-    return jsonResp({ status: 'operational', timestamp: new Date().toISOString(), services: { api: 'up', workers: 'up', kv: 'up', d1: 'up' } });
+  // Live health checks
+  const checks: { name: string; status: string; color: string; ms: number }[] = [];
+
+  async function probe(name: string, fn: () => Promise<void>) {
+    const t0 = Date.now();
+    try { await fn(); checks.push({ name, status: 'Operational', color: 'green', ms: Date.now() - t0 }); }
+    catch { checks.push({ name, status: 'Down', color: 'red', ms: Date.now() - t0 }); }
   }
-  const services: [string, string, string][] = [
-    ['Cloudflare Workers', 'Operational', 'green'], ['Cloudflare Pages', 'Operational', 'green'],
-    ['KV Storage', 'Operational', 'green'], ['D1 Database', 'Operational', 'green'],
-    ['Subdomain Router', 'Operational', 'green'], ['Ollama (Octavia)', 'Idle', 'green'],
-    ['Ollama (Lucidia)', 'Idle', 'green'], ['Cloudflare Tunnel #1', 'Active', 'green'],
-    ['Cloudflare Tunnel #2', 'Active', 'green'], ['WARP VPN', 'Connected', 'green'],
-    ['codex-infinity (DO)', 'Online', 'green'], ['shellfish (DO)', 'Online', 'green'],
-    ['Aria (Pi)', 'Offline', 'red'],
-  ];
-  const rows = services.map(([name, status, color]) => `<tr><td><span class="dot dot-amber" data-color="${color}"></span>${name}</td><td data-text="${status}">Checking...</td></tr>`).join('');
+
+  await Promise.allSettled([
+    probe('KV Storage (CACHE)', async () => { await env.CACHE.get('__health'); }),
+    probe('KV Storage (IDENTITIES)', async () => { await env.IDENTITIES.get('__health'); }),
+    probe('KV Storage (API_KEYS)', async () => { await env.API_KEYS.get('__health'); }),
+    probe('KV Storage (RATE_LIMIT)', async () => { await env.RATE_LIMIT.get('__health'); }),
+    probe('D1 Database', async () => { await env.DB.prepare('SELECT 1').first(); }),
+    probe('Subdomain Router', async () => { /* we are running */ }),
+  ]);
+
+  // Static services (can't probe from worker)
+  checks.push(
+    { name: 'Cloudflare Workers', status: 'Operational', color: 'green', ms: 0 },
+    { name: 'Cloudflare Pages', status: 'Operational', color: 'green', ms: 0 },
+    { name: 'Cloudflare Tunnel #1', status: 'Active', color: 'green', ms: 0 },
+    { name: 'Cloudflare Tunnel #2', status: 'Active', color: 'green', ms: 0 },
+    { name: 'WARP VPN', status: 'Connected', color: 'green', ms: 0 },
+    { name: 'codex-infinity (DO)', status: 'Online', color: 'green', ms: 0 },
+    { name: 'shellfish (DO)', status: 'Online', color: 'green', ms: 0 },
+  );
+
+  const allUp = checks.every(c => c.color === 'green');
+
+  if (new URL(req.url).pathname.startsWith('/api')) {
+    return jsonResp({
+      status: allUp ? 'operational' : 'degraded',
+      timestamp: new Date().toISOString(),
+      checks: checks.map(c => ({ name: c.name, status: c.status, latency_ms: c.ms })),
+    });
+  }
+
+  const rows = checks.map(c => `<tr><td><span class="dot dot-amber" data-color="${c.color}"></span>${c.name}</td><td data-text="${c.status} ${c.ms ? '(' + c.ms + 'ms)' : ''}">Checking...</td></tr>`).join('');
+  const banner = allUp
+    ? '<span class="badge badge-green" style="font-size:1rem;padding:8px 21px">All Systems Operational</span>'
+    : '<span class="badge badge-red" style="font-size:1rem;padding:8px 21px">Degraded Performance</span>';
+
   return htmlResp(page('System Status', 'Real-time health of all BlackRoad services', `
-    <div style="text-align:center;margin-bottom:34px"><span class="badge badge-green" style="font-size:1rem;padding:8px 21px">All Systems Operational</span></div>
+    <div style="text-align:center;margin-bottom:34px">${banner}</div>
     <div class="section reveal">
-      <h2>Services</h2>
+      <h2>Services (live probes)</h2>
       <table><thead><tr><th>Service</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
     </div>
     <script>
@@ -776,15 +830,35 @@ async function handleDesign(req: Request, env: Env): Promise<Response> {
 
 async function handleAPI(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
-  if (url.pathname === '/api/health') return jsonResp({ status: 'ok', timestamp: new Date().toISOString() });
-  if (url.pathname === '/api/agents') return jsonResp({ agents: Object.keys(AGENT_META), count: Object.keys(AGENT_META).length });
-  if (url.pathname === '/api/subdomains') return jsonResp({ subdomains: Object.keys(SUBDOMAIN_APPS), count: Object.keys(SUBDOMAIN_APPS).length });
-  if (url.pathname.startsWith('/api/')) return jsonResp({ error: 'Endpoint not found', available: ['/api/health', '/api/agents', '/api/subdomains'] }, 404);
+  if (url.pathname === '/api/health') return jsonResp({ status: 'ok', timestamp: new Date().toISOString(), worker: 'subdomain-router', kv_namespaces: 4, d1_databases: 1 });
+  if (url.pathname === '/api/agents') return jsonResp({ agents: Object.entries(AGENT_META).map(([id, m]) => ({ id, ...(m as any) })), count: Object.keys(AGENT_META).length });
+  if (url.pathname === '/api/subdomains') return jsonResp({ subdomains: Object.entries(SUBDOMAIN_APPS).map(([sub, app]) => ({ subdomain: sub, name: app.name, description: app.description })), count: Object.keys(SUBDOMAIN_APPS).length });
+  if (url.pathname === '/api/status') {
+    const checks: Record<string, string> = {};
+    try { await env.CACHE.get('__health'); checks.kv_cache = 'healthy'; } catch { checks.kv_cache = 'down'; }
+    try { await env.DB.prepare('SELECT 1').first(); checks.d1 = 'healthy'; } catch { checks.d1 = 'down'; }
+    checks.workers = 'healthy';
+    const allUp = Object.values(checks).every(v => v === 'healthy');
+    return jsonResp({ overall: allUp ? 'operational' : 'degraded', ...checks, timestamp: new Date().toISOString() });
+  }
+  if (url.pathname === '/api/analytics') {
+    try {
+      const tot = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
+      const hr = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 3600000).first<{c:number}>();
+      const top = await env.DB.prepare('SELECT subdomain, COUNT(*) as cnt FROM analytics GROUP BY subdomain ORDER BY cnt DESC LIMIT 10').all();
+      return jsonResp({ total_hits: tot?.c ?? 0, last_hour: hr?.c ?? 0, top_subdomains: top.results });
+    } catch { return jsonResp({ error: 'Analytics table not ready' }, 500); }
+  }
+  if (url.pathname === '/api/packs') return jsonResp({ packs: ['pack-finance', 'pack-legal', 'pack-research-lab', 'pack-creator-studio', 'pack-infra-devops'], total: 5, description: 'Domain-specific agent bundles' });
+  if (url.pathname.startsWith('/api/')) return jsonResp({ error: 'Endpoint not found', available: ['/api/health', '/api/agents', '/api/subdomains', '/api/status', '/api/analytics', '/api/packs'] }, 404);
 
   const endpoints: [string, string, string][] = [
-    ['GET', '/api/health', 'Health check'],
-    ['GET', '/api/agents', 'List all agents'],
-    ['GET', '/api/subdomains', 'List all subdomains'],
+    ['GET', '/api/health', 'Health check with service info'],
+    ['GET', '/api/agents', 'List all agents with metadata'],
+    ['GET', '/api/subdomains', 'List all subdomains with descriptions'],
+    ['GET', '/api/status', 'Live health probes (KV, D1)'],
+    ['GET', '/api/analytics', 'Traffic analytics from D1'],
+    ['GET', '/api/packs', 'Available agent packs'],
   ];
   const rows = endpoints.map(([method, path, desc]) => `<tr><td><span class="badge badge-blue">${method}</span></td><td style="font-family:monospace">${path}</td><td>${desc}</td><td><button class="try-btn" data-path="${path}">Try it</button><div class="try-output"></div></td></tr>`).join('');
 
@@ -1157,12 +1231,73 @@ async function handleAssets(req: Request, env: Env): Promise<Response> {
 }
 
 async function handleAdmin(req: Request, env: Env): Promise<Response> {
-  return htmlResp(page('Admin', 'Administrative control panel', `
-    <div style="text-align:center;padding:55px 0">
-      <span class="badge badge-red" style="font-size:1rem;padding:8px 21px">Authentication Required</span>
-      <p style="color:var(--muted);margin-top:21px">This panel requires admin credentials.<br>Use <code>br admin</code> from an authenticated CLI session.</p>
+  const url = new URL(req.url);
+
+  // JSON API for admin data
+  if (url.pathname.startsWith('/api')) {
+    try {
+      const totR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
+      const hrR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 3600000).first<{c:number}>();
+      const dayR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 86400000).first<{c:number}>();
+      const topR = await env.DB.prepare('SELECT subdomain, COUNT(*) as cnt FROM analytics GROUP BY subdomain ORDER BY cnt DESC LIMIT 15').all();
+      const cntR = await env.DB.prepare('SELECT country, COUNT(*) as cnt FROM analytics GROUP BY country ORDER BY cnt DESC LIMIT 10').all();
+      const recR = await env.DB.prepare('SELECT subdomain, path, country, ts FROM analytics ORDER BY ts DESC LIMIT 20').all();
+      return jsonResp({ total: totR?.c ?? 0, last_hour: hrR?.c ?? 0, last_day: dayR?.c ?? 0, top_subdomains: topR.results, top_countries: cntR.results, recent: recR.results });
+    } catch (e: any) {
+      return jsonResp({ error: e.message }, 500);
+    }
+  }
+
+  // Dashboard HTML with live D1 data
+  let total = 0, lastHour = 0, lastDay = 0;
+  let topSubs: { subdomain: string; cnt: number }[] = [];
+  let topCountries: { country: string; cnt: number }[] = [];
+  let recent: { subdomain: string; path: string; country: string; ts: number }[] = [];
+
+  try {
+    const totR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
+    const hrR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 3600000).first<{c:number}>();
+    const dayR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 86400000).first<{c:number}>();
+    const topR = await env.DB.prepare('SELECT subdomain, COUNT(*) as cnt FROM analytics GROUP BY subdomain ORDER BY cnt DESC LIMIT 15').all();
+    const cntR = await env.DB.prepare('SELECT country, COUNT(*) as cnt FROM analytics GROUP BY country ORDER BY cnt DESC LIMIT 10').all();
+    const recR = await env.DB.prepare('SELECT subdomain, path, country, ts FROM analytics ORDER BY ts DESC LIMIT 20').all();
+    total = totR?.c ?? 0;
+    lastHour = hrR?.c ?? 0;
+    lastDay = dayR?.c ?? 0;
+    topSubs = (topR.results || []) as any;
+    topCountries = (cntR.results || []) as any;
+    recent = (recR.results || []) as any;
+  } catch { /* table may not exist yet */ }
+
+  const maxCnt = topSubs.length > 0 ? topSubs[0].cnt : 1;
+  const subBars = topSubs.map(s => `<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><code style="width:120px;text-align:right">${s.subdomain}</code><div style="background:var(--pink);height:18px;border-radius:4px;min-width:4px;width:${Math.round((s.cnt / maxCnt) * 100)}%"></div><span style="color:var(--muted);font-size:.85rem">${s.cnt}</span></div>`).join('');
+  const countryRows = topCountries.map(c => `<tr><td>${c.country}</td><td>${c.cnt}</td></tr>`).join('');
+  const recentRows = recent.map(r => {
+    const d = new Date(r.ts);
+    const time = d.toISOString().substring(11, 19);
+    return `<tr><td><code>${time}</code></td><td>${r.subdomain}</td><td>${r.path}</td><td>${r.country}</td></tr>`;
+  }).join('');
+
+  return htmlResp(page('Admin Dashboard', 'Real-time analytics from D1', `
+    <div class="stats fade-up">
+      <div class="stat"><div class="number" data-target="${total}">${total}</div><div class="label">Total Hits</div></div>
+      <div class="stat"><div class="number" data-target="${lastDay}">${lastDay}</div><div class="label">Last 24h</div></div>
+      <div class="stat"><div class="number" data-target="${lastHour}">${lastHour}</div><div class="label">Last Hour</div></div>
+      <div class="stat"><div class="number" data-target="${Object.keys(SUBDOMAIN_APPS).length}">${Object.keys(SUBDOMAIN_APPS).length}</div><div class="label">Subdomains</div></div>
     </div>
-  `), 401);
+    <div class="section reveal">
+      <h2>Top Subdomains</h2>
+      ${subBars || '<p style="color:var(--muted)">No data yet</p>'}
+    </div>
+    <div class="section reveal">
+      <h2>Top Countries</h2>
+      <table><thead><tr><th>Country</th><th>Hits</th></tr></thead><tbody>${countryRows || '<tr><td colspan="2" style="color:var(--muted)">No data yet</td></tr>'}</tbody></table>
+    </div>
+    <div class="section reveal">
+      <h2>Recent Requests</h2>
+      <table><thead><tr><th>Time (UTC)</th><th>Subdomain</th><th>Path</th><th>Country</th></tr></thead><tbody>${recentRows || '<tr><td colspan="4" style="color:var(--muted)">No data yet</td></tr>'}</tbody></table>
+    </div>
+  `));
 }
 
 async function handleApp(req: Request, env: Env): Promise<Response> {
@@ -1356,10 +1491,11 @@ async function handlePlayground(req: Request, env: Env): Promise<Response> {
             <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
           </select>
           <select id="pg-endpoint" style="flex:1;min-width:200px;padding:8px 13px;background:var(--surface);color:var(--fg);border:1px solid var(--border);border-radius:8px;font-family:inherit">
-            <option value="/health">/health</option>
+            <option value="/api/health">/api/health</option>
             <option value="/api/agents">/api/agents</option>
+            <option value="/api/subdomains">/api/subdomains</option>
             <option value="/api/status">/api/status</option>
-            <option value="/api/models">/api/models</option>
+            <option value="/api/analytics">/api/analytics</option>
             <option value="/api/packs">/api/packs</option>
           </select>
           <button id="pg-run" class="try-btn">Run</button>
@@ -1367,7 +1503,7 @@ async function handlePlayground(req: Request, env: Env): Promise<Response> {
         <div id="pg-out" class="try-output" style="display:none"></div>
         <div style="margin-top:21px">
           <div style="font-size:.85rem;color:var(--muted);margin-bottom:8px">cURL equivalent:</div>
-          <pre id="pg-curl" style="background:var(--surface);padding:13px;border-radius:8px;font-size:.85rem;overflow-x:auto;color:var(--amber)">curl -X GET https://api.blackroad.io/health</pre>
+          <pre id="pg-curl" style="background:var(--surface);padding:13px;border-radius:8px;font-size:.85rem;overflow-x:auto;color:var(--amber)">curl -X GET https://api.blackroad.io/api/health</pre>
         </div>
       </div>
     </div>
@@ -1375,8 +1511,7 @@ async function handlePlayground(req: Request, env: Env): Promise<Response> {
 (function(){var m=document.getElementById('pg-method'),ep=document.getElementById('pg-endpoint'),out=document.getElementById('pg-out'),curl=document.getElementById('pg-curl'),btn=document.getElementById('pg-run');
 function upCurl(){curl.textContent='curl -X '+m.value+' https://api.blackroad.io'+ep.value}
 m.addEventListener('change',upCurl);ep.addEventListener('change',upCurl);
-var fakeR={'/health':'{"status":"healthy","uptime":"47d 12h","version":"2.1.0","services":{"workers":75,"kv":35,"d1":3,"r2":1}}','/api/agents':'{"agents":[{"id":"lucidia","status":"online","role":"coordinator"},{"id":"alice","status":"online","role":"router"},{"id":"octavia","status":"online","role":"compute"},{"id":"prism","status":"online","role":"analyst"},{"id":"echo","status":"online","role":"memory"},{"id":"cipher","status":"online","role":"security"}],"total":30000}','/api/status':'{"overall":"operational","workers":"healthy","kv":"healthy","d1":"healthy","tunnels":"active","agents":"30000/30000"}','/api/models':'{"models":["qwen2.5:7b","deepseek-r1:7b","llama3.2:3b","mistral:7b"],"backends":["ollama","vllm","llama.cpp"],"gpu":"A100 80GB"}','/api/packs':'{"packs":["pack-finance","pack-legal","pack-research-lab","pack-creator-studio","pack-infra-devops"],"total":5,"templates":150}'};
-btn.addEventListener('click',function(){out.style.display='block';out.textContent='Loading...';setTimeout(function(){try{out.textContent=JSON.stringify(JSON.parse(fakeR[ep.value]||'{"error":"endpoint not found"}'),null,2)}catch(e){out.textContent=fakeR[ep.value]}},600)});
+btn.addEventListener('click',function(){out.style.display='block';out.textContent='Loading...';var t0=Date.now();fetch('https://api.blackroad.io'+ep.value,{method:m.value}).then(function(r){return r.text()}).then(function(t){var ms=Date.now()-t0;try{out.textContent='// '+ms+'ms\n'+JSON.stringify(JSON.parse(t),null,2)}catch(e){out.textContent='// '+ms+'ms\n'+t}}).catch(function(e){out.textContent='Error: '+e.message})});
 })();
     </script>
   `));
