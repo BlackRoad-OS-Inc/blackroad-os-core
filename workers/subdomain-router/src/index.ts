@@ -15,6 +15,50 @@ interface Env {
 }
 
 // ═══════════════════════════════════════════════════════════
+// FAVICON MAP
+// ═══════════════════════════════════════════════════════════
+
+const FAVICON: Record<string, string> = {
+  os: '🖥️', ai: '🤖', agents: '🕵️', api: '⚡', status: '🟢', docs: '📖', console: '💻',
+  dashboard: '📊', chat: '💬', playground: '🧪', marketplace: '🏪', roadmap: '🗺️',
+  changelog: '📝', security: '🔒', careers: '💼', store: '🛒', search: '🔍', terminal: '⌨️',
+  world: '🌍', admin: '🛡️', analytics: '📈', network: '🌐', prism: '🔮', brand: '🎨',
+  design: '✏️', edge: '⚡', data: '💾', finance: '💰', quantum: '⚛️', blog: '✍️',
+  dev: '🧑‍💻', staging: '🚧', metrics: '📉', logs: '📋', cdn: '🚀', assets: '📦',
+  about: 'ℹ️', help: '❓', products: '🏷️', pitstop: '🏁', algorithms: '🧠',
+  blockchain: '⛓️', blocks: '🧱', chain: '🔗', circuits: '🔌', compliance: '✅',
+  compute: '⚙️', control: '🎛️', editor: '📝', engineering: '🏗️', events: '📅',
+  explorer: '🧭', features: '✨', guide: '📚', hardware: '🖲️', hr: '👥', ide: '💻',
+  asia: '🌏', eu: '🇪🇺', global: '🌐', app: '📱',
+  // Agents get a default
+  claude: '🧠', lucidia: '🌀', silas: '🛡️', alice: '🚪', cipher: '🔐', echo: '📡',
+  octavia: '⚡', atlas: '🗺️', cadence: '🎵', shellfish: '🐚',
+  nova: '💫', ember: '🔥', phoenix: '🦅', sentinel: '👁️', aria: '🎶',
+};
+
+function getFavicon(subdomain: string): string {
+  const emoji = FAVICON[subdomain] || 'B';
+  return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${emoji}</text></svg>`;
+}
+
+function generateRequestId(): string {
+  const ts = Date.now().toString(36);
+  const rand = Math.random().toString(36).substring(2, 8);
+  return `br-${ts}-${rand}`;
+}
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+// ═══════════════════════════════════════════════════════════
 // BRAND SYSTEM — Golden Ratio Design
 // ═══════════════════════════════════════════════════════════
 
@@ -144,6 +188,13 @@ const BRAND = `
   .try-btn{padding:4px 8px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--pink);cursor:pointer;font-size:.7rem;font-weight:600}
   .try-btn:hover{background:rgba(255,29,108,.1)}
   .try-output{margin-top:8px;padding:8px;background:#0a0a0a;border-radius:4px;font-family:monospace;font-size:.75rem;color:var(--muted);display:none;white-space:pre-wrap}
+  .skip-nav{position:absolute;top:-100%;left:50%;transform:translateX(-50%);padding:8px 21px;background:var(--pink);color:#fff;border-radius:0 0 8px 8px;z-index:1000;text-decoration:none;font-weight:600;transition:top .2s}
+  .skip-nav:focus{top:0}
+  *:focus-visible{outline:2px solid var(--pink);outline-offset:2px;border-radius:4px}
+  .sparkline{display:flex;align-items:flex-end;gap:2px;height:80px;padding:8px 0}
+  .sparkline-bar{flex:1;background:var(--pink);border-radius:2px 2px 0 0;min-height:2px;position:relative}
+  .sparkline-bar:hover{opacity:.8}
+  .sparkline-bar:hover::after{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--muted);white-space:nowrap;padding:2px 4px;background:var(--surface);border-radius:4px;border:1px solid var(--border)}
 </style>`;
 
 function getSharedJS(): string {
@@ -167,7 +218,7 @@ var lc=document.getElementById("live-clock");if(lc)setInterval(function(){lc.tex
 })();</script>`;
 }
 
-function page(title: string, subtitle: string, body: string, activeNav?: string): string {
+function page(title: string, subtitle: string, body: string, activeNav?: string, subdomain?: string): string {
   const navItems = [
     ['OS', 'https://os.blackroad.io'],
     ['AI', 'https://ai.blackroad.io'],
@@ -177,40 +228,48 @@ function page(title: string, subtitle: string, body: string, activeNav?: string)
     ['Status', 'https://status.blackroad.io'],
   ];
   const nav = navItems.map(([label, url]) =>
-    `<a href="${url}" ${activeNav === label ? 'style="color:var(--fg)"' : ''}>${label}</a>`
+    `<a href="${url}" ${activeNav === label ? 'style="color:var(--fg)"' : ''} aria-label="${label}">${label}</a>`
   ).join('');
+  const favicon = getFavicon(subdomain || '');
+  const canonicalUrl = subdomain ? `https://${subdomain}.blackroad.io/` : 'https://blackroad.io/';
+  const safeTitle = title.replace(/"/g, '&quot;');
+  const safeSub = subtitle.replace(/"/g, '&quot;');
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>${title} | BlackRoad</title>
-  <meta name="description" content="${subtitle}">
-  <meta property="og:title" content="${title} | BlackRoad">
-  <meta property="og:description" content="${subtitle}">
+  <meta name="description" content="${safeSub}">
+  <link rel="canonical" href="${canonicalUrl}">
+  <meta property="og:title" content="${safeTitle} | BlackRoad">
+  <meta property="og:description" content="${safeSub}">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="BlackRoad OS">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="${title} | BlackRoad">
-  <meta name="twitter:description" content="${subtitle}">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>B</text></svg>">
+  <meta name="twitter:title" content="${safeTitle} | BlackRoad">
+  <meta name="twitter:description" content="${safeSub}">
+  <link rel="icon" href="${favicon}">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"${safeTitle} | BlackRoad","url":"${canonicalUrl}","description":"${safeSub}","publisher":{"@type":"Organization","name":"BlackRoad OS, Inc.","url":"https://blackroad.io"}}</script>
   ${BRAND}
   <script>if(localStorage.getItem('br-theme')==='light')document.documentElement.setAttribute('data-theme','light')</script>
 </head>
 <body>
-  <div class="topbar"></div>
-  <nav>
+  <a href="#main-content" class="skip-nav">Skip to content</a>
+  <div class="topbar" role="presentation"></div>
+  <nav aria-label="Main navigation">
     <div class="logo"><span>BLACKROAD</span></div>
-    <div style="display:flex;align-items:center;gap:13px"><div class="nav-links">${nav}</div><button class="theme-toggle" onclick="(function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t==='dark'?'':'light');localStorage.setItem('br-theme',t)})()">☀/☾</button></div>
+    <div style="display:flex;align-items:center;gap:13px"><div class="nav-links" role="navigation">${nav}</div><button class="theme-toggle" aria-label="Toggle light/dark theme" onclick="(function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t==='dark'?'':'light');localStorage.setItem('br-theme',t)})()">☀/☾</button></div>
   </nav>
-  <main>
+  <main id="main-content">
     <div class="hero">
       <h1>${title}</h1>
       <p>${subtitle}</p>
     </div>
     ${body}
   </main>
-  <footer>
+  <footer role="contentinfo">
     <a href="https://blackroad.io">blackroad.io</a> &middot;
     <a href="https://github.com/BlackRoad-OS">GitHub</a> &middot;
     BlackRoad OS, Inc. &copy; 2026
@@ -422,6 +481,8 @@ const SUBDOMAIN_APPS: Record<string, SubdomainApp> = {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const requestId = generateRequestId();
+
     try {
       const url = new URL(request.url);
       const parts = url.hostname.split('.');
@@ -430,7 +491,7 @@ export default {
       // Sitemap and robots.txt on any subdomain
       if (url.pathname === '/robots.txt') {
         return new Response(`User-agent: *\nAllow: /\nSitemap: https://${subdomain}.blackroad.io/sitemap.xml`, {
-          headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'public, max-age=86400' },
+          headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'public, max-age=86400', 'X-Request-ID': requestId },
         });
       }
       if (url.pathname === '/sitemap.xml') {
@@ -438,26 +499,44 @@ export default {
           `  <url><loc>https://${sub}.blackroad.io/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`
         ).join('\n');
         return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>`, {
-          headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' },
+          headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400', 'X-Request-ID': requestId },
         });
       }
 
       const rateLimitResult = await checkRateLimit(request, env);
       if (!rateLimitResult.allowed) {
-        return new Response('Rate limit exceeded', { status: 429, headers: { 'Retry-After': '60' } });
+        return new Response('Rate limit exceeded', { status: 429, headers: {
+          'Retry-After': '60', 'X-Request-ID': requestId,
+          'X-RateLimit-Limit': '100', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '60',
+        } });
       }
+
+      // Store subdomain in request context for page() calls
+      (globalThis as any).__currentSubdomain = subdomain;
 
       const app = SUBDOMAIN_APPS[subdomain];
       if (!app) {
         if (subdomain.startsWith('agent-') || subdomain.startsWith('user-')) {
           return handleDynamic(request, env, subdomain);
         }
+
+        // Smart 404: suggest similar subdomains
+        const allSubs = Object.keys(SUBDOMAIN_APPS);
+        const scored = allSubs.map(s => ({ s, d: levenshtein(subdomain, s) })).sort((a, b) => a.d - b.d).slice(0, 5);
+        const suggestions = scored.filter(x => x.d <= 3).map(x =>
+          `<a class="link-card" href="https://${x.s}.blackroad.io">${x.s}</a>`
+        ).join('');
+
         return htmlResp(page('404', 'Subdomain not found', `
           <div class="section reveal"><p style="text-align:center;color:var(--muted)">
-            <strong>${subdomain}.blackroad.io</strong> is not configured.<br><br>
-            <a href="https://pitstop.blackroad.io">Browse all services at Pitstop</a>
+            <strong>${subdomain}.blackroad.io</strong> is not configured.
           </p></div>
-        `), 404);
+          ${suggestions ? `<div class="section reveal"><h2>Did you mean?</h2><div class="link-grid">${suggestions}</div></div>` : ''}
+          <div class="section reveal" style="text-align:center">
+            <a href="https://pitstop.blackroad.io" style="color:var(--pink)">Browse all services at Pitstop →</a>
+          </div>
+          <div style="text-align:center;margin-top:13px;font-size:.75rem;color:var(--muted)">Request ID: <code>${requestId}</code></div>
+        `, undefined, subdomain), 404);
       }
 
       const response = await app.handler(request, env);
@@ -465,6 +544,10 @@ export default {
       newResp.headers.set('X-Subdomain', subdomain);
       newResp.headers.set('X-App-Name', app.name);
       newResp.headers.set('X-Powered-By', 'BlackRoad OS');
+      newResp.headers.set('X-Request-ID', requestId);
+      newResp.headers.set('X-RateLimit-Limit', '100');
+      newResp.headers.set('X-RateLimit-Remaining', String(Math.max(0, 100 - (rateLimitResult.count || 0))));
+      newResp.headers.set('X-RateLimit-Reset', '60');
 
       // Log analytics to D1 (non-blocking)
       if (env.DB) {
@@ -485,6 +568,7 @@ export default {
     } catch (error: any) {
       return htmlResp(page('Error', 'Something went wrong', `
         <div class="card" style="border-color:var(--pink)"><p style="color:var(--muted)">${error.message}</p></div>
+        <div style="text-align:center;margin-top:13px;font-size:.75rem;color:var(--muted)">Request ID: <code>${requestId}</code></div>
       `), 500);
     }
   }
@@ -507,17 +591,17 @@ async function ensureAnalyticsTable(db: D1Database): Promise<void> {
 // RATE LIMITING
 // ═══════════════════════════════════════════════════════════
 
-async function checkRateLimit(request: Request, env: Env): Promise<{ allowed: boolean; limit?: number; retryAfter?: number }> {
-  if (!env.RATE_LIMIT) return { allowed: true };
+async function checkRateLimit(request: Request, env: Env): Promise<{ allowed: boolean; limit?: number; retryAfter?: number; count?: number }> {
+  if (!env.RATE_LIMIT) return { allowed: true, count: 0 };
   try {
     const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
     const key = `rate-limit:${ip}`;
     const current = await env.RATE_LIMIT.get(key);
     const count = current ? parseInt(current) : 0;
-    if (count >= 100) return { allowed: false, limit: 100, retryAfter: 60 };
+    if (count >= 100) return { allowed: false, limit: 100, retryAfter: 60, count };
     await env.RATE_LIMIT.put(key, (count + 1).toString(), { expirationTtl: 60 });
-    return { allowed: true, limit: 100 };
-  } catch { return { allowed: true }; }
+    return { allowed: true, limit: 100, count: count + 1 };
+  } catch { return { allowed: true, count: 0 }; }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1253,6 +1337,7 @@ async function handleAdmin(req: Request, env: Env): Promise<Response> {
   let topSubs: { subdomain: string; cnt: number }[] = [];
   let topCountries: { country: string; cnt: number }[] = [];
   let recent: { subdomain: string; path: string; country: string; ts: number }[] = [];
+  let hourlyBuckets: { hour: number; cnt: number }[] = [];
 
   try {
     const totR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
@@ -1267,6 +1352,19 @@ async function handleAdmin(req: Request, env: Env): Promise<Response> {
     topSubs = (topR.results || []) as any;
     topCountries = (cntR.results || []) as any;
     recent = (recR.results || []) as any;
+
+    // Hourly buckets for last 24h sparkline
+    const now = Date.now();
+    const dayAgo = now - 86400000;
+    const hourlyR = await env.DB.prepare(
+      'SELECT CAST((ts - ?) / 3600000 AS INTEGER) as bucket, COUNT(*) as cnt FROM analytics WHERE ts > ? GROUP BY bucket ORDER BY bucket'
+    ).bind(dayAgo, dayAgo).all();
+    const bucketMap = new Map<number, number>();
+    ((hourlyR.results || []) as any[]).forEach((r: any) => bucketMap.set(r.bucket, r.cnt));
+    for (let i = 0; i < 24; i++) {
+      const h = new Date(dayAgo + i * 3600000).getUTCHours();
+      hourlyBuckets.push({ hour: h, cnt: bucketMap.get(i) || 0 });
+    }
   } catch { /* table may not exist yet */ }
 
   const maxCnt = topSubs.length > 0 ? topSubs[0].cnt : 1;
@@ -1278,12 +1376,23 @@ async function handleAdmin(req: Request, env: Env): Promise<Response> {
     return `<tr><td><code>${time}</code></td><td>${r.subdomain}</td><td>${r.path}</td><td>${r.country}</td></tr>`;
   }).join('');
 
+  // Sparkline bars
+  const maxHourly = Math.max(1, ...hourlyBuckets.map(b => b.cnt));
+  const sparkBars = hourlyBuckets.map(b =>
+    `<div class="sparkline-bar" style="height:${Math.max(2, Math.round((b.cnt / maxHourly) * 100))}%" data-label="${String(b.hour).padStart(2, '0')}:00 — ${b.cnt} hits"></div>`
+  ).join('');
+
   return htmlResp(page('Admin Dashboard', 'Real-time analytics from D1', `
     <div class="stats fade-up">
       <div class="stat"><div class="number" data-target="${total}">${total}</div><div class="label">Total Hits</div></div>
       <div class="stat"><div class="number" data-target="${lastDay}">${lastDay}</div><div class="label">Last 24h</div></div>
       <div class="stat"><div class="number" data-target="${lastHour}">${lastHour}</div><div class="label">Last Hour</div></div>
       <div class="stat"><div class="number" data-target="${Object.keys(SUBDOMAIN_APPS).length}">${Object.keys(SUBDOMAIN_APPS).length}</div><div class="label">Subdomains</div></div>
+    </div>
+    <div class="section reveal">
+      <h2>Traffic — Last 24 Hours</h2>
+      <div class="sparkline">${sparkBars}</div>
+      <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted)"><span>24h ago</span><span>Now</span></div>
     </div>
     <div class="section reveal">
       <h2>Top Subdomains</h2>
@@ -1297,7 +1406,7 @@ async function handleAdmin(req: Request, env: Env): Promise<Response> {
       <h2>Recent Requests</h2>
       <table><thead><tr><th>Time (UTC)</th><th>Subdomain</th><th>Path</th><th>Country</th></tr></thead><tbody>${recentRows || '<tr><td colspan="4" style="color:var(--muted)">No data yet</td></tr>'}</tbody></table>
     </div>
-  `));
+  `, undefined, 'admin'));
 }
 
 async function handleApp(req: Request, env: Env): Promise<Response> {
