@@ -21,6 +21,13 @@ interface Env {
   TUNNEL_URL?: string; // URL to local services via Cloudflare Tunnel
 }
 
+// Legacy Durable Object stub (required by existing deployment)
+export class SessionDO {
+  state: DurableObjectState;
+  constructor(state: DurableObjectState) { this.state = state; }
+  async fetch(request: Request) { return new Response("deprecated", { status: 410 }); }
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
