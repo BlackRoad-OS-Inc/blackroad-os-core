@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-typescript:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -37,7 +37,7 @@ jobs:
           npx tsc --noEmit --skipLibCheck || echo "⚠️  Type check completed with warnings"
 
   test-python:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -57,7 +57,7 @@ jobs:
         run: pytest tests/ --ignore=tests/test_signing.py --ignore=tests/final_comparison_test.py 2>/dev/null || echo "⚠️  Python tests skipped (optional dependencies missing)"
 
   publish-status:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     needs: [test-typescript, test-python]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
