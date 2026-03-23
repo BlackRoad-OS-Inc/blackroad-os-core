@@ -1,3 +1,11 @@
+# blackroad-os-core
+
+> BlackRoad OS Core — desktop UI, backend APIs, auth, identity, and state management
+
+Part of the [BlackRoad OS](https://blackroad.io) ecosystem — [BlackRoad-OS-Inc](https://github.com/BlackRoad-OS-Inc)
+
+---
+
 <div align="center">
 
 <img src="https://images.blackroad.io/pixel-art/road-logo.png" alt="BlackRoad OS" width="80" />
